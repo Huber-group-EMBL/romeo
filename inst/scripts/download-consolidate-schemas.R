@@ -1,4 +1,4 @@
-download_consolidate_schemas <- function(ome_version, type, link, path) {
+download_consolidate_schemas <- function(ome_version, type, path) {
 
     # Download root schema
   schema_file <- paste0(type, ".schema")
@@ -24,8 +24,6 @@ download_consolidate_schemas <- function(ome_version, type, link, path) {
         is.character(x) &&
         grepl("^https://ngff.openmicroscopy.org/.+/schemas/.+\\.schema$", x)
       ) {
-        if(!is.na(link))
-          x <- file.path(link, basename(x))
         download.file(x, file.path(path, ome_version, basename(x)))
         return(basename(x))
       } else {
@@ -36,19 +34,8 @@ download_consolidate_schemas <- function(ome_version, type, link, path) {
     jsonlite::write_json(dest, auto_unbox = TRUE, pretty = TRUE)
 }
 
-
-# OME v0.2 fails to download from
-# https://ngff.openmicroscopy.org/0.6.dev2/schemas/*.schema
-# Check: https://github.com/ome/ngff/tree/main/specifications and 
-# https://github.com/ome/ngff-spec/tree/c95fc4ad8b4b3fe946125375397ebb08dfd995e8
-link02 <- "https://raw.githubusercontent.com/ome/ngff-spec/c95fc4ad8b4b3fe946125375397ebb08dfd995e8/schemas/"
-
-# schema config, some version do not have labels
+# schema configs
 config <- list(
-  c(version = "0.1", type = "image"),
-  c(version = "0.2", type = "image", link = link02),
-  c(version = "0.2", type = "label", link = link02),
-  c(version = "0.3", type = "image"),
   c(version = "0.4", type = "image"),
   c(version = "0.4", type = "label"),
   c(version = "0.5", type = "image"),
@@ -59,7 +46,6 @@ invisible(
   lapply(config, function(cg){
     download_consolidate_schemas(ome_version = cg["version"], 
                                  type = cg["type"], 
-                                 link = cg["link"],
                                  "inst/extdata/schemas")
   }) 
 )

@@ -13,18 +13,12 @@ from skimage.data import binary_blobs
 import zarr
 from ome_zarr.writer import write_image, write_labels
 from ome_zarr.format import (
-  FormatV01, 
-  FormatV02, 
-  FormatV03, 
   FormatV04, 
   FormatV05
 )
 
 # ome versions
 versions = {
-    "01": FormatV01(),
-    "02": FormatV02(),
-    "03": FormatV03(),
     "04": FormatV04(),
     "05": FormatV05()
 }
@@ -36,12 +30,12 @@ rng = np.random.default_rng(0)
 data = rng.poisson(lam=10, size=(size_c, size_xy, size_xy)).astype(np.uint8)
 
 # generate labels
-blobs = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=3).astype('int8')
-blobs2 = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=3).astype('int8')
+blobs = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
+blobs2 = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
 blobs += 2 * blobs2
 
 for v, fmt in versions.items():
-    path = f"../extdata/test_ngff_image_v{v}.ome.zarr"
+    path = f"inst/extdata/test_ngff_image_v{v}.ome.zarr"
 
     if os.path.exists(path) and os.path.isdir(path):
         shutil.rmtree(path)
@@ -62,17 +56,16 @@ for v, fmt in versions.items():
         scale_factors=(2,4,8,16)
     )
     
-    # write labels, version 0.1 and 0.3 do not have label.schema
-    if fmt not in ["01", "03"]:
-      root = zarr.open_group(path, mode="a", zarr_format = fmt.zarr_format)
-      write_labels(
+    # write labels
+    root = zarr.open_group(path, mode="a", zarr_format = fmt.zarr_format)
+    write_labels(
         blobs, 
         path, 
-        axes="cyx", 
+        axes="yx", 
         name="blobs", 
         fmt=fmt,
         scale_factors=(2,4,8,16)
-      )
+    )
 
     # zip files
     zip_path = f"{path}.zip"
@@ -85,4 +78,4 @@ for v, fmt in versions.items():
                 rel_path = os.path.relpath(full_path, path)
                 z.write(full_path, arcname=rel_path)
 
-    shutil.rmtree(path)
+    # shutil.rmtree(path)

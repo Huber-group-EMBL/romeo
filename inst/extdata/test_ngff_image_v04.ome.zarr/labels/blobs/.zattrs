@@ -1,0 +1,83 @@
+{
+  "multiscales": [
+    {
+      "datasets": [
+        {
+          "path": "s0",
+          "coordinateTransformations": [
+            {
+              "type": "scale",
+              "scale": [
+                1.0,
+                1.0
+              ]
+            }
+          ]
+        },
+        {
+          "path": "s1",
+          "coordinateTransformations": [
+            {
+              "type": "scale",
+              "scale": [
+                2.0,
+                2.0
+              ]
+            }
+          ]
+        },
+        {
+          "path": "s2",
+          "coordinateTransformations": [
+            {
+              "type": "scale",
+              "scale": [
+                4.0,
+                4.0
+              ]
+            }
+          ]
+        },
+        {
+          "path": "s3",
+          "coordinateTransformations": [
+            {
+              "type": "scale",
+              "scale": [
+                8.0,
+                8.0
+              ]
+            }
+          ]
+        },
+        {
+          "path": "s4",
+          "coordinateTransformations": [
+            {
+              "type": "scale",
+              "scale": [
+                16.0,
+                16.0
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "blobs",
+      "axes": [
+        {
+          "name": "y",
+          "type": "space"
+        },
+        {
+          "name": "x",
+          "type": "space"
+        }
+      ],
+      "version": "0.4"
+    }
+  ],
+  "image-label": {
+    "version": "0.4"
+  }
+}

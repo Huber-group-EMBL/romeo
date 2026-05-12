@@ -8,7 +8,7 @@ format <- c(
 )
 
 test_that("parse ome version", {
-  for (i in seq_len(length(format))) {
+  for (i in seq_along(format)) {
     omezarrzip <- system.file(
       "extdata",
       paste0("test_ngff_image_", format[i], ".ome.zarr.zip"),

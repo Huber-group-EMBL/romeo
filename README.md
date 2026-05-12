@@ -99,8 +99,6 @@ plot(x, all = TRUE)
 Labels of image pyramids can also be read as images
 
 ``` r
-library(rome)
-library(utils)
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
@@ -118,14 +116,14 @@ versions 0.4 and 0.5.
 ``` r
 # read image
 library(EBImage)
-img_file <- system.file("images", "sample.png", package="EBImage")
+img_file <- system.file("extdata", "example_RGB.png", package="rome")
 img <- readImage(img_file)
 
 # write image, version 0.4
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      version = "0.4",
-                     storage_options = list(chunk_dim = c(64,64)))
+                     storage_options = list(chunk_dim = c(64,64,1)))
 ```
 
 Users can also define there own scaling factors for the image pyramids.
@@ -134,10 +132,9 @@ scales. Eac scale factor in the vector defines the scale factor relative
 to the previous scale.
 
 ``` r
-# write image, version 0.5
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      version = "0.5", 
                      scalefactors = c(2,2,3),
-                     storage_options = list(chunk_dim = c(64,64)))
+                     storage_options = list(chunk_dim = c(64,64,1)))
 ```

@@ -26,7 +26,6 @@
   }
   
   # axis
-  axes <- .get_valid_axes(image, axes)
   meta[[ax]] <- .make_axes_meta(axes)
   
   # coordinate transformations
@@ -60,20 +59,13 @@
 #' 
 #' @noRd
 .get_valid_axes <- function(
-    x,
+    image,
     axes = NULL, 
-    format = "0.4"
+    version = "0.4"
 ) {
   
-  if (!is.null(format) && format %in% c("0.1", "0.2")) {
-    if (!is.null(axes)) {
-      message("axes ignored for version 0.1 or 0.2")
-    }
-    return(NULL)
-  }
-  
   # We can guess axes for images, labels if 2D (with/without channels)
-  ndim <- length(dim(x))
+  ndim <- length(dim(image))
   if (is.null(axes)) {
     if (ndim %in% c(2,3)) {
       axes <- c("x", "y", if(ndim==3) "c" else NULL)
@@ -119,19 +111,17 @@
 
 #' @noRd
 .make_axes_meta <- function(axes){
-  .DEFAULT_AXES[
-    vapply(.DEFAULT_AXES, 
-           \(.) {
-             . <- 
-             .$name %in% axes
-           },
-           logical(1))
-  ]
+  lapply(axes, 
+         \(.) {
+           if(. == "t") list(name = ., type = "time", unit = "millisecond")
+           else if(. == "c") list(name = ., type = "channel")
+           else list(name = ., type = "space")
+         })
 }
 
 #' @noRd
 .make_datasets <- function(scalefactors, axes){
-  paths <- paste0(seq_len(length(scalefactors)+1)-1)
+  paths <- as.character(seq(0, length(scalefactors)))
   scalefactors <- c(1,cumprod(scalefactors))
   mapply(\(p, s) {
     list(

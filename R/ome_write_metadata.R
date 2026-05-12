@@ -55,8 +55,6 @@
 #'
 #' @inheritParams ome_write
 #' 
-#' @importFrom S4Vectors function
-#' 
 #' @noRd
 .get_valid_axes <- function(
     image,

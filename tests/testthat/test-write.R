@@ -29,6 +29,9 @@ test_that("writing 0.4 and 0.5", {
                          scalefactors = c(2,2,2),
                          storage_options = list(chunk_dim = c(64,64)))
     
+    # zarr exists
+    expect_true(zarr_exists(td))
+    
     # check version, 0.4 or 0.5
     expect_identical(.get_version(Rarr::read_zarr_attributes(td)), .)
     

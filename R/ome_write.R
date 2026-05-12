@@ -101,7 +101,7 @@ ome_write <- function(image,
   zarr_version <- if(version == "0.4") 2 else "3"
   
   # create zarr
-  if(!zarr_path_exists(path, target_path = "/"))
+  if(!zarr_exists(path))
     create_zarr(store = path, version = zarr_version)
   
   # check storage options

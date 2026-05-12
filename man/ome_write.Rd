@@ -26,7 +26,7 @@ Importantly, each scale factor is relative to the previous scale factor.
 For example, if the scale factors are c(2, 2, 2), the returned multiscale
 image will have 4 scales.}
 
-\item{version}{OME-ZARR format (0.4 or 0.5), lower versions are not supported
+\item{version}{OME-ZARR version (0.4 or 0.5), lower versions are not supported
 for writing.}
 
 \item{storage_options}{a list of storage options for the zarr array

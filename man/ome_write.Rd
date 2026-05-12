@@ -10,7 +10,8 @@ ome_write(
   axes = NULL,
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
-  storage_options = NULL
+  storage_options = NULL,
+  type = "image"
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ for writing.}
 
 \item{storage_options}{a list of storage options for the zarr array
 (e.g. chunks)}
+
+\item{type}{The type of OME pyramid written: 'image' (default) or 'label'.}
 }
 \description{
 Writes an ome image to the zarr path according to ome-zarr specification

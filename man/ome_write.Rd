@@ -2,9 +2,32 @@
 % Please edit documentation in R/ome_write.R
 \name{ome_write}
 \alias{ome_write}
+\alias{ome_write,Image-method}
+\alias{ome_write,character-method}
+\alias{ome_write,array-method}
 \title{ome_write}
 \usage{
-ome_write(
+\S4method{ome_write}{Image}(
+  image,
+  path = "/",
+  axes = NULL,
+  scalefactors = c(2, 2, 2, 2),
+  version = c("0.4", "0.5"),
+  storage_options = NULL,
+  type = c("image", "label")
+)
+
+\S4method{ome_write}{character}(
+  image,
+  path = "/",
+  axes = NULL,
+  scalefactors = c(2, 2, 2, 2),
+  version = c("0.4", "0.5"),
+  storage_options = NULL,
+  type = c("image", "label")
+)
+
+\S4method{ome_write}{array}(
   image,
   path = "/",
   axes = NULL,
@@ -15,9 +38,9 @@ ome_write(
 )
 }
 \arguments{
-\item{image}{an n-dimensional (1<n<6) array representing the image data}
+\item{image}{an n-dimensional (or a path to an) array representing the image data (1<n<6)}
 
-\item{path}{the zarr path to write the image to}
+\item{path}{the path to writing ome.zarr}
 
 \item{axes}{a character vector specifying the axes of the image
 (e.g. c("t", "c", "z", "y", "x"))}

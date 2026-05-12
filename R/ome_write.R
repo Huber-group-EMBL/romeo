@@ -1,10 +1,11 @@
-
-#' ome_write
+#' @name ome_write
+#' @title ome_write
 #' 
+#' @description
 #' Writes an ome image to the zarr path according to ome-zarr specification
 #'
-#' @param image an n-dimensional (1<n<6) array representing the image data 
-#' @param path the zarr path to write the image to
+#' @param image an n-dimensional (or a path to an) array representing the image data (1<n<6)
+#' @param path the path to writing ome.zarr
 #' @param axes a character vector specifying the axes of the image 
 #' (e.g. c("t", "c", "z", "y", "x"))
 #' @param scalefactors Scale factors to apply to construct a multiscale image. 
@@ -16,19 +17,22 @@
 #' @param storage_options a list of storage options for the zarr array 
 #' (e.g. chunks)
 #' @param type The type of OME pyramid written: 'image' (default) or 'label'.
-#'
-#' @rdname ome_write
-#' 
-#' @importFrom stats setNames
 #' 
 #' @export
-ome_write <- function(image, 
-                      path="/", 
-                      axes = NULL,  
-                      scalefactors = c(2,2,2,2),
-                      version = c("0.4", "0.5"),
-                      storage_options = NULL,
-                      type = c("image", "label")){
+NULL
+
+#' @rdname ome_write
+#' @importFrom stats setNames
+#' @export
+setMethod("ome_write", 
+          "Image",
+          function(image, 
+                   path="/", 
+                   axes = NULL,  
+                   scalefactors = c(2,2,2,2),
+                   version = c("0.4", "0.5"),
+                   storage_options = NULL,
+                   type = c("image", "label")){ 
   
   # version and type
   version <- match.arg(version)
@@ -63,8 +67,46 @@ ome_write <- function(image,
   
   # return
   ome_read(path = path)
-}
+})
 
+#' @rdname ome_write
+#' @importFrom EBImage readImage
+#' @export
+setMethod("ome_write", 
+          "character",
+          function(image, 
+                   path="/", 
+                   axes = NULL,  
+                   scalefactors = c(2,2,2,2),
+                   version = c("0.4", "0.5"),
+                   storage_options = NULL,
+                   type = c("image", "label")){ 
+  
+  # check path
+  if(!file.exists(image))
+    stop("Image at path ", image, "does not exist!")
+  image <- EBImage::readImage(image)
+  ome_write(image, path, axes, scalefactors, version, storage_options, type)
+})
+
+#' @rdname ome_write
+#' @importFrom EBImage Image
+#' @export
+setMethod("ome_write", 
+          "array",
+          function(image, 
+                   path="/", 
+                   axes = NULL,  
+                   scalefactors = c(2,2,2,2),
+                   version = c("0.4", "0.5"),
+                   storage_options = NULL,
+                   type = c("image", "label")){ 
+            
+  # check path
+  image <- Image(image)
+  ome_write(image, path, axes, scalefactors, version, storage_options, type)
+})
+            
 #' .create_mip
 #' 
 #' Generate a downsampled pyramid of images.

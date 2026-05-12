@@ -1,0 +1,1 @@
+setGeneric("ome_write", \(image, ...) standardGeneric("ome_write"))

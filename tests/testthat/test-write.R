@@ -23,9 +23,9 @@ img_file <- system.file("images", "sample.png", package="EBImage")
 img <- readImage(img_file)
 
 # label example
-img_file <- system.file("images", "nuclei.tif", package="EBImage")
-img_label <- getFrames(readImage(img_file))[[1]]
-img_label <- img_label > otsu(img_label)
+lbl_file <- system.file("images", "nuclei.tif", package="EBImage")
+lbl <- getFrames(readImage(lbl_file))[[1]]
+lbl <- lbl > otsu(lbl)
 
 # no support for 0.1, 0.2 and 0.3
 test_that("check version", {
@@ -41,11 +41,31 @@ test_that("check version", {
 })
 
 test_that("default version works", {
-  td <- tempfile(fileext = ".ome.zarr")
   expect_no_error(
     ome_write(
       img,
-      path = td,
+      path = tempfile(fileext = ".ome.zarr"),
+      storage_options = list(chunk_dim = c(64, 64))
+    )
+  )
+})
+
+test_that("writing from path works", {
+  expect_no_error(
+    ome_write(
+      img_file,
+      path = tempfile(fileext = ".ome.zarr"),
+      storage_options = list(chunk_dim = c(64, 64))
+    )
+  )
+})
+
+test_that("writing from array works", {
+  imgdata <- imageData(img)
+  expect_no_error(
+    ome_write(
+      imgdata,
+      path = tempfile(fileext = ".ome.zarr"),
       storage_options = list(chunk_dim = c(64, 64))
     )
   )
@@ -95,7 +115,7 @@ test_that("writing 0.4 and 0.5 works", {
     # write label
     if(dir.exists(td))
       unlink(td, recursive = TRUE)
-    ome_label <- ome_write(img_label,
+    ome_label <- ome_write(lbl,
                            path = td,
                            version = .,
                            scalefactors = c(2,2,2),
@@ -107,7 +127,7 @@ test_that("writing 0.4 and 0.5 works", {
     
     # type is logical in this example
     expect_equal(type(ome_label[[1]]), "logical")
-    expect_equal(type(ome_label[[1]]), type(img_label))
+    expect_equal(type(ome_label[[1]]), type(lbl))
   })
   
 })

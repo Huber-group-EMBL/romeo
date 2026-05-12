@@ -15,6 +15,7 @@
 #' for writing.
 #' @param storage_options a list of storage options for the zarr array 
 #' (e.g. chunks)
+#' @param type The type of OME pyramid written: 'image' (default) or 'label'.
 #'
 #' @rdname ome_write
 #' 
@@ -26,7 +27,8 @@ ome_write <- function(image,
                       axes = NULL,  
                       scalefactors = c(2,2,2,2),
                       version = c("0.4", "0.5"),
-                      storage_options = NULL){
+                      storage_options = NULL,
+                      type = "image"){
   
   # validate axes
   axes <- .get_valid_axes(image = image, 
@@ -34,7 +36,7 @@ ome_write <- function(image,
                           version = version)
   
   # Generate a downsampled pyramid of images.
-  image_pyramid <- .create_mip(image, version, scalefactors, axes)
+  image_pyramid <- .create_mip(image, version, scalefactors, axes, type)
   
   # write image
   .write_multiscale_image(image_pyramid = image_pyramid, 
@@ -66,7 +68,8 @@ ome_write <- function(image,
 .create_mip <- function(image,
                         version,
                         scalefactors,
-                        axes = NULL){
+                        axes = NULL, 
+                        type = "image"){
   
   # get x y dimensions for EBImage
   dim_image <- dim(image)
@@ -77,7 +80,10 @@ ome_write <- function(image,
     dim_image <- ceiling(dim_image / scalefactors[i])
     img <- EBImage::resize(image,
                            w = dim_image[1],
-                           h = dim_image[2])
+                           h = dim_image[2], 
+                           filter = switch(type, 
+                                           image = "bilinear",
+                                           label = "none"))
     image_list[[i+1]] <- EBImage::imageData(img)
   }
   

@@ -115,10 +115,33 @@ For a `scalefactors` with length three, the pyramid will have four scales.
 Eac scale factor in the vector defines the scale factor relative to the previous
 scale.
 
-```{r write_scale}
+```{r write2}
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      version = "0.5", 
                      scalefactors = c(2,2,3),
                      storage_options = list(chunk_dim = c(64,64,1)))
+```
+
+## Write label
+
+```{r write_label}
+#| label: write
+# read image
+library(EBImage)
+
+# read the first frame of image
+nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+nuc <- getFrames(nuc)[[1]]
+
+# threshold using otsu's method
+nuc_th = nuc > otsu(nuc)
+
+# write label, version 0.4
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label")
+plot(ome_nuc_th, 3)
 ```

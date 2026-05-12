@@ -1,6 +1,31 @@
 library(EBImage)
+library(ZarrArray)
+
+test_that("check scalefactors", {
+  
+  # scales have to be non-negative, non-zero and MUST have incremental 
+  # values
+  # NOTE: incremental scales are not dictated by NGFF but the specification
+  # says it has to be ordered from largest to lowest
+  # See:
+  #   https://ngff.openmicroscopy.org/specifications/0.4/index.html#multiscales-metadata
+  #   https://ngff.openmicroscopy.org/specifications/0.5/index.html#multiscales-metadata
+  expect_error(.check_scalefactors(c(2,0.1,2)))
+  expect_error(.check_scalefactors(c(2,NA,2)))
+  expect_error(.check_scalefactors(c(2,-1,2)))
+  expect_error(.check_scalefactors(c()))
+  expect_error(.check_scalefactors(NULL))
+  
+})
+
+# image example
 img_file <- system.file("images", "sample.png", package="EBImage")
 img <- readImage(img_file)
+
+# label example
+img_file <- system.file("images", "nuclei.tif", package="EBImage")
+img_label <- getFrames(readImage(img_file))[[1]]
+img_label <- img_label > otsu(img_label)
 
 # no support for 0.1, 0.2 and 0.3
 test_that("check version", {
@@ -23,6 +48,7 @@ test_that("writing 0.4 and 0.5", {
     # path
     td <- tempfile(fileext = ".ome.zarr")
     
+    # write image
     ome_img <- ome_write(img,
                          path = td,
                          version = .,
@@ -41,6 +67,9 @@ test_that("writing 0.4 and 0.5", {
     # first scale is the original scale
     expect_equal(dim(ome_img[[1]]), dim(img))
     
+    # image type is float
+    expect_equal(type(ome_img[[1]]), type(img))
+    
     # TODO: for now, chunk_dim has to be specified:
     expect_error(
       ome_img <- ome_write(img,
@@ -48,19 +77,20 @@ test_that("writing 0.4 and 0.5", {
                            version = .), 
       regexp = "'chunk_dim' must be provided"
     )
-
-    # scales have to be non-negative, non-zero and MUST have incremental 
-    # values
-    # NOTE: incremental scales are not dictated by NGFF but the specification
-    # says it has to be ordered from largest to lowest
-    # See:
-    #   https://ngff.openmicroscopy.org/specifications/0.4/index.html#multiscales-metadata
-    #   https://ngff.openmicroscopy.org/specifications/0.5/index.html#multiscales-metadata
-    expect_error(.check_scalefactors(c(2,0.1,2)))
-    expect_error(.check_scalefactors(c(2,NA,2)))
-    expect_error(.check_scalefactors(c(2,-1,2)))
-    expect_error(.check_scalefactors(c()))
-    expect_error(.check_scalefactors(NULL))
+    
+    # write label
+    if(dir.exists(td))
+      unlink(td, recursive = TRUE)
+    ome_label <- ome_write(img_label,
+                           path = td,
+                           version = .,
+                           scalefactors = c(2,2,2),
+                           storage_options = list(chunk_dim = c(64,64)), 
+                           type = "label")
+    
+    # type is logical in this example
+    expect_equal(type(ome_label[[1]]), "logical")
+    expect_equal(type(ome_label[[1]]), type(img_label))
   })
   
 })

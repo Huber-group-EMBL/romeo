@@ -78,4 +78,4 @@ for v, fmt in versions.items():
                 rel_path = os.path.relpath(full_path, path)
                 z.write(full_path, arcname=rel_path)
 
-    # shutil.rmtree(path)
+    shutil.rmtree(path)

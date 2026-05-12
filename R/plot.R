@@ -15,8 +15,9 @@
 #' }
 #'
 plot.ome_zarr <- function(x, level = 1, ...) {
-  x[[level]] |>
-    aperm(c(seq(2, length(dim(x[[level]]))), 1)) |>
-    EBImage::Image() |>
+  x <- x[[level]] |>
+    aperm(c(seq(2, length(dim(x[[level]]))), 1))
+  x |> 
+    EBImage::Image(dim = dim(x)) |>
     plot(...)
 }

@@ -2,8 +2,6 @@
 .get_dim_names <- function(metadata, ome_version) {
   dim_names <- switch(
     ome_version,
-    "0.1" = NULL,
-    "0.2" = NULL,
     "0.3" = metadata$multiscales[[1]]$axes,
     "0.4" = metadata$multiscales[[1]]$axes |>
       vapply(function(axis) axis$name, character(1)),

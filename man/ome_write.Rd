@@ -11,7 +11,7 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = "image"
+  type = c("image", "label")
 )
 }
 \arguments{

@@ -13,7 +13,8 @@ ome_validate(path, s3_client = NULL)
 file on S3. Leave as \code{NULL} for a file on local storage.}
 }
 \value{
-This function is used for its side-effect and will return an error when
+This function is used for its side-effect and will return the type of the
+OME-Zarr schema (image, label), otherwise will invoke an error when
 passed an invalid OME-Zarr file
 }
 \description{

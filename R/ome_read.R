@@ -19,8 +19,10 @@
 #' }
 ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
   # FIXME: check we're in a group
-  if (validate) {
+  type <- if (validate) {
     ome_validate(path, s3_client = s3_client)
+  } else {
+    "Unknown"
   }
 
   group_attributes <- Rarr::read_zarr_attributes(path, s3_client = s3_client)
@@ -61,6 +63,8 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
     SIMPLIFY = FALSE
   )
   class(x) <- "ome_zarr"
+  attr(x, "type") <- type
+  attr(x, "version") <- ome_version
 
   return(x)
 }

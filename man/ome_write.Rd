@@ -2,12 +2,12 @@
 % Please edit documentation in R/ome_write.R
 \name{ome_write}
 \alias{ome_write}
-\alias{ome_write,Image-method}
 \alias{ome_write,character-method}
 \alias{ome_write,array-method}
+\alias{ome_write,Image-method}
 \title{ome_write}
 \usage{
-\S4method{ome_write}{Image}(
+ome_write(
   image,
   path = "/",
   axes = NULL,
@@ -28,6 +28,16 @@
 )
 
 \S4method{ome_write}{array}(
+  image,
+  path = "/",
+  axes = NULL,
+  scalefactors = c(2, 2, 2, 2),
+  version = c("0.4", "0.5"),
+  storage_options = NULL,
+  type = c("image", "label")
+)
+
+\S4method{ome_write}{Image}(
   image,
   path = "/",
   axes = NULL,

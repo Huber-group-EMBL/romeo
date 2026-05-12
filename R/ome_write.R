@@ -19,20 +19,56 @@
 #' @param type The type of OME pyramid written: 'image' (default) or 'label'.
 #' 
 #' @export
-NULL
+setGeneric("ome_write", 
+           \(image, 
+             path="/", 
+             axes = NULL,  
+             scalefactors = c(2,2,2,2),
+             version = c("0.4", "0.5"),
+             storage_options = NULL,
+             type = c("image", "label")){
+  
+  standardGeneric("ome_write")
+})
 
 #' @rdname ome_write
-#' @importFrom stats setNames
+#' @importFrom EBImage readImage
+#' @export
+setMethod("ome_write", 
+          "character",
+          function(image, path, axes, scalefactors, version, storage_options, type){ 
+            if(!file.exists(image))
+              stop("Image at path ", image, "does not exist!")
+            image <- EBImage::readImage(image)
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type)
+          })
+
+#' @rdname ome_write
+#' @importFrom EBImage Image
+#' @export
+setMethod("ome_write", 
+          "array",
+          function(image, path, axes, scalefactors, version, storage_options, type){
+            image <- Image(image)
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type)
+          })
+
+#' @rdname ome_write
+#' @importFrom EBImage Image
 #' @export
 setMethod("ome_write", 
           "Image",
-          function(image, 
-                   path="/", 
-                   axes = NULL,  
-                   scalefactors = c(2,2,2,2),
-                   version = c("0.4", "0.5"),
-                   storage_options = NULL,
-                   type = c("image", "label")){ 
+          function(image, path, axes, scalefactors, version, storage_options, type){
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type)
+          })
+
+.ome_write <- function(image, 
+                       path="/", 
+                       axes = NULL,  
+                       scalefactors = c(2,2,2,2),
+                       version = c("0.4", "0.5"),
+                       storage_options = NULL,
+                       type = c("image", "label")){
   
   # version and type
   version <- match.arg(version)
@@ -67,45 +103,7 @@ setMethod("ome_write",
   
   # return
   ome_read(path = path)
-})
-
-#' @rdname ome_write
-#' @importFrom EBImage readImage
-#' @export
-setMethod("ome_write", 
-          "character",
-          function(image, 
-                   path="/", 
-                   axes = NULL,  
-                   scalefactors = c(2,2,2,2),
-                   version = c("0.4", "0.5"),
-                   storage_options = NULL,
-                   type = c("image", "label")){ 
-  
-  # check path
-  if(!file.exists(image))
-    stop("Image at path ", image, "does not exist!")
-  image <- EBImage::readImage(image)
-  ome_write(image, path, axes, scalefactors, version, storage_options, type)
-})
-
-#' @rdname ome_write
-#' @importFrom EBImage Image
-#' @export
-setMethod("ome_write", 
-          "array",
-          function(image, 
-                   path="/", 
-                   axes = NULL,  
-                   scalefactors = c(2,2,2,2),
-                   version = c("0.4", "0.5"),
-                   storage_options = NULL,
-                   type = c("image", "label")){ 
-            
-  # check path
-  image <- Image(image)
-  ome_write(image, path, axes, scalefactors, version, storage_options, type)
-})
+}
             
 #' .create_mip
 #' 

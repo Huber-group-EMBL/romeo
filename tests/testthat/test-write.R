@@ -69,7 +69,21 @@ test_that("writing from array works", {
       storage_options = list(chunk_dim = c(64, 64))
     )
   )
+  
+  ar <- array(sample(1:10, size = 100, replace = TRUE), dim = c(2,2,5,5))
+  axes <- c("t", "c", "x", "y")
+  expect_no_error(
+    ome_img <- ome_write(ar, 
+                         path = tempfile(fileext = ".ome.zarr"),
+                         axes = axes, 
+                         scalefactors = c(2), 
+                         storage_options = list(chunk_dim = c(1,1,2,2)))
+  )
+  expect_equal(dim(ome_img[[1]]), dim(ar))
+  expect_equal(type(ome_img[[1]]), type(ar))
+  
 })
+
 
 # writing
 test_that("writing 0.4 and 0.5 works", {

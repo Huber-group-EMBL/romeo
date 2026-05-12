@@ -4,7 +4,7 @@
 #'
 #' @param store the location of (zarr) store
 #' @param name name of the group
-#' @param version zarr version
+#' @param version zarr version, 2L for v2 and 3L for v3
 #'
 #' @importFrom cli cli_abort
 #' @importFrom utils tail
@@ -17,7 +17,7 @@
 #' store <- tempfile(fileext = ".zarr")
 #' create_zarr(store)
 #' create_zarr_group(store, "gp")
-create_zarr_group <- function(store, name, version = "2") {
+create_zarr_group <- function(store, name, version = 2L) {
   split_name <- strsplit(name, split = "/", fixed = TRUE)[[1]]
   if (length(split_name) > 1) {
     split_name <- vapply(
@@ -32,7 +32,7 @@ create_zarr_group <- function(store, name, version = "2") {
   }
   dir.create(file.path(store, split_name[1]), showWarnings = FALSE)
   switch(
-    version,
+    as.character(version),
     "2" = {
       write(
         "{\"zarr_format\":2}",

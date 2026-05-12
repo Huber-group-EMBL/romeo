@@ -56,6 +56,8 @@
 #'
 #' @inheritParams ome_write
 #' 
+#' @importFrom S4Vectors function
+#' 
 #' @noRd
 .get_valid_axes <- function(
     x,
@@ -70,16 +72,19 @@
     return(NULL)
   }
   
-  # We can guess axes for images, labels, points/shapes
+  # We can guess axes for images, labels if 2D (with/without channels)
   ndim <- length(dim(x))
   if (is.null(axes)) {
-    if (ndim == 2) {
-      axes <- c("y", "x")
+    if (ndim %in% c(2,3)) {
+      axes <- c("x", "y", if(ndim==3) "c" else NULL)
     } else {
-      stop("axes must be provided. Can't be guessed beyond 2D image", 
+      stop("axes must be provided. Can't be guessed beyond 2D images ", 
+           "with or without channels!", 
            call. = FALSE)
     } 
   } else {
+    if (is.character(axes) && length(axes) == 1L)
+      axes <- strsplit(axes, "", fixed = TRUE)[[1]]
     if (length(axes) != ndim) {
       stop(
         sprintf("axes length (%d) must match number of dimensions (%d)", 
@@ -89,10 +94,7 @@
     }
   }
   
-  # axes may be string e.g. "tczyx"
-  if (is.character(axes) && length(axes) == 1L) 
-    axes <- strsplit(axes, "", fixed = TRUE)[[1]]
-  
+  # axes length should match # of dim
   if (!is.null(ndim) && length(axes) != ndim) {
     stop(
       sprintf("axes length (%d) must match number of dimensions (%d)", 
@@ -101,6 +103,17 @@
     )
   }
   
+  # invalid axes
+  diff_axes <- setdiff(axes, .DEFAULT_AXES)
+  if(length(diff_axes))
+    stop("Some axes are invalid: ", paste(diff_axes, collapse = ","))
+  
+  # duplicated axes
+  ind_dup <- which(table(axes) > 1)
+  if(length(ind_dup))
+    stop("Duplicated axes are detected: ", 
+         paste(names(ind_dup), collapse = ","))
+  
   axes
 }
 
@@ -108,7 +121,10 @@
 .make_axes_meta <- function(axes){
   .DEFAULT_AXES[
     vapply(.DEFAULT_AXES, 
-           \(.) .$name %in% axes, 
+           \(.) {
+             . <- 
+             .$name %in% axes
+           },
            logical(1))
   ]
 }

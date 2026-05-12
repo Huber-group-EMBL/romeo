@@ -61,8 +61,7 @@ ome_write <- function(image,
 .create_mip <- function(image,
                         format,
                         scalefactors,
-                        axes){
-  
+                        axes = NULL){
   
   # check dim
   ndim <- length(dim(image))
@@ -89,14 +88,15 @@ ome_write <- function(image,
   # downscale image
   image_list <- list(image)
   cur_image <- aperm(image, 
-                     perm = rev(seq_len(length(axes))))
+                     perm = rev(seq_along(axes)))
   for (i in seq_along(scalefactors)) {
     dim_image <- ceiling(dim_image / scalefactors[i])
-    image_list[[i+1]] <- 
-      aperm(EBImage::resize(cur_image,
-                            w = dim_image[1],
-                            h = dim_image[2]), 
-            perm = rev(seq_len(length(axes))))
+    img <- aperm(EBImage::resize(cur_image,
+                                 w = dim_image[1],
+                                 h = dim_image[2]), 
+                 perm = rev(seq_along(axes)))
+    dimnames(img) <- axes
+    image_list[[i+1]] <- img
   }
   
   image_list
@@ -115,10 +115,12 @@ ome_write <- function(image,
                                     format,
                                     storage_options){
   
+  # version
+  zarr_version <- if(format == "0.4") 2 else "3"
+  
   # create zarr
   if(!zarr_path_exists(path, target_path = "/"))
-    create_zarr(store = path, 
-                version = if(format == "0.4") "2" else "3")
+    create_zarr(store = path, version = zarr_version)
   
   # check storage options
   if(!"chunk_dim" %in% names(storage_options))
@@ -134,7 +136,7 @@ ome_write <- function(image,
       chunk_dim = .get_scale_chunk_dim(
         chunk_dim = storage_options$chunk_dim,
         dim = dim(image)
-      ),
+      ), zarr_version = zarr_version
     )
   }
 }

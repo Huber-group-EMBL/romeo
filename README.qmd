@@ -102,7 +102,7 @@ rome also provides utilities for writing OME-ZARR images for OME-NGFF versions
 #| label: write
 # read image
 library(EBImage)
-img_file <- system.file("images", "sample.png", package="EBImage")
+img_file <- system.file("extdata", "example_RGB.png", package="rome")
 img <- readImage(img_file)
 
 # write image, version 0.4

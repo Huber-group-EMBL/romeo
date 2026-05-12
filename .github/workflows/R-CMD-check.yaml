@@ -23,6 +23,7 @@ jobs:
       matrix:
         config:
           - {os: macos-latest,    r: 'devel', http-user-agent: 'release'}
+          - {os: macos-latest,    r: 'release', http-user-agent: 'release'}
           - {os: windows-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
 

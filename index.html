@@ -61,7 +61,7 @@
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"Huber-group-EMBL/rome"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="image">Image<a class="anchor" aria-label="anchor" href="#image"></a>
 </h2>
 <p>This is a basic example which shows you how to read a OME-ZARR image of version 0.4. By default, the read will be performed lazily using <code>ZarrArray</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -70,9 +70,40 @@
 <span><span class="va">omezarrzip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"test_ngff_image_v04.ome.zarr.zip"</span>, package <span class="op">=</span> <span class="st">"rome"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">omezarrzip</span>, exdir <span class="op">=</span> <span class="va">td</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span></code></pre></div>
-<p>For remote OME-ZARR files, you can use the <code><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">paws.storage::s3</a></code> client to read the data directly from the S3 bucket without downloading it first:</p>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span>
+<span><span class="va">x</span></span>
+<span><span class="co">#&gt; Multiscale OME-Zarr image (v0.4) object.</span></span>
+<span><span class="co">#&gt; Scale: 1/5 </span></span>
+<span><span class="co">#&gt; &lt;2 x 5 x 5&gt; DelayedArray object of type "integer":</span></span>
+<span><span class="co">#&gt; ,,1</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">#&gt; [1,]   11   16    9   11   11</span></span>
+<span><span class="co">#&gt; [2,]    9    7   10    6   11</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ,,2</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">#&gt; [1,]    2   11    8   11   10</span></span>
+<span><span class="co">#&gt; [2,]   12    2    8   11   11</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ,,3</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">#&gt; [1,]   11    6   18    4    7</span></span>
+<span><span class="co">#&gt; [2,]   12    8   13    6    9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ,,4</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">#&gt; [1,]   13    8   17    6    3</span></span>
+<span><span class="co">#&gt; [2,]    9    6    8    5    8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ,,5</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">#&gt; [1,]   14   13    4   10    5</span></span>
+<span><span class="co">#&gt; [2,]    9   11    6   12    6</span></span></code></pre></div>
+<p>Otherwise the read can be performed in memory as:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span>, lazy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>For remote OME-ZARR files, you can use the <code><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">paws.storage::s3</a></code> client to read the data directly from the S3 bucket without downloading it first:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paws-r/paws" class="external-link">paws</a></span><span class="op">)</span></span>
 <span><span class="va">s3_client</span> <span class="op">&lt;-</span> <span class="fu">paws.storage</span><span class="fu">::</span><span class="fu"><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">s3</a></span><span class="op">(</span></span>
 <span>  config <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -86,6 +117,20 @@
 <span>  s3_client <span class="op">=</span> <span class="va">s3_client</span>,</span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="labels">Labels<a class="anchor" aria-label="anchor" href="#labels"></a>
+</h2>
+<p>Labels of image pyramids can also be read as images</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://huber-group-embl.github.io/rome/">rome</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">utils</span><span class="op">)</span></span>
+<span><span class="va">omezarrzip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"test_ngff_image_v04.ome.zarr.zip"</span>, package <span class="op">=</span> <span class="st">"rome"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">omezarrzip</span>, exdir <span class="op">=</span> <span class="va">td</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">td</span>, <span class="st">"labels/blobs"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-read_label-1.png" style="width:100.0%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

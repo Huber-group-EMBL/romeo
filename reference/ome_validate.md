@@ -23,7 +23,8 @@ ome_validate(path, s3_client = NULL)
 
 ## Value
 
-This function is used for its side-effect and will return an error when
+This function is used for its side-effect and will return the type of
+the OME-Zarr schema (image, label), otherwise will invoke an error when
 passed an invalid OME-Zarr file
 
 ## Examples

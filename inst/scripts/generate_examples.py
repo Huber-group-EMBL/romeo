@@ -30,6 +30,7 @@ rng = np.random.default_rng(0)
 data = rng.poisson(lam=10, size=(size_c, size_xy, size_xy)).astype(np.uint8)
 
 # generate labels
+# TODO: for now we only generate a binary mask
 blobs = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
 blobs2 = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
 blobs += 2 * blobs2

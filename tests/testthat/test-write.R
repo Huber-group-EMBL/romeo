@@ -40,8 +40,19 @@ test_that("check version", {
   })
 })
 
+test_that("default version works", {
+  td <- tempfile(fileext = ".ome.zarr")
+  expect_no_error(
+    ome_write(
+      img,
+      path = td,
+      storage_options = list(chunk_dim = c(64, 64))
+    )
+  )
+})
+
 # writing
-test_that("writing 0.4 and 0.5", {
+test_that("writing 0.4 and 0.5 works", {
   
   lapply(c("0.4", "0.5"), \(.) {
     
@@ -54,6 +65,9 @@ test_that("writing 0.4 and 0.5", {
                          version = .,
                          scalefactors = c(2,2,2),
                          storage_options = list(chunk_dim = c(64,64)))
+    
+    # check type
+    expect_equal(attr(ome_img, "type"), "image")
     
     # zarr exists
     expect_true(zarr_exists(td))
@@ -87,6 +101,9 @@ test_that("writing 0.4 and 0.5", {
                            scalefactors = c(2,2,2),
                            storage_options = list(chunk_dim = c(64,64)), 
                            type = "label")
+    
+    # check type
+    expect_equal(attr(ome_label, "type"), "label")
     
     # type is logical in this example
     expect_equal(type(ome_label[[1]]), "logical")

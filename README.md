@@ -138,3 +138,35 @@ ome_img <- ome_write(img,
                      scalefactors = c(2,2,3),
                      storage_options = list(chunk_dim = c(64,64,1)))
 ```
+
+## Write label
+
+OME-ZARR label pyramids can be generated the same way. We first create
+our own label data using EBImage first.
+
+``` r
+# read image
+library(EBImage)
+
+# read the first frame of image
+nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+nuc <- getFrames(nuc)[[1]]
+
+# threshold using otsu's method
+nuc_th = nuc > otsu(nuc)
+```
+
+We can now write the image pyramid. Arguments are similar for labels.
+
+``` r
+# write label, version 0.4
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label")
+plot(ome_nuc_th, 3)
+```
+
+<img src="man/figures/README-write_label-1.png" style="width:100.0%" />

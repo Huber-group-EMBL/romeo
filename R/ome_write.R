@@ -28,12 +28,19 @@ ome_write <- function(image,
                       scalefactors = c(2,2,2,2),
                       version = c("0.4", "0.5"),
                       storage_options = NULL,
-                      type = "image"){
+                      type = c("image", "label")){
+  
+  # version and type
+  version <- match.arg(version)
+  type <- match.arg(type)
   
   # validate axes
   axes <- .get_valid_axes(image = image, 
                           axes = axes, 
                           version = version)
+  
+  # scale factors
+  .check_scalefactors(scalefactors)
   
   # Generate a downsampled pyramid of images.
   image_pyramid <- .create_mip(image, version, scalefactors, axes, type)
@@ -43,14 +50,16 @@ ome_write <- function(image,
                           path = path, 
                           axes = axes, 
                           version = version, 
-                          storage_options = storage_options)
+                          storage_options = storage_options, 
+                          type = type)
   
   # write ome metadata 
   .write_ome_metadata(path = path, 
                       image = image,
                       scalefactors = scalefactors,
                       version = version, 
-                      axes = axes)
+                      axes = axes,
+                      type = type)
   
   # return
   ome_read(path = path)
@@ -101,10 +110,11 @@ ome_write <- function(image,
                                     path,
                                     axes,
                                     version,
-                                    storage_options){
+                                    storage_options, 
+                                    type){
   
-  # version
-  zarr_version <- if(version == "0.4") 2 else "3"
+  # zarr version
+  zarr_version <- if(version == "0.4") 2L else 3L
   
   # create zarr
   if(!zarr_exists(path))

@@ -116,6 +116,7 @@ Eac scale factor in the vector defines the scale factor relative to the previous
 scale.
 
 ```{r write2}
+#| label: write2
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      version = "0.5", 
@@ -125,8 +126,11 @@ ome_img <- ome_write(img,
 
 ## Write label
 
-```{r write_label}
-#| label: write
+OME-ZARR label pyramids can be generated the same way. We first create
+our own label data using EBImage first. 
+
+```{r image-label}
+#| label: image-label
 # read image
 library(EBImage)
 
@@ -136,11 +140,17 @@ nuc <- getFrames(nuc)[[1]]
 
 # threshold using otsu's method
 nuc_th = nuc > otsu(nuc)
+```
 
+We can now write the image pyramid. Arguments are similar for labels.
+
+```{r write_label}
+#| label: write_label
 # write label, version 0.4
 ome_nuc_th <- ome_write(nuc_th,
                         path = tempfile(fileext = ".ome.zarr"),
                         version = "0.4",
+                        scalefactors = c(2,2,3),
                         storage_options = list(chunk_dim = c(64,64)), 
                         type = "label")
 plot(ome_nuc_th, 3)

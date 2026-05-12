@@ -3,7 +3,8 @@
                                image,
                                scalefactors,
                                version = c("0.4", "0.5"),
-                               axes = NULL) {
+                               axes = NULL, 
+                               type = c("image", "label")) {
 
   # for now we only do version 0.4 due to Rarr only supporting v2
   # see https://ngff.openmicroscopy.org/0.4/index.html#multiscale-md
@@ -36,6 +37,15 @@
   
   # multiscales
   meta <- list(multiscales = list(meta)) 
+  
+  # image-label
+  if(type == "label")
+    meta <- 
+      c(meta, 
+        list(`image-label` = list(version = version))
+      )
+  
+  # version meta
   if(version == "0.5"){
     meta <- list(
       ome = c(meta, 
@@ -126,11 +136,7 @@
       coordinateTransformations = list(
         list(
           scale = vapply(axes, \(.){
-            if(. == "c"){
-              1
-            } else if(. =="t") {
-              0.1 
-            } else as.numeric(s)
+            if(. %in% c("c", "t")) 1 else as.numeric(s)
           }, numeric(1)),
           type = "scale" 
         )

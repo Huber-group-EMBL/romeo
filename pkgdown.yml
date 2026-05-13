@@ -2,7 +2,7 @@ pandoc: 3.8.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2026-05-12T06:34Z
+last_built: 2026-05-13T05:03Z
 urls:
   reference: https://huber-group-embl.github.io/rome/reference
   article: https://huber-group-embl.github.io/rome/articles

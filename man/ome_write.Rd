@@ -14,7 +14,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 
 \S4method{ome_write}{character}(
@@ -24,7 +25,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 
 \S4method{ome_write}{array}(
@@ -34,7 +36,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 
 \S4method{ome_write}{Image}(
@@ -44,7 +47,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 }
 \arguments{
@@ -67,6 +71,8 @@ for writing.}
 (e.g. chunks)}
 
 \item{type}{The type of OME pyramid written: 'image' (default) or 'label'.}
+
+\item{label_metadata}{label metadata added to attributes}
 }
 \description{
 Writes an ome image to the zarr path according to ome-zarr specification

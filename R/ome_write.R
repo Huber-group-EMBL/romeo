@@ -17,6 +17,7 @@
 #' @param storage_options a list of storage options for the zarr array 
 #' (e.g. chunks)
 #' @param type The type of OME pyramid written: 'image' (default) or 'label'.
+#' @param label_metadata label metadata added to attributes
 #' 
 #' @export
 setGeneric("ome_write", 
@@ -26,7 +27,8 @@ setGeneric("ome_write",
              scalefactors = c(2,2,2,2),
              version = c("0.4", "0.5"),
              storage_options = NULL,
-             type = c("image", "label")){
+             type = c("image", "label"), 
+             label_metadata = NULL){
   
   standardGeneric("ome_write")
 })
@@ -36,11 +38,11 @@ setGeneric("ome_write",
 #' @export
 setMethod("ome_write", 
           "character",
-          function(image, path, axes, scalefactors, version, storage_options, type){ 
+          function(image, path, axes, scalefactors, version, storage_options, type, label_metadata){ 
             if(!file.exists(image))
               stop("Image at path ", image, "does not exist!")
             image <- EBImage::readImage(image)
-            .ome_write(image, path, axes, scalefactors, version, storage_options, type)
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_metadata)
           })
 
 #' @rdname ome_write
@@ -48,9 +50,9 @@ setMethod("ome_write",
 #' @export
 setMethod("ome_write", 
           "array",
-          function(image, path, axes, scalefactors, version, storage_options, type){
+          function(image, path, axes, scalefactors, version, storage_options, type, label_metadata){
             image <- Image(image)
-            .ome_write(image, path, axes, scalefactors, version, storage_options, type)
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_metadata)
           })
 
 #' @rdname ome_write
@@ -58,8 +60,8 @@ setMethod("ome_write",
 #' @export
 setMethod("ome_write", 
           "Image",
-          function(image, path, axes, scalefactors, version, storage_options, type){
-            .ome_write(image, path, axes, scalefactors, version, storage_options, type)
+          function(image, path, axes, scalefactors, version, storage_options, type, label_metadata){
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_metadata)
           })
 
 .ome_write <- function(image, 
@@ -68,7 +70,8 @@ setMethod("ome_write",
                        scalefactors = c(2,2,2,2),
                        version = c("0.4", "0.5"),
                        storage_options = NULL,
-                       type = c("image", "label")){
+                       type = c("image", "label"), 
+                       label_metadata = NULL){
   
   # version and type
   version <- match.arg(version)
@@ -99,7 +102,8 @@ setMethod("ome_write",
                       scalefactors = scalefactors,
                       version = version, 
                       axes = axes,
-                      type = type)
+                      type = type, 
+                      label_metadata = label_metadata)
   
   # return
   ome_read(path = path)

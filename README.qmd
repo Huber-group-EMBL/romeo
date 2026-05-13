@@ -155,3 +155,27 @@ ome_nuc_th <- ome_write(nuc_th,
                         type = "label")
 plot(ome_nuc_th, 3)
 ```
+
+Additional metadata information about labels can be provided using the 
+`label_metadata` argument. 
+
+```{r write_label_meta}
+#| label: write_label_meta
+# write label, version 0.4
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label", 
+                        label_metadata = list(
+                          colors = list(
+                           list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
+                           list(`label-value` = 2, rgba = list(0, 255, 255, 128)) 
+                          ),
+                          properties = list(
+                           list(`label-value` = 1, class = "A"),
+                           list(`label-value` = 2, class = "B")
+                          )
+                        ))
+```

@@ -4,7 +4,8 @@
                                scalefactors,
                                version = c("0.4", "0.5"),
                                axes = NULL, 
-                               type = c("image", "label")) {
+                               type = c("image", "label"), 
+                               label_metadata = NULL) {
 
   # for now we only do version 0.4 due to Rarr only supporting v2
   # see https://ngff.openmicroscopy.org/0.4/index.html#multiscale-md
@@ -40,10 +41,10 @@
   
   # image-label
   if(type == "label")
-    meta <- 
-      c(meta, 
-        list(`image-label` = list(version = version))
-      )
+    meta <- append(meta,
+                   .make_label_metadata(
+                     label_metadata = label_metadata, 
+                     version = version))
   
   # version meta
   if(version == "0.5"){
@@ -57,6 +58,65 @@
   Rarr::write_zarr_attributes(zarr_path = path, 
                               new.zattrs = meta, 
                               overwrite = TRUE)
+}
+
+#' @noRd
+.make_label_metadata <- function(label_metadata, version){
+  
+  # add image-label
+  meta <- list(`image-label` = list(version = version))
+  
+  # check label metadata if provided
+  if(!is.null(label_metadata)){
+    
+    # check names
+    lm_names <- c("properties", "colors", "source")
+    if(!all(names(label_metadata) %in% lm_names))
+      stop("Label metadata should only include: ", 
+           paste(lm_names, collapse = ", "))
+    
+    # check source
+    if(!"source" %in% names(label_metadata))
+      label_metadata <- append(label_metadata, 
+                               list(source = "../../"))
+    
+    # check colors
+    lapply(label_metadata["colors"], function(lm){
+      .check_label_value(lm[[1]])
+      if(!is.null(lmrgb <- lm[["rgba"]])){
+        msg <- "rgba should be a list of four uint8 [0,255] entries"
+        if(!is.list(lmrgb)) stop(msg)
+        if(!is.rgba(unlist(lmrgb))) stop(msg)
+      }
+        
+    })
+    
+    # check properties
+    lapply(label_metadata["properties"], function(lm){
+      .check_label_value(lm[[1]])
+    })
+  }
+  
+  append(meta, label_metadata)
+}
+
+.check_label_value <- function(lmv){
+  if(!is.null(lmv <- lmv[["label-value"]])){
+    lmv <- suppressWarnings(as.numeric(lmv))
+    if(lmv %% 1 != 0)
+      stop("label-value should be a non-zero integer")
+  } else {
+    stop("colors and properties in label metadata should include 'label-value'")
+  }
+}
+
+#' @noRd
+is.rgba <- function(x){
+  all(
+    vapply(x, \(.) {
+      (. >= 0 & .<=255) & (. %% 1 == 0)
+    }, logical(1))
+  )
 }
 
 #' .get_valid_axes

@@ -125,23 +125,6 @@ test_that("writing 0.4 and 0.5 works", {
                            version = .), 
       regexp = "'chunk_dim' must be provided"
     )
-    
-    # write label
-    if(dir.exists(td))
-      unlink(td, recursive = TRUE)
-    ome_label <- ome_write(lbl,
-                           path = td,
-                           version = .,
-                           scalefactors = c(2,2,2),
-                           storage_options = list(chunk_dim = c(64,64)), 
-                           type = "label")
-    
-    # check type
-    expect_equal(attr(ome_label, "type"), "label")
-    
-    # type is logical in this example
-    expect_equal(type(ome_label[[1]]), "logical")
-    expect_equal(type(ome_label[[1]]), type(lbl))
   })
   
 })

@@ -1,3 +1,5 @@
+# write ####
+
 #' @noRd
 .write_ome_metadata <- function(path, 
                                image,
@@ -81,43 +83,27 @@
                                list(source = "../../"))
     
     # check colors
-    lapply(label_metadata["colors"], function(lm){
-      .check_label_value(lm[[1]])
-      if(!is.null(lmrgb <- lm[["rgba"]])){
-        msg <- "rgba should be a list of four uint8 [0,255] entries"
-        if(!is.list(lmrgb)) stop(msg)
-        if(!is.rgba(unlist(lmrgb))) stop(msg)
-      }
-        
-    })
+    if(!is.null(lbl_meta <- label_metadata$colors))
+      lapply(lbl_meta, function(lm){
+        .check_label_value(lm)
+        if(!is.null(lmrgb <- lm[["rgba"]])){
+          msg <- "rgba should be a list of four uint8 [0,255] entries"
+          if(!is.list(lmrgb)) stop(msg)
+          if(!is.rgba(lmrgb)) stop(msg)
+        }
+      })
     
     # check properties
-    lapply(label_metadata["properties"], function(lm){
-      .check_label_value(lm[[1]])
-    })
+    if(!is.null(lbl_meta <- label_metadata$properties))
+      lapply(lbl_meta, function(lm){
+        .check_label_value(lm)
+      })
   }
   
   append(meta, label_metadata)
 }
 
-.check_label_value <- function(lmv){
-  if(!is.null(lmv <- lmv[["label-value"]])){
-    lmv <- suppressWarnings(as.numeric(lmv))
-    if(lmv %% 1 != 0)
-      stop("label-value should be a non-zero integer")
-  } else {
-    stop("colors and properties in label metadata should include 'label-value'")
-  }
-}
-
-#' @noRd
-is.rgba <- function(x){
-  all(
-    vapply(x, \(.) {
-      (. >= 0 & .<=255) & (. %% 1 == 0)
-    }, logical(1))
-  )
-}
+# auxiliary ####
 
 #' .get_valid_axes
 #' 
@@ -222,6 +208,8 @@ is.rgba <- function(x){
   )
 }
 
+# utils ####
+
 .check_scalefactors <- function(sf){
   msg <- "scale factors should be non-NA values higher than 1."
   if(anyNA(sf))
@@ -232,4 +220,24 @@ is.rgba <- function(x){
     stop(msg)
   if(any(sf < 1))
     stop(msg)
+}
+
+.check_label_value <- function(lmv){
+  if(!is.null(lmv <- lmv$`label-value`)){
+    lmv <- suppressWarnings(as.numeric(lmv))
+    if(lmv %% 1 != 0)
+      stop("label-value should be a non-zero integer")
+  } else {
+    stop("colors and properties in label metadata should include 'label-value'")
+  }
+}
+
+#' @noRd
+is.rgba <- function(x){
+  x <- unlist(x, use.names = FALSE)
+  is.numeric(x) &&
+    all(is.finite(x)) &&
+    all(x >= 0 & x <= 255) &&
+    all(x == floor(x)) && 
+    length(x) == 4
 }

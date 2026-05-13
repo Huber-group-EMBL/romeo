@@ -12,6 +12,7 @@ Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 4.1)
 Imports: 
+    cli,
     EBImage,
     jsonlite,
     jsonvalidate,

@@ -99,8 +99,6 @@ plot(x, all = TRUE)
 Labels of image pyramids can also be read as images
 
 ``` r
-library(rome)
-library(utils)
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
@@ -109,3 +107,66 @@ plot(x, all = TRUE)
 ```
 
 <img src="man/figures/README-read_label-1.png" style="width:100.0%" />
+
+## Write Image
+
+rome also provides utilities for writing OME-ZARR images for OME-NGFF
+versions 0.4 and 0.5.
+
+``` r
+# read image
+library(EBImage)
+img_file <- system.file("extdata", "example_RGB.png", package="rome")
+img <- readImage(img_file)
+
+# write image, version 0.4
+ome_img <- ome_write(img,
+                     path = tempfile(fileext = ".ome.zarr"),
+                     version = "0.4",
+                     storage_options = list(chunk_dim = c(64,64,1)))
+```
+
+Users can also define there own scaling factors for the image pyramids.
+For a `scalefactors` with length three, the pyramid will have four
+scales. Eac scale factor in the vector defines the scale factor relative
+to the previous scale.
+
+``` r
+ome_img <- ome_write(img,
+                     path = tempfile(fileext = ".ome.zarr"),
+                     version = "0.5", 
+                     scalefactors = c(2,2,3),
+                     storage_options = list(chunk_dim = c(64,64,1)))
+```
+
+## Write label
+
+OME-ZARR label pyramids can be generated the same way. We first create
+our own label data using EBImage first.
+
+``` r
+# read image
+library(EBImage)
+
+# read the first frame of image
+nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+nuc <- getFrames(nuc)[[1]]
+
+# threshold using otsu's method
+nuc_th = nuc > otsu(nuc)
+```
+
+We can now write the image pyramid. Arguments are similar for labels.
+
+``` r
+# write label, version 0.4
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label")
+plot(ome_nuc_th, 3)
+```
+
+<img src="man/figures/README-write_label-1.png" style="width:100.0%" />

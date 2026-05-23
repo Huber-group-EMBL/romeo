@@ -31,5 +31,5 @@ extract_levels <- function(x, levels) {
   }
 
   class(x) <- "ome_zarr"
-  return(x)
+  x
 }

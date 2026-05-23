@@ -9,5 +9,5 @@
       vapply(function(axis) axis$name, character(1)),
     stop("Unsupported OME version: ", ome_version)
   )
-  return(dim_names)
+  dim_names
 }

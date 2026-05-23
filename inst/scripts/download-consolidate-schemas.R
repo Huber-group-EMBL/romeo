@@ -25,9 +25,9 @@ download_consolidate_schemas <- function(ome_version, type, path) {
           grepl("^https://ngff.openmicroscopy.org/.+/schemas/.+\\.schema$", x)
       ) {
         download.file(x, file.path(path, ome_version, basename(x)))
-        return(basename(x))
+        basename(x)
       } else {
-        return(x)
+        x
       }
     }
   ) |>

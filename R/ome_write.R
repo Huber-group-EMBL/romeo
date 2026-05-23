@@ -4,7 +4,8 @@
 #' @description
 #' Writes an ome image to the zarr path according to ome-zarr specification
 #'
-#' @param image an n-dimensional (or a path to an) array representing the image data (1<n<6)
+#' @param image an n-dimensional (or a path to an) array representing the
+#' image data (1<n<6)
 #' @param path the path to writing ome.zarr
 #' @param axes a character vector specifying the axes of the image
 #' (e.g. c("t", "c", "z", "y", "x"))
@@ -12,8 +13,8 @@
 #' Importantly, each scale factor is relative to the previous scale factor.
 #' For example, if the scale factors are c(2, 2, 2), the returned multiscale
 #' image will have 4 scales.
-#' @param version OME-ZARR version (0.4 or 0.5), lower versions are not supported
-#' for writing.
+#' @param version OME-ZARR version (0.4 or 0.5), lower versions are not
+#' supported for writing.
 #' @param storage_options a list of storage options for the zarr array
 #' (e.g. chunks)
 #' @param type The type of OME pyramid written: 'image' (default) or 'label'.
@@ -171,7 +172,7 @@ setMethod(
           ome_validate(path)
         },
         error = function(e) {
-          return(path)
+          path
         }
       )
 
@@ -301,7 +302,7 @@ setMethod(
 
   # write multiscale image
   # TODO: how can we do this optimal for each scale/layer
-  for (i in seq_len(length(pyramid))) {
+  for (i in seq_along(pyramid)) {
     image <- pyramid[[i]]
     if (version == "0.5") {
       dimnames(image) <- setNames(

@@ -7,5 +7,5 @@
     "0.5" = metadata$ome$multiscales,
     stop("Unsupported OME version: ", ome_version)
   )
-  return(scales[[1]])
+  scales[[1]]
 }

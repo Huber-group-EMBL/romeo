@@ -53,13 +53,13 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
         dim_names
       )
     }
-    return(img)
+    img
   })
 
   x <- mapply(
     function(img, scale) {
       attr(img, "scale") <- scale
-      return(img)
+      img
     },
     x,
     lapply(scales$datasets, function(x) {
@@ -71,5 +71,5 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
   attr(x, "type") <- type
   attr(x, "version") <- ome_version
 
-  return(x)
+  x
 }

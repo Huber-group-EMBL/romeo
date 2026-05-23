@@ -17,9 +17,7 @@ NULL
   ax <- "axes"
   ct <- "coordinateTransformations"
   ds <- "datasets"
-  mt <- "metadata"
   v <- "version"
-  n <- "name"
 
   # check version
   if (!version %in% c("0.4", "0.5")) {

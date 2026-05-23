@@ -1,7 +1,8 @@
 #' Plot an `ome_zarr` object.
 #'
 #' @param x An `ome_zarr` object.
-#' @param level Integer. The scale level to plot. Defaults to `1` (the highest resolution).
+#' @param level Integer. The scale level to plot. Defaults to `1`
+#' (the highest resolution).
 #' @param ... Additional arguments passed to `plot()`.
 #'
 #' @export

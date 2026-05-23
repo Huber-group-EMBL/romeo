@@ -134,29 +134,29 @@ setMethod("ome_write",
   ome_read(path = path)
 }
 
-.write_label_group <- function(path, label_name = NULL, version) {
+.write_label_group <- function(path, name = NULL, version) {
   
   # check name
-  if(!is.character(label_name))
+  if(!is_label_name(name))
     stop("label_name has to be a string!")
   
   # message
   message(
     sprintf("An image pyramid was found at '%s', writing labels to '%s'", 
             path, 
-            file.path("labels", label_name))
+            file.path("labels", name))
   )
 
-  # create zarr group of labels/<label_name>
+  # create zarr group of labels/<name>
   create_zarr(path, 
               version = if(version == "0.4") 2L else 3L)
-  create_zarr_group(path, file.path("labels", label_name))
+  create_zarr_group(path, file.path("labels", name))
   
   # add labels group metadata
-  .write_label_group_metadata(path, label_name, version = version)
+  .write_label_group_metadata(path, name, version = version)
   
   # update path
-  file.path(path, file.path("labels", label_name))
+  file.path(path, file.path("labels", name))
 }
             
 #' .create_mip

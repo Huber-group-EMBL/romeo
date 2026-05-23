@@ -60,7 +60,7 @@
 }
 
 #' @noRd
-.write_label_group_metadata <- function(path, name, version = version) { 
+.write_label_group_metadata <- function(path, name, version) { 
   meta <- list(labels = list(name))
   if(version == "0.5")
     meta <- list(ome = meta)
@@ -276,4 +276,8 @@ is_integer <- function(x) {
     is.numeric(x) &&
     is.finite(x) &&
     (x %% 1 == 0)
+}
+
+is_label_name <- function(x) {
+  is.character(x) && length(x) == 1L && !is.na(x) && nzchar(x)
 }

@@ -113,29 +113,37 @@ NULL
 
     # check colors
     if (!is.null(lbl_meta <- label_metadata$colors)) {
-      colors <- lapply(lbl_meta, function(lm) {
-        .check_label_value(lm)
-        if (!is.null(lmrgb <- lm[["rgba"]])) {
-          msg <- "rgba should be a list of four uint8 [0,255] entries"
-          if (!is.list(lmrgb)) {
-            stop(msg)
+      colors <- vapply(
+        lbl_meta,
+        function(lm) {
+          .check_label_value(lm)
+          if (!is.null(lmrgb <- lm[["rgba"]])) {
+            msg <- "rgba should be a list of four uint8 [0,255] entries"
+            if (!is.list(lmrgb)) {
+              stop(msg)
+            }
+            if (!is_rgba(lmrgb)) stop(msg)
           }
-          if (!is_rgba(lmrgb)) stop(msg)
-        }
-        lm[["label-value"]]
-      })
-      if (anyDuplicated(colors) == 0L) {
+          lm[["label-value"]]
+        },
+        numeric(1)
+      )
+      if (anyDuplicated(colors)) {
         stop("label values should be unique!")
       }
     }
 
     # check properties
     if (!is.null(lbl_meta <- label_metadata$properties)) {
-      props <- lapply(lbl_meta, function(lm) {
-        .check_label_value(lm)
-        lm[["label-value"]]
-      })
-      if (anyDuplicated(props) == 0L) {
+      props <- vapply(
+        lbl_meta,
+        function(lm) {
+          .check_label_value(lm)
+          lm[["label-value"]]
+        },
+        numeric(1)
+      )
+      if (anyDuplicated(props)) {
         stop("label values should be unique!")
       }
     }

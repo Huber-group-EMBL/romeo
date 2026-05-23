@@ -23,13 +23,11 @@ ome_validate <- function(path, s3_client = NULL) {
   # local references as jsonvalidate doesn't support remote references
   # (https://github.com/ropensci/jsonvalidate/issues/70)
 
+  fields <- names(
+    if (is.null(ome <- group_attributes$ome)) group_attributes else ome
+  )
   type <-
-    if (
-      "image-label" %in%
-        names(
-          if (is.null(ome <- group_attributes$ome)) group_attributes else ome
-        )
-    ) {
+    if ("image-label" %in% fields) {
       "label"
     } else {
       "image"

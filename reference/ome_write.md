@@ -12,7 +12,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 
 # S4 method for class 'character'
@@ -23,7 +24,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 
 # S4 method for class 'array'
@@ -34,7 +36,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 
 # S4 method for class 'Image'
@@ -45,7 +48,8 @@ ome_write(
   scalefactors = c(2, 2, 2, 2),
   version = c("0.4", "0.5"),
   storage_options = NULL,
-  type = c("image", "label")
+  type = c("image", "label"),
+  label_metadata = NULL
 )
 ```
 
@@ -84,3 +88,7 @@ ome_write(
 - type:
 
   The type of OME pyramid written: 'image' (default) or 'label'.
+
+- label_metadata:
+
+  label metadata added to attributes

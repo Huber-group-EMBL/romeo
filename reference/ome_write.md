@@ -13,6 +13,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 
@@ -25,6 +26,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 
@@ -37,6 +39,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 
@@ -49,6 +52,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 ```
@@ -89,6 +93,10 @@ ome_write(
 
   The type of OME pyramid written: 'image' (default) or 'label'.
 
+- label_name:
+
+  The name of the label data.
+
 - label_metadata:
 
-  label metadata added to attributes
+  label metadata added to attributes.

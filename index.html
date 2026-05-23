@@ -140,7 +140,7 @@
 <span><span class="va">img_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_RGB.png"</span>, package<span class="op">=</span><span class="st">"rome"</span><span class="op">)</span></span>
 <span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/io.html" class="external-link">readImage</a></span><span class="op">(</span><span class="va">img_file</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># write image, version 0.4</span></span>
+<span><span class="co"># write image pyramid</span></span>
 <span><span class="va">ome_img</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">img</span>,</span>
 <span>                     path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
@@ -167,10 +167,9 @@
 <span></span>
 <span><span class="co"># threshold using otsu's method</span></span>
 <span><span class="va">nuc_th</span> <span class="op">=</span> <span class="va">nuc</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/otsu.html" class="external-link">otsu</a></span><span class="op">(</span><span class="va">nuc</span><span class="op">)</span></span></code></pre></div>
-<p>We can now write the image pyramid. Arguments are similar for labels.</p>
+<p>We can now write the label pyramid. Arguments are similar to how images are written.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># write label, version 0.4</span></span>
-<span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
+<code class="sourceCode R"><span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
 <span>                        path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
 <span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span>
@@ -178,6 +177,46 @@
 <span>                        type <span class="op">=</span> <span class="st">"label"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc_th</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-write_label-1.png" style="width:100.0%"></p>
+<p>Additional metadata information about labels can be provided using the <code>label_metadata</code> argument.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># write label, version 0.4</span></span>
+<span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
+<span>                        path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
+<span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
+<span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>                        storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                        type <span class="op">=</span> <span class="st">"label"</span>, </span>
+<span>                        label_name <span class="op">=</span> <span class="st">"blobs"</span>,</span>
+<span>                        label_metadata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                          colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                           <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>`label-value` <span class="op">=</span> <span class="fl">1</span>, rgba <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">255</span>, <span class="fl">255</span>, <span class="fl">255</span>, <span class="fl">255</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                           <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>`label-value` <span class="op">=</span> <span class="fl">2</span>, rgba <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">255</span>, <span class="fl">255</span>, <span class="fl">128</span><span class="op">)</span><span class="op">)</span> </span>
+<span>                          <span class="op">)</span>,</span>
+<span>                          properties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>                           <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>`label-value` <span class="op">=</span> <span class="fl">1</span>, class <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span>,</span>
+<span>                           <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>`label-value` <span class="op">=</span> <span class="fl">2</span>, class <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span></span>
+<span>                          <span class="op">)</span></span>
+<span>                        <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>If the path already includes an image pyramid, then we should define a name (e.g. <code>blobs</code>) for the label pyramid associated with the image.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># write image pyramid</span></span>
+<span><span class="va">ome_img</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">img</span>,</span>
+<span>                     path <span class="op">=</span> <span class="va">td</span>,</span>
+<span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
+<span>                     storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>,<span class="fl">64</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
+<span>                        path <span class="op">=</span> <span class="va">td</span>,</span>
+<span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
+<span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>                        storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                        type <span class="op">=</span> <span class="st">"label"</span>, </span>
+<span>                        label_name <span class="op">=</span> <span class="st">"blobs"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; An image pyramid was found at '/var/folders/vf/d8kg507x41xfh6z9vgv9skksdsn29w/T//RtmpAFXkPo/filee73723f4f451.ome.zarr', writing labels to 'labels/blobs'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc_th</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-write_image_label-1.png" style="width:100.0%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

@@ -118,7 +118,7 @@ library(EBImage)
 img_file <- system.file("extdata", "example_RGB.png", package="rome")
 img <- readImage(img_file)
 
-# write image, version 0.4
+# write image pyramid
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      version = "0.4",
@@ -157,11 +157,11 @@ nuc <- getFrames(nuc)[[1]]
 nuc_th = nuc > otsu(nuc)
 ```
 
-We can now write the image pyramid. Arguments are similar for labels.
+We can now write the label pyramid. Arguments are similar to how images
+are written.
 
 ``` r
 
-# write label, version 0.4
 ome_nuc_th <- ome_write(nuc_th,
                         path = tempfile(fileext = ".ome.zarr"),
                         version = "0.4",
@@ -172,6 +172,57 @@ plot(ome_nuc_th, 3)
 ```
 
 ![](reference/figures/README-write_label-1.png)
+
+Additional metadata information about labels can be provided using the
+`label_metadata` argument.
+
+``` r
+
+# write label, version 0.4
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label", 
+                        label_name = "blobs",
+                        label_metadata = list(
+                          colors = list(
+                           list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
+                           list(`label-value` = 2, rgba = list(0, 255, 255, 128)) 
+                          ),
+                          properties = list(
+                           list(`label-value` = 1, class = "A"),
+                           list(`label-value` = 2, class = "B")
+                          )
+                        ))
+```
+
+If the path already includes an image pyramid, then we should define a
+name (e.g. `blobs`) for the label pyramid associated with the image.
+
+``` r
+
+td <- tempfile(fileext = ".ome.zarr")
+
+# write image pyramid
+ome_img <- ome_write(img,
+                     path = td,
+                     version = "0.4",
+                     storage_options = list(chunk_dim = c(64,64,1)))
+
+ome_nuc_th <- ome_write(nuc_th,
+                        path = td,
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label", 
+                        label_name = "blobs")
+#> An image pyramid was found at '/var/folders/vf/d8kg507x41xfh6z9vgv9skksdsn29w/T//RtmpAFXkPo/filee73723f4f451.ome.zarr', writing labels to 'labels/blobs'
+plot(ome_nuc_th, 3)
+```
+
+![](reference/figures/README-write_image_label-1.png)
 
 # Package index
 

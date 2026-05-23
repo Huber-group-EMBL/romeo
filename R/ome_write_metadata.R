@@ -78,29 +78,48 @@
            paste(lm_names, collapse = ", "))
     
     # check source
-    if(!"source" %in% names(label_metadata))
+    if(!"source" %in% names(label_metadata)){
       label_metadata <- append(label_metadata, 
-                               list(source = "../../"))
+                               list(source = list(image = "../../")))
+    } else {
+      if(!is.null(lbl_meta <- label_metadata$source)){
+        if(!"image" %in% names(lbl_meta)){
+          stop("'source' should include 'image' with a path")
+        }
+      }
+    }
     
     # check colors
-    if(!is.null(lbl_meta <- label_metadata$colors))
-      lapply(lbl_meta, function(lm){
+    if(!is.null(lbl_meta <- label_metadata$colors)){
+      colors <- lapply(lbl_meta, function(lm){
         .check_label_value(lm)
         if(!is.null(lmrgb <- lm[["rgba"]])){
           msg <- "rgba should be a list of four uint8 [0,255] entries"
           if(!is.list(lmrgb)) stop(msg)
           if(!is.rgba(lmrgb)) stop(msg)
         }
-      })
+        lm[["label-value"]]
+      }) 
+      if(length(unique(colors)) != length(colors))
+        stop("label values should be unique!")
+    }
     
     # check properties
-    if(!is.null(lbl_meta <- label_metadata$properties))
-      lapply(lbl_meta, function(lm){
+    if(!is.null(lbl_meta <- label_metadata$properties)){
+      props <- lapply(lbl_meta, function(lm){
         .check_label_value(lm)
-      })
+        lm[["label-value"]]
+      }) 
+      if(length(unique(props)) != length(props))
+        stop("label values should be unique!")
+    }
+    
+    # append label metadata
+    meta[["image-label"]] <- append(meta[["image-label"]], 
+                                  label_metadata)
   }
   
-  append(meta, label_metadata)
+  meta
 }
 
 # auxiliary ####
@@ -225,7 +244,7 @@
 .check_label_value <- function(lmv){
   if(!is.null(lmv <- lmv$`label-value`)){
     lmv <- suppressWarnings(as.numeric(lmv))
-    if(lmv %% 1 != 0)
+    if(!is_integer(lmv))
       stop("label-value should be a non-zero integer")
   } else {
     stop("colors and properties in label metadata should include 'label-value'")
@@ -240,4 +259,11 @@ is.rgba <- function(x){
     all(x >= 0 & x <= 255) &&
     all(x == floor(x)) && 
     length(x) == 4
+}
+
+is_integer <- function(x) {
+  !is.na(x) &&
+    is.numeric(x) &&
+    is.finite(x) &&
+    (x %% 1 == 0)
 }

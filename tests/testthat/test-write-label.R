@@ -41,7 +41,6 @@ test_that("writing label metadata works", {
   meta <- .make_label_metadata(NULL, version = "0.4")
   expect_contains(names(meta), "image-label")
   
-
   lbl_meta <- list(
     colors = list(
       list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
@@ -53,6 +52,18 @@ test_that("writing label metadata works", {
     )
   )
   expect_no_error(.make_label_metadata(lbl_meta, version = "0.4"))
+
+  lbl_meta$properties[[2]]$`label-value` <- 1
+  expect_error(.make_label_metadata(lbl_meta, version = "0.4"), 
+               regexp = "label values should be unique!")
+  
+  lbl_meta$colors[[2]]$`label-value` <- 1
+  expect_error(.make_label_metadata(lbl_meta, version = "0.4"), 
+               regexp = "label values should be unique!")
+  
+  lbl_meta$colors[[2]]$`label-value` <- NA
+  expect_error(.make_label_metadata(lbl_meta, version = "0.4"),
+               regexp = "label-value should be a non-zero integer")
   
   lbl_meta$colors[[1]]$rgba <- list(255, 255, 255)
   expect_error(.make_label_metadata(lbl_meta, version = "0.4"), 
@@ -61,5 +72,9 @@ test_that("writing label metadata works", {
   lbl_meta$colors[[1]]$`label-value` <- NULL
   expect_error(.make_label_metadata(lbl_meta, version = "0.4"), 
                regexp = " metadata should include 'label-value'")
+  
+  lbl_meta$source <- list(temp = "../../")
+  expect_error(.make_label_metadata(lbl_meta, version = "0.4"), 
+               regexp = "'source' should include 'image'")
   
 })

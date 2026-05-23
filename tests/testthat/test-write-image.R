@@ -22,11 +22,6 @@ test_that("check scalefactors", {
 img_file <- system.file("images", "sample.png", package="EBImage")
 img <- readImage(img_file)
 
-# label example
-lbl_file <- system.file("images", "nuclei.tif", package="EBImage")
-lbl <- getFrames(readImage(lbl_file))[[1]]
-lbl <- lbl > otsu(lbl)
-
 # no support for 0.1, 0.2 and 0.3
 test_that("check version", {
   

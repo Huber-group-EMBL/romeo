@@ -1,3 +1,6 @@
+#' @importFrom Rarr read_zarr_array read_zarr_attributes
+NULL
+
 # write ####
 
 #' @noRd
@@ -9,9 +12,6 @@
                                type = c("image", "label"), 
                                label_metadata = NULL) {
 
-  # for now we only do version 0.4 due to Rarr only supporting v2
-  # see https://ngff.openmicroscopy.org/0.4/index.html#multiscale-md
-  
   meta <- list()
   ax <- "axes"
   ct <- "coordinateTransformations"
@@ -60,6 +60,19 @@
   Rarr::write_zarr_attributes(zarr_path = path, 
                               new.zattrs = meta, 
                               overwrite = TRUE)
+}
+
+#' @noRd
+.write_label_group_metadata <- function(path, name, version) { 
+  meta <- list(labels = list(name))
+  if(version == "0.5")
+    meta <- list(ome = meta)
+  zarr_version <- if(version == "0.4") 2L else 3L
+  Rarr::write_zarr_attributes(
+    file.path(path, "labels"),
+    meta,
+    zarr_version = zarr_version
+  )
 }
 
 #' @noRd
@@ -266,4 +279,8 @@ is_integer <- function(x) {
     is.numeric(x) &&
     is.finite(x) &&
     (x %% 1 == 0)
+}
+
+is_label_name <- function(x) {
+  is.character(x) && length(x) == 1L && !is.na(x) && nzchar(x)
 }

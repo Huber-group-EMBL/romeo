@@ -9,6 +9,9 @@
 #' @param validate Logical.If `TRUE` (the default), validate the OME-Zarr file.
 #'
 #' @importFrom stats setNames
+#' @importFrom Rarr read_zarr_array read_zarr_attributes
+#' @importFrom ZarrArray ZarrArray
+#' 
 #' @export
 #'
 #' @examples

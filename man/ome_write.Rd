@@ -15,6 +15,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 
@@ -26,6 +27,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 
@@ -37,6 +39,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 
@@ -48,6 +51,7 @@ ome_write(
   version = c("0.4", "0.5"),
   storage_options = NULL,
   type = c("image", "label"),
+  label_name = NULL,
   label_metadata = NULL
 )
 }
@@ -72,7 +76,9 @@ for writing.}
 
 \item{type}{The type of OME pyramid written: 'image' (default) or 'label'.}
 
-\item{label_metadata}{label metadata added to attributes}
+\item{label_name}{The name of the label data.}
+
+\item{label_metadata}{label metadata added to attributes.}
 }
 \description{
 Writes an ome image to the zarr path according to ome-zarr specification

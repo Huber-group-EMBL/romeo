@@ -9,3 +9,5 @@
 ^\.Rproj\.user$
 ^[.]?air[.]toml$
 ^\.vscode$
+^\.positai$
+^\.claude$

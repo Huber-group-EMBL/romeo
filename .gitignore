@@ -8,3 +8,4 @@ inst/extdata/ome-*
 .Ruserdata
 *.Rproj
 .DS_Store
+.positai

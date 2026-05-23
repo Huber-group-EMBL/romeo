@@ -17,7 +17,8 @@
 #' @param storage_options a list of storage options for the zarr array 
 #' (e.g. chunks)
 #' @param type The type of OME pyramid written: 'image' (default) or 'label'.
-#' @param label_metadata label metadata added to attributes
+#' @param label_name The name of the label data.
+#' @param label_metadata label metadata added to attributes.
 #' 
 #' @export
 setGeneric("ome_write", 
@@ -28,6 +29,7 @@ setGeneric("ome_write",
              version = c("0.4", "0.5"),
              storage_options = NULL,
              type = c("image", "label"), 
+             label_name = NULL,
              label_metadata = NULL){
   
   standardGeneric("ome_write")
@@ -38,11 +40,11 @@ setGeneric("ome_write",
 #' @export
 setMethod("ome_write", 
           "character",
-          function(image, path, axes, scalefactors, version, storage_options, type, label_metadata){ 
+          function(image, path, axes, scalefactors, version, storage_options, type, label_name, label_metadata){ 
             if(!file.exists(image))
               stop("Image at path ", image, "does not exist!")
             image <- EBImage::readImage(image)
-            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_metadata)
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_name, label_metadata)
           })
 
 #' @rdname ome_write
@@ -50,9 +52,9 @@ setMethod("ome_write",
 #' @export
 setMethod("ome_write", 
           "array",
-          function(image, path, axes, scalefactors, version, storage_options, type, label_metadata){
+          function(image, path, axes, scalefactors, version, storage_options, type, label_name, label_metadata){
             image <- Image(image)
-            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_metadata)
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_name, label_metadata)
           })
 
 #' @rdname ome_write
@@ -60,8 +62,8 @@ setMethod("ome_write",
 #' @export
 setMethod("ome_write", 
           "Image",
-          function(image, path, axes, scalefactors, version, storage_options, type, label_metadata){
-            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_metadata)
+          function(image, path, axes, scalefactors, version, storage_options, type, label_name, label_metadata){
+            .ome_write(image, path, axes, scalefactors, version, storage_options, type, label_name, label_metadata)
           })
 
 .ome_write <- function(image, 
@@ -71,6 +73,7 @@ setMethod("ome_write",
                        version = c("0.4", "0.5"),
                        storage_options = NULL,
                        type = c("image", "label"), 
+                       label_name = NULL,
                        label_metadata = NULL){
   
   # version and type
@@ -86,15 +89,37 @@ setMethod("ome_write",
   .check_scalefactors(scalefactors)
   
   # Generate a downsampled pyramid of images.
-  image_pyramid <- .create_mip(image, version, scalefactors, axes, type)
+  pyramid <- .create_mip(image, version, scalefactors, axes, type)
+  
+  # update path if writing labels
+  path <- switch (type,
+    "label" = {
+      
+      # first check if an image is written, 
+      # otherwise return path and write a regular label pyramid
+      res <- tryCatch({
+        ome_validate(path)
+      }, error = function(e){
+        return(path)
+      })
+      
+      if(res == "image") {
+        .write_label_group(path, label_name, version) 
+      } else {
+        res
+      }
+    },
+    "image" = path,
+    stop("Type should be either 'image' or 'label'")
+  )
   
   # write image
-  .write_multiscale_image(image_pyramid = image_pyramid, 
-                          path = path, 
-                          axes = axes, 
-                          version = version, 
-                          storage_options = storage_options, 
-                          type = type)
+  .write_multiscale(pyramid = pyramid, 
+                    path = path, 
+                    axes = axes, 
+                    version = version, 
+                    storage_options = storage_options, 
+                    type = type)
   
   # write ome metadata 
   .write_ome_metadata(path = path, 
@@ -107,6 +132,31 @@ setMethod("ome_write",
   
   # return
   ome_read(path = path)
+}
+
+.write_label_group <- function(path, label_name = NULL, version) {
+  
+  # check name
+  if(!is.character(label_name))
+    stop("label_name has to be a string!")
+  
+  # message
+  message(
+    sprintf("An image pyramid was found at '%s', writing labels to '%s'", 
+            path, 
+            file.path("labels", label_name))
+  )
+
+  # create zarr group of labels/<label_name>
+  create_zarr(path, 
+              version = if(version == "0.4") 2L else 3L)
+  create_zarr_group(path, file.path("labels", label_name))
+  
+  # add labels group metadata
+  .write_label_group_metadata(path, label_name, version = version)
+  
+  # update path
+  file.path(path, file.path("labels", label_name))
 }
             
 #' .create_mip
@@ -143,14 +193,14 @@ setMethod("ome_write",
   image_list
 }
 
-#' .write_multiscale_image
+#' .write_multiscale
 #' 
 #' Write a pyramid with multiscale metadata to disk.
 #'
 #' @inheritParams ome_write
 #' 
 #' @noRd
-.write_multiscale_image <- function(image_pyramid,
+.write_multiscale <- function(pyramid,
                                     path,
                                     axes,
                                     version,
@@ -170,8 +220,8 @@ setMethod("ome_write",
   
   # write multiscale image
   # TODO: how can we do this optimal for each scale/layer
-  for(i in seq_len(length(image_pyramid))){
-    image <- image_pyramid[[i]]
+  for(i in seq_len(length(pyramid))){
+    image <- pyramid[[i]]
     if(version == "0.5")
       dimnames(image) <- setNames(
         vector("list", length(axes)),

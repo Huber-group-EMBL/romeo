@@ -15,7 +15,8 @@ download_consolidate_schemas <- function(ome_version, type, path) {
   download.file(url, dest)
 
   # Fetch references and transform them to local references as jsonvalidate
-  # doesn't support remote references (https://github.com/ropensci/jsonvalidate/issues/70)
+  # doesn't support remote references
+  # (https://github.com/ropensci/jsonvalidate/issues/70)
   schema <- jsonlite::read_json(dest)
   purrr::modify_tree(
     schema,

@@ -7,8 +7,8 @@ test_that("check scalefactors", {
   # NOTE: incremental scales are not dictated by NGFF but the specification
   # says it has to be ordered from largest to lowest
   # See:
-  #   https://ngff.openmicroscopy.org/specifications/0.4/index.html#multiscales-metadata
-  #   https://ngff.openmicroscopy.org/specifications/0.5/index.html#multiscales-metadata
+  #   https://ngff.openmicroscopy.org/specifications/0.4/index.html
+  #   https://ngff.openmicroscopy.org/specifications/0.5/index.html
   expect_error(.check_scalefactors(c(2, 0.1, 2)))
   expect_error(.check_scalefactors(c(2, NA, 2)))
   expect_error(.check_scalefactors(c(2, -1, 2)))

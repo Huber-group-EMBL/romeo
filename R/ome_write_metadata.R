@@ -120,11 +120,11 @@ NULL
           if (!is.list(lmrgb)) {
             stop(msg)
           }
-          if (!is.rgba(lmrgb)) stop(msg)
+          if (!is_rgba(lmrgb)) stop(msg)
         }
         lm[["label-value"]]
       })
-      if (length(unique(colors)) != length(colors)) {
+      if (anyDuplicated(colors) == 0L) {
         stop("label values should be unique!")
       }
     }
@@ -135,7 +135,7 @@ NULL
         .check_label_value(lm)
         lm[["label-value"]]
       })
-      if (length(unique(props)) != length(props)) {
+      if (anyDuplicated(props) == 0L) {
         stop("label values should be unique!")
       }
     }
@@ -293,7 +293,7 @@ NULL
   if (length(sf) < 1) {
     stop(msg)
   }
-  if (any(!is.numeric(sf))) {
+  if (!all(is.numeric(sf))) {
     stop(msg)
   }
   if (any(sf < 1)) {
@@ -313,7 +313,7 @@ NULL
 }
 
 #' @noRd
-is.rgba <- function(x) {
+is_rgba <- function(x) {
   x <- unlist(x, use.names = FALSE)
   is.numeric(x) &&
     all(is.finite(x)) &&

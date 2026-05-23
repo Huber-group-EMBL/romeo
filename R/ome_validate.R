@@ -26,9 +26,9 @@ ome_validate <- function(path, s3_client = NULL) {
   type <-
     if (
       "image-label" %in%
-      names(
-        if (is.null(ome <- group_attributes$ome)) group_attributes else ome
-      )
+        names(
+          if (is.null(ome <- group_attributes$ome)) group_attributes else ome
+        )
     ) {
       "label"
     } else {

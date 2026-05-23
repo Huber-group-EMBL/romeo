@@ -8,7 +8,7 @@
 #'
 #' @importFrom cli cli_abort
 #' @importFrom utils tail
-#' 
+#'
 #' @return `NULL`
 #'
 #' @noRd

@@ -1,10 +1,10 @@
 download_consolidate_schemas <- function(ome_version, type, path) {
-
-    # Download root schema
+  # Download root schema
   schema_file <- paste0(type, ".schema")
   url <- sprintf(
     paste0(
-      "https://ngff.openmicroscopy.org/%s/schemas/", schema_file
+      "https://ngff.openmicroscopy.org/%s/schemas/",
+      schema_file
     ),
     ome_version
   )
@@ -13,7 +13,7 @@ download_consolidate_schemas <- function(ome_version, type, path) {
     dir.create(dirname(dest), recursive = TRUE)
   }
   download.file(url, dest)
-  
+
   # Fetch references and transform them to local references as jsonvalidate
   # doesn't support remote references (https://github.com/ropensci/jsonvalidate/issues/70)
   schema <- jsonlite::read_json(dest)
@@ -22,7 +22,7 @@ download_consolidate_schemas <- function(ome_version, type, path) {
     leaf = function(x) {
       if (
         is.character(x) &&
-        grepl("^https://ngff.openmicroscopy.org/.+/schemas/.+\\.schema$", x)
+          grepl("^https://ngff.openmicroscopy.org/.+/schemas/.+\\.schema$", x)
       ) {
         download.file(x, file.path(path, ome_version, basename(x)))
         return(basename(x))
@@ -43,9 +43,11 @@ config <- list(
 )
 
 invisible(
-  lapply(config, function(cg){
-    download_consolidate_schemas(ome_version = cg["version"], 
-                                 type = cg["type"], 
-                                 "inst/extdata/schemas")
-  }) 
+  lapply(config, function(cg) {
+    download_consolidate_schemas(
+      ome_version = cg["version"],
+      type = cg["type"],
+      "inst/extdata/schemas"
+    )
+  })
 )

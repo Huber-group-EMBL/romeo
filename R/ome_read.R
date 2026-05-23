@@ -11,7 +11,7 @@
 #' @importFrom stats setNames
 #' @importFrom Rarr read_zarr_array read_zarr_attributes
 #' @importFrom ZarrArray ZarrArray
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -42,9 +42,11 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
   }
 
   x <- lapply(scales$datasets, function(scale) {
-    img <- .read_zarr(file.path(path, scale$path), 
-                      lazy = TRUE, 
-                      s3_client = s3_client)
+    img <- .read_zarr(
+      file.path(path, scale$path),
+      lazy = TRUE,
+      s3_client = s3_client
+    )
     if (!is.null(dim_names)) {
       dimnames(img) <- setNames(
         vector("list", length = length(dim(img))),

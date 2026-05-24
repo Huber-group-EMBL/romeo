@@ -94,7 +94,7 @@ s3_client <- paws.storage::s3(
   )
 )
 x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr", 
+  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr",
   s3_client = s3_client,
 )
 plot(x, all = TRUE)
@@ -109,7 +109,7 @@ plot(x, all = TRUE)
 
 ```{r write}
 library(EBImage)
-img_file <- system.file("extdata", "example_RGB.png", package="rome")
+img_file <- system.file("extdata", "example_RGB.png", package = "rome")
 img <- readImage(img_file)
 
 # write image pyramid
@@ -117,7 +117,7 @@ ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      axes = c("x", "y", "c"),
                      version = "0.4",
-                     storage_options = list(chunk_dim = c(64,64,1)))
+                     storage_options = list(chunk_dim = c(64, 64, 1)))
 plot(ome_img, 1)
 ```
 
@@ -130,9 +130,9 @@ scale.
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      axes = c("x", "y", "c"),
-                     version = "0.5", 
-                     scalefactors = c(2,2,3),
-                     storage_options = list(chunk_dim = c(64,64,1)))
+                     version = "0.5",
+                     scalefactors = c(2, 2, 3),
+                     storage_options = list(chunk_dim = c(64, 64, 1)))
 ```
 
 ## Labels
@@ -144,11 +144,11 @@ our own label data using EBImage first.
 library(EBImage)
 
 # read the first frame of image
-nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+nuc <- readImage(system.file("images", "nuclei.tif", package = "EBImage"))
 nuc <- getFrames(nuc)[[1]]
 
 # threshold using otsu's method
-nuc_th = nuc > otsu(nuc)
+nuc_th <- nuc > otsu(nuc)
 ```
 
 We can now write the label pyramid. Arguments are similar to how images are 
@@ -158,8 +158,8 @@ written.
 ome_nuc_th <- ome_write(nuc_th,
                         path = tempfile(fileext = ".ome.zarr"),
                         version = "0.4",
-                        scalefactors = c(2,2,3),
-                        storage_options = list(chunk_dim = c(64,64)), 
+                        scalefactors = c(2, 2, 3),
+                        storage_options = list(chunk_dim = c(64, 64)),
                         type = "label")
 plot(ome_nuc_th, 3)
 ```
@@ -172,18 +172,18 @@ Additional metadata information about labels can be provided using the
 ome_nuc_th <- ome_write(nuc_th,
                         path = tempfile(fileext = ".ome.zarr"),
                         version = "0.4",
-                        scalefactors = c(2,2,3),
-                        storage_options = list(chunk_dim = c(64,64)), 
-                        type = "label", 
+                        scalefactors = c(2, 2, 3),
+                        storage_options = list(chunk_dim = c(64, 64)),
+                        type = "label",
                         label_name = "blobs",
                         label_metadata = list(
                           colors = list(
-                           list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
-                           list(`label-value` = 2, rgba = list(0, 255, 255, 128)) 
+                            list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
+                            list(`label-value` = 2, rgba = list(0, 255, 255, 128))
                           ),
                           properties = list(
-                           list(`label-value` = 1, class = "A"),
-                           list(`label-value` = 2, class = "B")
+                            list(`label-value` = 1, class = "A"),
+                            list(`label-value` = 2, class = "B")
                           )
                         ))
 ```
@@ -198,18 +198,18 @@ td <- tempfile(fileext = ".ome.zarr")
 ome_nuc <- ome_write(nuc,
                      path = td,
                      version = "0.4",
-                     storage_options = list(chunk_dim = c(64,64)))
+                     storage_options = list(chunk_dim = c(64, 64)))
 
 ome_nuc_th <- ome_write(nuc_th,
                         path = td,
                         version = "0.4",
-                        scalefactors = c(2,2,3),
-                        storage_options = list(chunk_dim = c(64,64)), 
-                        type = "label", 
+                        scalefactors = c(2, 2, 3),
+                        storage_options = list(chunk_dim = c(64, 64)),
+                        type = "label",
                         label_name = "blobs")
 
 # plot
-layout(matrix(1:2, nrow=1))
+layout(matrix(1:2, nrow = 1))
 plot(ome_nuc, 3)
 plot(ome_nuc_th, 3)
 ```

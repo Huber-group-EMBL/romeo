@@ -12,7 +12,7 @@
   dim_names
 }
 
-#' @export 
-dimnames.ome_zarr <- function(x){
+#' @export
+dimnames.ome_zarr <- function(x) {
   attr(x, "dim_names")
 }

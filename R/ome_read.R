@@ -68,8 +68,9 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
   class(x) <- "ome_zarr"
   attr(x, "type") <- type
   attr(x, "version") <- ome_version
-  if(!is.null(dim_names))
+  if (!is.null(dim_names)) {
     attr(x, "dim_names") <- dim_names
-  
+  }
+
   x
 }

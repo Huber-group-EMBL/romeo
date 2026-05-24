@@ -31,7 +31,7 @@ output:
 
 ## rome
 
-`r BiocStyle::Biocpkg("rome")` is a minimal R package to read and write multiscale OME-Zarr files.
+`r BiocStyle::Biocpkg("rome")` is a minimal R package to read and write multiscale OME-ZARR images.
 
 It also provides helper and methods to manipulate the resulting `ome_zarr` objects the same way one would manipulate traditional arrays in R. For example, you can subset an `ome_zarr` object using the `[` operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.
 
@@ -58,7 +58,7 @@ omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
-x
+plot(x, 1)
 ```
 
 Otherwise the read can be performed in memory as:

@@ -9,9 +9,11 @@
 [![R-CMD-check](https://github.com/Huber-group-EMBL/rome/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Huber-group-EMBL/rome/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-rome is a minimal R package to read and write multiscale OME-Zarr files.
+rome is a minimal R package to read and write multiscale
+[OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or OME-NGFF)
+images.
 
-It also provides helper and methods to manipulate the resulting
+The package also provides helper and methods to manipulate the resulting
 `ome_zarr` objects the same way one would manipulate traditional arrays
 in R. For example, you can subset an `ome_zarr` object using the `[`
 operator, and the subsetting will be applied to all levels of the
@@ -26,7 +28,7 @@ You can install the development version of rome like so:
 pak::pak("Huber-group-EMBL/rome")
 ```
 
-## Image
+## Reading OME-ZARR images
 
 This is a basic example which shows you how to read a OME-ZARR image of
 version 0.4. By default, the read will be performed lazily using
@@ -39,41 +41,12 @@ omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
-x
-#> Multiscale OME-Zarr image (v0.4) object.
-#> Scale: 1/5 
-#> <2 x 5 x 5> DelayedArray object of type "integer":
-#> ,,1
-#>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   11   16    9   11   11
-#> [2,]    9    7   10    6   11
-#> 
-#> ,,2
-#>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]    2   11    8   11   10
-#> [2,]   12    2    8   11   11
-#> 
-#> ,,3
-#>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   11    6   18    4    7
-#> [2,]   12    8   13    6    9
-#> 
-#> ,,4
-#>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   13    8   17    6    3
-#> [2,]    9    6    8    5    8
-#> 
-#> ,,5
-#>      [,1] [,2] [,3] [,4] [,5]
-#> [1,]   14   13    4   10    5
-#> [2,]    9   11    6   12    6
+plot(x, 1)
+#> Only the first frame of the image stack is displayed.
+#> To display all frames use 'all = TRUE'.
 ```
 
-Otherwise the read can be performed in memory as:
-
-``` r
-x <- ome_read(td, lazy = FALSE)
-```
+<img src="man/figures/README-read-1.png" style="width:100.0%" />
 
 For remote OME-ZARR files, you can use the `paws.storage::s3` client to
 read the data directly from the S3 bucket without downloading it first:
@@ -91,27 +64,13 @@ x <- ome_read(
   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr", 
   s3_client = s3_client,
 )
-plot(x, all = TRUE)
 ```
 
-## Labels
-
-Labels of image pyramids can also be read as images
-
-``` r
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
-dir.create(td <- tempfile())
-unzip(omezarrzip, exdir = td)
-x <- ome_read(file.path(td, "labels/blobs"))
-plot(x, all = TRUE)
-```
-
-<img src="man/figures/README-read_label-1.png" style="width:100.0%" />
-
-## Write Image
+## Writing OME-ZARR images
 
 rome also provides utilities for writing OME-ZARR images for OME-NGFF
-versions 0.4 and 0.5.
+versions 0.4 and 0.5. The package also supports writing pyramids using
+`scalfactors` argument.
 
 ``` r
 # read image
@@ -123,104 +82,11 @@ img <- readImage(img_file)
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      version = "0.4",
-                     storage_options = list(chunk_dim = c(64,64,1)))
-```
-
-Users can also define there own scaling factors for the image pyramids.
-For a `scalefactors` with length three, the pyramid will have four
-scales. Eac scale factor in the vector defines the scale factor relative
-to the previous scale.
-
-``` r
-ome_img <- ome_write(img,
-                     path = tempfile(fileext = ".ome.zarr"),
-                     version = "0.5", 
                      scalefactors = c(2,2,3),
                      storage_options = list(chunk_dim = c(64,64,1)))
+plot(ome_img)
+#> Only the first frame of the image stack is displayed.
+#> To display all frames use 'all = TRUE'.
 ```
 
-## Write label
-
-OME-ZARR label pyramids can be generated the same way. We first create
-our own label data using EBImage first.
-
-``` r
-# read image
-library(EBImage)
-
-# read the first frame of image
-nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
-nuc <- getFrames(nuc)[[1]]
-
-# threshold using otsu's method
-nuc_th = nuc > otsu(nuc)
-```
-
-We can now write the label pyramid. Arguments are similar to how images
-are written.
-
-``` r
-ome_nuc_th <- ome_write(nuc_th,
-                        path = tempfile(fileext = ".ome.zarr"),
-                        version = "0.4",
-                        scalefactors = c(2,2,3),
-                        storage_options = list(chunk_dim = c(64,64)), 
-                        type = "label")
-plot(ome_nuc_th, 3)
-```
-
-<img src="man/figures/README-write_label-1.png" style="width:100.0%" />
-
-Additional metadata information about labels can be provided using the
-`label_metadata` argument.
-
-``` r
-# write label, version 0.4
-ome_nuc_th <- ome_write(nuc_th,
-                        path = tempfile(fileext = ".ome.zarr"),
-                        version = "0.4",
-                        scalefactors = c(2,2,3),
-                        storage_options = list(chunk_dim = c(64,64)), 
-                        type = "label", 
-                        label_name = "blobs",
-                        label_metadata = list(
-                          colors = list(
-                           list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
-                           list(`label-value` = 2, rgba = list(0, 255, 255, 128)) 
-                          ),
-                          properties = list(
-                           list(`label-value` = 1, class = "A"),
-                           list(`label-value` = 2, class = "B")
-                          )
-                        ))
-```
-
-If the path already includes an image pyramid, then we should define a
-name (e.g. `blobs`) for the label pyramid associated with the image.
-
-``` r
-td <- tempfile(fileext = ".ome.zarr")
-
-# write image pyramid
-ome_nuc <- ome_write(nuc,
-                     path = td,
-                     version = "0.4",
-                     storage_options = list(chunk_dim = c(64,64)))
-
-ome_nuc_th <- ome_write(nuc_th,
-                        path = td,
-                        version = "0.4",
-                        scalefactors = c(2,2,3),
-                        storage_options = list(chunk_dim = c(64,64)), 
-                        type = "label", 
-                        label_name = "blobs")
-#> An image pyramid was found at '/var/folders/vf/d8kg507x41xfh6z9vgv9skksdsn29w/T//RtmpPFoYQ2/file111b73d89153e.ome.zarr', writing labels to 'labels/blobs'
-
-# plot
-layout(matrix(1:2, nrow=1))
-plot(ome_nuc, 3)
-plot(ome_nuc_th, 3)
-```
-
-<img src="man/figures/README-write_image_label-1.png"
-style="width:100.0%" />
+<img src="man/figures/README-write-1.png" style="width:100.0%" />

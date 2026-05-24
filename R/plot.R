@@ -25,6 +25,7 @@ plot.ome_zarr <- function(x, level = 1, ...) {
   plot_dim <- c(plot_dim, setdiff(dimx, plot_dim))
   x <- x[[level]] |>
     aperm(match(dimnames(x), plot_dim))
+  x <- x/max(x)
   x |>
     EBImage::Image(dim = dim(x)) |>
     plot(...)

@@ -2,14 +2,18 @@
 # requires-python = "==3.13.0"
 # dependencies = [
 #   "ome-zarr==0.14.0",
-#   "scikit-image==0.26.0"
+#   "scikit-image==0.26.0",
+#   "tifffile==2026.5.15",
+#   "imagecodecs==2026.5.10",
+#   "pooch==1.9.0"
 # ]
 # ///
 import os
 import shutil
 import zipfile
 import numpy as np
-from skimage.data import binary_blobs
+from skimage.data import binary_blobs, human_mitosis
+from skimage.filters import threshold_multiotsu
 import zarr
 from ome_zarr.writer import write_image, write_labels
 from ome_zarr.format import (
@@ -24,15 +28,18 @@ versions = {
 }
 
 # generate image
-size_xy = 128
-size_c = 2
-rng = np.random.default_rng(0)
-data = rng.poisson(lam=10, size=(size_c, size_xy, size_xy)).astype(np.uint8)
+data = human_mitosis()
+# size_xy = 128
+# size_c = 2
+# rng = np.random.default_rng(0)
+# data = rng.poisson(lam=10, size=(size_c, size_xy, size_xy)).astype(np.uint8)
 
 # generate labels
-blobs = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
-blobs2 = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
-blobs += 2 * blobs2
+# blobs = binary_blobs(length=data.shape[], volume_fraction=0.1, n_dim=2).astype('int8')
+# blobs2 = binary_blobs(length=size_xy, volume_fraction=0.1, n_dim=2).astype('int8')
+# blobs += 2 * blobs2
+thresholds = threshold_multiotsu(data, classes=3)
+blobs = np.digitize(data, bins=thresholds)
 
 for v, fmt in versions.items():
     path = f"inst/extdata/test_ngff_image_v{v}.ome.zarr"
@@ -51,7 +58,7 @@ for v, fmt in versions.items():
     write_image(
         data,
         path,
-        axes=['c', 'y', 'x'],
+        axes=['y', 'x'],
         fmt=fmt,
         scale_factors=(2,4,8,16)
     )

@@ -1,7 +1,7 @@
 #' Subset an `ome-zarr` object
 #'
-#' Subset operation is applied on all levels of the multiscale `ome-zarr` object.
-#' The result is an `ome-zarr` object with the same number of levels,
+#' Subset operation is applied on all levels of the multiscale `ome-zarr`
+#' object. The result is an `ome-zarr` object with the same number of levels,
 #' but each level is subsetted according to the provided indices.
 #'
 #' The first image is subsetted using the provided indices, and the
@@ -34,7 +34,7 @@
         }
         # FIXME: is this the most sensible way to round here?
         scaled_idx <- unique(ceiling((idx / scaling_factor)))
-        return(scaled_idx)
+        scaled_idx
       },
       indices,
       scale,
@@ -43,5 +43,5 @@
     do.call(`[`, c(list(layer), indices))
   })
   class(x) <- "ome_zarr"
-  return(x)
+  x
 }

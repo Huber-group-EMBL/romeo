@@ -16,16 +16,16 @@ test_that("parse ome version", {
     )
     td <- withr::local_tempfile()
     unzip(omezarrzip, exdir = td)
-    
+
     # image
     x <- ome_read(td)
-    # TODO: why S3 ? 
+    # TODO: why S3 ?
     expect_s3_class(x, "ome_zarr")
     expect_equal(attr(x, "type"), "image")
-    
+
     # labels
     x <- ome_read(file.path(td, "labels/blobs"))
-    # TODO: why S3 ? 
+    # TODO: why S3 ?
     expect_s3_class(x, "ome_zarr")
     expect_equal(attr(x, "type"), "label")
   }

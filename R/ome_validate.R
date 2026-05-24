@@ -10,11 +10,12 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' ome_validate(
-#'   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-#' )
-#' }
+#' omezarrzip <- system.file("extdata",
+#'                           "test_ngff_image_v04.ome.zarr.zip",
+#'                           package = "rome")
+#' dir.create(td <- tempfile())
+#' unzip(omezarrzip, exdir = td)
+#' ome_validate(td)
 ome_validate <- function(path, s3_client = NULL) {
   group_attributes <- Rarr::read_zarr_attributes(path, s3_client = s3_client)
   ome_version <- .get_version(group_attributes)

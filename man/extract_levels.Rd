@@ -16,16 +16,21 @@ extract_levels(x, levels)
 \item If \code{levels} is of length 1, an array
 \item If \code{levels} is of length more than 1, an \code{ome-zarr} object
 }
+
+An object of \code{ome_zarr} (OME-Zarr) class representing an
+image or label pyramid.
 }
 \description{
 Extract specific levels from a multiscale \code{ome-zarr} object
 }
 \examples{
-\dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
 extract_levels(x, c(1, 3))
 extract_levels(x, 2)
-}
+
 }

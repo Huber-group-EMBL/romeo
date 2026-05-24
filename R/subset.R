@@ -11,18 +11,20 @@
 #' @param x An `ome-zarr` object.
 #' @param ... Indices to subset the `ome-zarr` object.
 #'
-#' @export
+#' @returns A subset of an object of `ome_zarr` (OME-Zarr) class representing
+#'  an image or label pyramid.
 #'
 #' @examples
-#' \dontrun{
-#' x <- ome_read(
-#'   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-#' )
-#' y <- x[3, 1:5, 1:5]
-#' extract_levels(y, 2)
+#' omezarrzip <- system.file("extdata",
+#'                           "test_ngff_image_v04.ome.zarr.zip",
+#'                           package = "rome")
+#' dir.create(td <- tempfile())
+#' unzip(omezarrzip, exdir = td)
+#' x <- ome_read(td)
+#' y <- x[1:2, 1:5,1:5]
 #' plot(y, level = 2)
-#' }
 #'
+#' @export
 `[.ome_zarr` <- function(x, ...) {
   x <- lapply(x, function(layer) {
     scale <- attr(layer, "scale")

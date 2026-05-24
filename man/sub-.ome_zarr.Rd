@@ -11,9 +11,13 @@
 
 \item{...}{Indices to subset the \code{ome-zarr} object.}
 }
+\value{
+A subset of an object of \code{ome_zarr} (OME-Zarr) class representing
+an image or label pyramid.
+}
 \description{
-Subset operation is applied on all levels of the multiscale \code{ome-zarr} object.
-The result is an \code{ome-zarr} object with the same number of levels,
+Subset operation is applied on all levels of the multiscale \code{ome-zarr}
+object. The result is an \code{ome-zarr} object with the same number of levels,
 but each level is subsetted according to the provided indices.
 }
 \details{
@@ -22,13 +26,13 @@ resulting dimensions are used to subset the remaining levels, while
 conserving the same scaling factor across levels
 }
 \examples{
-\dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
-y <- x[3, 1:5, 1:5]
-extract_levels(y, 2)
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
+y <- x[1:2, 1:5,1:5]
 plot(y, level = 2)
-}
 
 }

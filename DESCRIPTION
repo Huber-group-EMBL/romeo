@@ -1,16 +1,22 @@
 Package: rome
 Title: Minimal R 'OME-Zarr' Reader
-Version: 0.0.0.9000
+Version: 0.99.1
 Authors@R: c(
-    person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = c("aut", "cre")),
-    person("Artür", "Manukyan", role = "ctb")
+    person("Hugo", "Gruson",
+        role=c("aut", "cre"),
+        email="hugo.gruson@embl.de",
+        comment=c(ORCID="0000-0002-4094-1476")),
+    person("Artür", "Manukyan",
+        role=c("aut"),
+        email="artur-man@hotmail.com",
+        comment=c(ORCID="0000-0002-0441-9517"))
   )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Depends: 
-    R (>= 4.1)
+    R (>= 4.6)
 Imports:
     methods,
     cli,
@@ -23,6 +29,9 @@ Suggests:
     utils,
     testthat,
     withr
+Remotes:
+    Huber-group-EMBL/Rarr@b0c8174
+biocViews: DataImport
 URL: https://huber-group-embl.github.io/rome/, https://github.com/Huber-group-EMBL/rome
 BugReports: https://github.com/Huber-group-EMBL/rome/issues
 Config/roxygen2/version: 8.0.0

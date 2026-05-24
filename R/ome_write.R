@@ -21,6 +21,33 @@
 #' @param label_name The name of the label data.
 #' @param label_metadata label metadata added to attributes.
 #'
+#' @returns An object of `ome_zarr` (OME-Zarr) class representing an
+#'  image or label pyramid.
+#'
+#' @examples
+#' library(EBImage)
+#' nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+#' nuc <- getFrames(nuc)[[1]]
+#' td <- tempfile(fileext = ".ome.zarr")
+#'
+#' # write image pyramid
+#' ome_nuc <- ome_write(nuc,
+#'                      path = td,
+#'                      version = "0.4",
+#'                      storage_options = list(chunk_dim = c(64,64)))
+#'
+#' # nuclei segmentation using otsu's method
+#' nuc_th = nuc > otsu(nuc)
+#'
+#' # write label pyramid
+#' ome_nuc_th <- ome_write(nuc_th,
+#'                         path = td,
+#'                         version = "0.4",
+#'                         scalefactors = c(2,2,3),
+#'                         storage_options = list(chunk_dim = c(64,64)),
+#'                         label_name = "nuclei_segmentation",
+#'                         type = "label")
+#'
 #' @export
 setGeneric(
   "ome_write",

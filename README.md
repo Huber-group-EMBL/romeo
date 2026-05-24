@@ -42,8 +42,6 @@ dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
 plot(x, 1)
-#> Only the first frame of the image stack is displayed.
-#> To display all frames use 'all = TRUE'.
 ```
 
 <img src="man/figures/README-read-1.png" style="width:100.0%" />

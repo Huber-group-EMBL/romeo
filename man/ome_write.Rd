@@ -56,7 +56,8 @@ ome_write(
 )
 }
 \arguments{
-\item{image}{an n-dimensional (or a path to an) array representing the image data (1<n<6)}
+\item{image}{an n-dimensional (or a path to an) array representing the
+image data (1<n<6)}
 
 \item{path}{the path to writing ome.zarr}
 
@@ -68,8 +69,8 @@ Importantly, each scale factor is relative to the previous scale factor.
 For example, if the scale factors are c(2, 2, 2), the returned multiscale
 image will have 4 scales.}
 
-\item{version}{OME-ZARR version (0.4 or 0.5), lower versions are not supported
-for writing.}
+\item{version}{OME-ZARR version (0.4 or 0.5), lower versions are not
+supported for writing.}
 
 \item{storage_options}{a list of storage options for the zarr array
 (e.g. chunks)}
@@ -80,6 +81,35 @@ for writing.}
 
 \item{label_metadata}{label metadata added to attributes.}
 }
+\value{
+An object of \code{ome_zarr} (OME-Zarr) class representing an
+image or label pyramid.
+}
 \description{
 Writes an ome image to the zarr path according to ome-zarr specification
+}
+\examples{
+library(EBImage)
+nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+nuc <- getFrames(nuc)[[1]]
+td <- tempfile(fileext = ".ome.zarr")
+
+# write image pyramid
+ome_nuc <- ome_write(nuc,
+                     path = td,
+                     version = "0.4",
+                     storage_options = list(chunk_dim = c(64,64)))
+
+# nuclei segmentation using otsu's method
+nuc_th = nuc > otsu(nuc)
+
+# write label pyramid
+ome_nuc_th <- ome_write(nuc_th,
+                        path = td,
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)),
+                        label_name = "nuclei_segmentation",
+                        type = "label")
+
 }

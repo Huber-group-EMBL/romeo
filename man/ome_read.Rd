@@ -19,13 +19,19 @@ may result in better performance.}
 
 \item{validate}{Logical.If \code{TRUE} (the default), validate the OME-Zarr file.}
 }
+\value{
+An object of \code{ome_zarr} (OME-Zarr) class representing an
+image or label pyramid.
+}
 \description{
 Read a multiscale OME-Zarr file
 }
 \examples{
-\dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
-}
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
+
 }

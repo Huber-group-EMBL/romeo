@@ -7,16 +7,20 @@
 #' - If `levels` is of length 1, an array
 #' - If `levels` is of length more than 1, an `ome-zarr` object
 #'
-#' @export
+#' @returns An object of `ome_zarr` (OME-Zarr) class representing an
+#'  image or label pyramid.
 #'
 #' @examples
-#' \dontrun{
-#' x <- ome_read(
-#'   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-#' )
+#' omezarrzip <- system.file("extdata",
+#'                           "test_ngff_image_v04.ome.zarr.zip",
+#'                           package = "rome")
+#' dir.create(td <- tempfile())
+#' unzip(omezarrzip, exdir = td)
+#' x <- ome_read(td)
 #' extract_levels(x, c(1, 3))
 #' extract_levels(x, 2)
-#' }
+#'
+#' @export
 extract_levels <- function(x, levels) {
   stopifnot(
     inherits(x, "ome_zarr")

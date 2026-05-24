@@ -9,19 +9,26 @@
 \arguments{
 \item{x}{An \code{ome_zarr} object.}
 
-\item{level}{Integer. The scale level to plot. Defaults to \code{1} (the highest resolution).}
+\item{level}{Integer. The scale level to plot. Defaults to \code{1}
+(the highest resolution).}
 
 \item{...}{Additional arguments passed to \code{plot()}.}
+}
+\value{
+None
 }
 \description{
 Plot an \code{ome_zarr} object.
 }
 \examples{
-\dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
 plot(x)
-}
+plot(x, 2)
+plot(x, all = TRUE)
 
 }

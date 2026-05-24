@@ -21,9 +21,10 @@ passed an invalid OME-Zarr file
 Validate a multiscale OME-Zarr file
 }
 \examples{
-\dontrun{
-ome_validate(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
-}
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+ome_validate(td)
 }

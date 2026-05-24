@@ -27,11 +27,14 @@ Imports:
     ZarrArray
 Suggests:
     BiocStyle,
+    knitr,
     utils,
     testthat,
     withr
 Remotes:
     Huber-group-EMBL/Rarr@b0c8174
+VignetteBuilder: 
+    knitr
 biocViews: DataImport
 URL: https://huber-group-embl.github.io/rome/, https://github.com/Huber-group-EMBL/rome
 BugReports: https://github.com/Huber-group-EMBL/rome/issues

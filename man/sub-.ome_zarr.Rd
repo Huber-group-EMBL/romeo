@@ -26,13 +26,13 @@ resulting dimensions are used to subset the remaining levels, while
 conserving the same scaling factor across levels
 }
 \examples{
-omezarrzip <- system.file("extdata", 
-                          "test_ngff_image_v04.ome.zarr.zip", 
+omezarrzip <- system.file("extdata",
+                          "test_ngff_image_v04.ome.zarr.zip",
                           package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
-y <- x[1:2, 1:5,1:5]
+y <- x[1:5,1:5]
 plot(y, level = 2)
 
 }

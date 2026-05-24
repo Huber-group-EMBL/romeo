@@ -26,6 +26,7 @@ Imports:
     Rarr,
     ZarrArray
 Suggests:
+    BiocStyle,
     utils,
     testthat,
     withr

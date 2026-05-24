@@ -21,8 +21,8 @@ passed an invalid OME-Zarr file
 Validate a multiscale OME-Zarr file
 }
 \examples{
-omezarrzip <- system.file("extdata", 
-                          "test_ngff_image_v04.ome.zarr.zip", 
+omezarrzip <- system.file("extdata",
+                          "test_ngff_image_v04.ome.zarr.zip",
                           package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)

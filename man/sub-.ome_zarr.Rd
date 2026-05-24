@@ -26,8 +26,8 @@ resulting dimensions are used to subset the remaining levels, while
 conserving the same scaling factor across levels
 }
 \examples{
-omezarrzip <- system.file("extdata", 
-                          "test_ngff_image_v04.ome.zarr.zip", 
+omezarrzip <- system.file("extdata",
+                          "test_ngff_image_v04.ome.zarr.zip",
                           package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)

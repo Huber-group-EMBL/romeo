@@ -24,8 +24,8 @@ image or label pyramid.
 Extract specific levels from a multiscale \code{ome-zarr} object
 }
 \examples{
-omezarrzip <- system.file("extdata", 
-                          "test_ngff_image_v04.ome.zarr.zip", 
+omezarrzip <- system.file("extdata",
+                          "test_ngff_image_v04.ome.zarr.zip",
                           package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)

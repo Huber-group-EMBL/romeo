@@ -1,0 +1,222 @@
+---
+title: "Introduction to `rome`"
+date: "`r BiocStyle::doc_date()`"
+author:
+  - name: Hugo Gruson
+    affiliation: EMBL Heidelberg
+    email: hugo.gruson@embl.de
+  - name: Artür Manukyan
+    affiliation: MDC-BIMSB
+    email: artur-man@hotmail.com
+package: "`r BiocStyle::pkg_ver('rome')`"
+vignette: >
+  %\VignetteIndexEntry{Introduction to rome}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document
+---
+
+```{css, echo=FALSE}
+.main-container {
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+```
+
+# Introduction
+
+## OME-ZARR
+
+## rome
+
+`r BiocStyle::Biocpkg("rome")` is a minimal R package to read and write multiscale OME-Zarr files.
+
+It also provides helper and methods to manipulate the resulting `ome_zarr` objects the same way one would manipulate traditional arrays in R. For example, you can subset an `ome_zarr` object using the `[` operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.
+
+# Installation
+
+You can install the development version of `r BiocStyle::Biocpkg("rome")` like so:
+
+``` r
+# install.packages("pak")
+pak::pak("Huber-group-EMBL/rome")
+```
+
+# Reading OME-ZARR data
+
+## Images
+
+This is a basic example which shows you how to read a OME-ZARR image of version 0.4. 
+By default, the read will be performed lazily using `ZarrArray`. 
+
+```{r read}
+library(rome)
+library(utils)
+omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
+x
+```
+
+Otherwise the read can be performed in memory as:
+
+```{r read_lazy}
+x <- ome_read(td, lazy = FALSE)
+```
+
+## Labels
+
+Labels of image pyramids can also be read as images
+
+```{r read_label}
+omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(file.path(td, "labels/blobs"))
+plot(x, all = TRUE)
+```
+
+# Reading from S3 storage
+
+For remote OME-ZARR files, you can use the `paws.storage::s3` client to read 
+the data directly from the S3 bucket without downloading it first:
+
+```{r read_remote, eval=FALSE}
+library(paws)
+s3_client <- paws.storage::s3(
+  config = list(
+    credentials = list(anonymous = TRUE),
+    region = "auto",
+    endpoint = "https://uk1s3.embassy.ebi.ac.uk"
+  )
+)
+x <- ome_read(
+  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr", 
+  s3_client = s3_client,
+)
+plot(x, all = TRUE)
+```
+
+# Writing OME-ZARR data
+
+## Images
+
+`r BiocStyle::Biocpkg("rome")` also provides utilities for writing OME-ZARR images for OME-NGFF versions 
+0.4 and 0.5. 
+
+```{r write}
+library(EBImage)
+img_file <- system.file("extdata", "example_RGB.png", package="rome")
+img <- readImage(img_file)
+
+# write image pyramid
+ome_img <- ome_write(img,
+                     path = tempfile(fileext = ".ome.zarr"),
+                     axes = c("x", "y", "c"),
+                     version = "0.4",
+                     storage_options = list(chunk_dim = c(64,64,1)))
+plot(ome_img, 1)
+```
+
+Users can also define there own scaling factors for the image pyramids.
+For a `scalefactors` with length three, the pyramid will have four scales. 
+Eac scale factor in the vector defines the scale factor relative to the previous
+scale.
+
+```{r write2}
+ome_img <- ome_write(img,
+                     path = tempfile(fileext = ".ome.zarr"),
+                     axes = c("x", "y", "c"),
+                     version = "0.5", 
+                     scalefactors = c(2,2,3),
+                     storage_options = list(chunk_dim = c(64,64,1)))
+```
+
+## Labels
+
+OME-ZARR label pyramids can be generated the same way. We first create
+our own label data using EBImage first. 
+
+```{r image-label}
+library(EBImage)
+
+# read the first frame of image
+nuc <- readImage(system.file("images", "nuclei.tif", package="EBImage"))
+nuc <- getFrames(nuc)[[1]]
+
+# threshold using otsu's method
+nuc_th = nuc > otsu(nuc)
+```
+
+We can now write the label pyramid. Arguments are similar to how images are 
+written.
+
+```{r write_label}
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label")
+plot(ome_nuc_th, 3)
+```
+
+Additional metadata information about labels can be provided using the 
+`label_metadata` argument. 
+
+```{r write_label_meta}
+# write label, version 0.4
+ome_nuc_th <- ome_write(nuc_th,
+                        path = tempfile(fileext = ".ome.zarr"),
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label", 
+                        label_name = "blobs",
+                        label_metadata = list(
+                          colors = list(
+                           list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
+                           list(`label-value` = 2, rgba = list(0, 255, 255, 128)) 
+                          ),
+                          properties = list(
+                           list(`label-value` = 1, class = "A"),
+                           list(`label-value` = 2, class = "B")
+                          )
+                        ))
+```
+
+If the path already includes an image pyramid, then we should define a name 
+(e.g. `blobs`) for the label pyramid associated with the image.
+
+```{r write_image_label}
+td <- tempfile(fileext = ".ome.zarr")
+
+# write image pyramid
+ome_nuc <- ome_write(nuc,
+                     path = td,
+                     version = "0.4",
+                     storage_options = list(chunk_dim = c(64,64)))
+
+ome_nuc_th <- ome_write(nuc_th,
+                        path = td,
+                        version = "0.4",
+                        scalefactors = c(2,2,3),
+                        storage_options = list(chunk_dim = c(64,64)), 
+                        type = "label", 
+                        label_name = "blobs")
+
+# plot
+layout(matrix(1:2, nrow=1))
+plot(ome_nuc, 3)
+plot(ome_nuc_th, 3)
+```
+
+# Appendix
+
+## Session info {.unnumbered}
+```{r, session-info, echo = FALSE}
+sessionInfo()
+```

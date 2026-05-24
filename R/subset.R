@@ -21,12 +21,12 @@
 #' dir.create(td <- tempfile())
 #' unzip(omezarrzip, exdir = td)
 #' x <- ome_read(td)
-#' y <- x[1:2, 1:5,1:5]
+#' y <- x[1:5,1:5]
 #' plot(y, level = 2)
 #'
 #' @export
 `[.ome_zarr` <- function(x, ...) {
-  x <- lapply(x, function(layer) {
+  y <- lapply(x, function(layer) {
     scale <- attr(layer, "scale")
     indices <- list(...)
     indices <- mapply(
@@ -44,6 +44,7 @@
     )
     do.call(`[`, c(list(layer), indices))
   })
-  class(x) <- "ome_zarr"
-  x
+  class(y) <- "ome_zarr"
+  attributes(y) <- attributes(x)
+  y
 }

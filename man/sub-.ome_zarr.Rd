@@ -32,7 +32,7 @@ omezarrzip <- system.file("extdata",
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
-y <- x[1:2, 1:5,1:5]
+y <- x[1:5,1:5]
 plot(y, level = 2)
 
 }

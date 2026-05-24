@@ -206,10 +206,10 @@ name (e.g. `blobs`) for the label pyramid associated with the image.
 td <- tempfile(fileext = ".ome.zarr")
 
 # write image pyramid
-ome_img <- ome_write(img,
+ome_nuc <- ome_write(nuc,
                      path = td,
                      version = "0.4",
-                     storage_options = list(chunk_dim = c(64,64,1)))
+                     storage_options = list(chunk_dim = c(64,64)))
 
 ome_nuc_th <- ome_write(nuc_th,
                         path = td,
@@ -218,7 +218,11 @@ ome_nuc_th <- ome_write(nuc_th,
                         storage_options = list(chunk_dim = c(64,64)), 
                         type = "label", 
                         label_name = "blobs")
-#> An image pyramid was found at '/var/folders/vf/d8kg507x41xfh6z9vgv9skksdsn29w/T//RtmpAFXkPo/filee73723f4f451.ome.zarr', writing labels to 'labels/blobs'
+#> An image pyramid was found at '/var/folders/vf/d8kg507x41xfh6z9vgv9skksdsn29w/T//RtmpPFoYQ2/file111b73d89153e.ome.zarr', writing labels to 'labels/blobs'
+
+# plot
+layout(matrix(1:2, nrow=1))
+plot(ome_nuc, 3)
 plot(ome_nuc_th, 3)
 ```
 

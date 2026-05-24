@@ -21,6 +21,11 @@ x[...]
 
   Indices to subset the `ome-zarr` object.
 
+## Value
+
+A subset of an object of `ome_zarr` (OME-Zarr) class representing an
+image or label pyramid.
+
 ## Details
 
 The first image is subsetted using the provided indices, and the
@@ -30,12 +35,15 @@ conserving the same scaling factor across levels
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
-y <- x[3, 1:5, 1:5]
-extract_levels(y, 2)
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
+y <- x[1:2, 1:5,1:5]
 plot(y, level = 2)
-} # }
+#> Only the first frame of the image stack is displayed.
+#> To display all frames use 'all = TRUE'.
+
 ```

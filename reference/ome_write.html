@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,8 @@
 
 
 <dl><dt id="arg-image">image<a class="anchor" aria-label="anchor" href="#arg-image"></a></dt>
-<dd><p>an n-dimensional (or a path to an) array representing the image data (1&lt;n&lt;6)</p></dd>
+<dd><p>an n-dimensional (or a path to an) array representing the
+image data (1&lt;n&lt;6)</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
@@ -115,8 +116,8 @@ image will have 4 scales.</p></dd>
 
 
 <dt id="arg-version">version<a class="anchor" aria-label="anchor" href="#arg-version"></a></dt>
-<dd><p>OME-ZARR version (0.4 or 0.5), lower versions are not supported
-for writing.</p></dd>
+<dd><p>OME-ZARR version (0.4 or 0.5), lower versions are not
+supported for writing.</p></dd>
 
 
 <dt id="arg-storage-options">storage_options<a class="anchor" aria-label="anchor" href="#arg-storage-options"></a></dt>
@@ -136,13 +137,46 @@ for writing.</p></dd>
 <dd><p>label metadata added to attributes.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>An object of <code>ome_zarr</code> (OME-Zarr) class representing an
+image or label pyramid.</p>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aoles/EBImage" class="external-link">EBImage</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/io.html" class="external-link">readImage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"images"</span>, <span class="st">"nuclei.tif"</span>, package<span class="op">=</span><span class="st">"EBImage"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">getFrames</a></span><span class="op">(</span><span class="va">nuc</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># write image pyramid</span></span></span>
+<span class="r-in"><span><span class="va">ome_nuc</span> <span class="op">&lt;-</span> <span class="fu">ome_write</span><span class="op">(</span><span class="va">nuc</span>,</span></span>
+<span class="r-in"><span>                     path <span class="op">=</span> <span class="va">td</span>,</span></span>
+<span class="r-in"><span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span></span>
+<span class="r-in"><span>                     storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># nuclei segmentation using otsu's method</span></span></span>
+<span class="r-in"><span><span class="va">nuc_th</span> <span class="op">=</span> <span class="va">nuc</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/otsu.html" class="external-link">otsu</a></span><span class="op">(</span><span class="va">nuc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># write label pyramid</span></span></span>
+<span class="r-in"><span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu">ome_write</span><span class="op">(</span><span class="va">nuc_th</span>,</span></span>
+<span class="r-in"><span>                        path <span class="op">=</span> <span class="va">td</span>,</span></span>
+<span class="r-in"><span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span></span>
+<span class="r-in"><span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>,<span class="fl">64</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                        label_name <span class="op">=</span> <span class="st">"nuclei_segmentation"</span>,</span></span>
+<span class="r-in"><span>                        type <span class="op">=</span> <span class="st">"label"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> An image pyramid was found at '/tmp/Rtmp6bW6zc/file1fe131d296b4.ome.zarr', writing labels to 'labels/nuclei_segmentation'</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Hugo Gruson.</p>
+  <p>Developed by Hugo Gruson, Artür Manukyan.</p>
 </div>
 
 <div class="pkgdown-footer-right">

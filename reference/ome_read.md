@@ -31,12 +31,18 @@ ome_read(path, s3_client = NULL, lazy = TRUE, validate = TRUE)
 
   Logical.If `TRUE` (the default), validate the OME-Zarr file.
 
+## Value
+
+An object of `ome_zarr` (OME-Zarr) class representing an image or label
+pyramid.
+
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
-} # }
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
 ```

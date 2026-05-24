@@ -25,13 +25,27 @@ plot(x, level = 1, ...)
   Additional arguments passed to
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html).
 
+## Value
+
+None
+
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
-)
+omezarrzip <- system.file("extdata", 
+                          "test_ngff_image_v04.ome.zarr.zip", 
+                          package = "rome")
+dir.create(td <- tempfile())
+unzip(omezarrzip, exdir = td)
+x <- ome_read(td)
 plot(x)
-} # }
+#> Only the first frame of the image stack is displayed.
+#> To display all frames use 'all = TRUE'.
+
+plot(x, 2)
+#> Only the first frame of the image stack is displayed.
+#> To display all frames use 'all = TRUE'.
+
+plot(x, all = TRUE)
+
 ```

@@ -35,15 +35,13 @@ conserving the same scaling factor across levels
 ## Examples
 
 ``` r
-omezarrzip <- system.file("extdata", 
-                          "test_ngff_image_v04.ome.zarr.zip", 
+omezarrzip <- system.file("extdata",
+                          "test_ngff_image_v04.ome.zarr.zip",
                           package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
-y <- x[1:2, 1:5,1:5]
+y <- x[1:5,1:5]
 plot(y, level = 2)
-#> Only the first frame of the image stack is displayed.
-#> To display all frames use 'all = TRUE'.
 
 ```

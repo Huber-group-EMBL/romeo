@@ -32,19 +32,15 @@ None
 ## Examples
 
 ``` r
-omezarrzip <- system.file("extdata", 
-                          "test_ngff_image_v04.ome.zarr.zip", 
+omezarrzip <- system.file("extdata",
+                          "test_ngff_image_v04.ome.zarr.zip",
                           package = "rome")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
 plot(x)
-#> Only the first frame of the image stack is displayed.
-#> To display all frames use 'all = TRUE'.
 
 plot(x, 2)
-#> Only the first frame of the image stack is displayed.
-#> To display all frames use 'all = TRUE'.
 
 plot(x, all = TRUE)
 

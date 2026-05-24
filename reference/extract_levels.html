@@ -15,7 +15,8 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/rome.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/Huber-group-EMBL/rome/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -64,8 +65,8 @@ image or label pyramid.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">omezarrzip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, </span></span>
-<span class="r-in"><span>                          <span class="st">"test_ngff_image_v04.ome.zarr.zip"</span>, </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">omezarrzip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,</span></span>
+<span class="r-in"><span>                          <span class="st">"test_ngff_image_v04.ome.zarr.zip"</span>,</span></span>
 <span class="r-in"><span>                          package <span class="op">=</span> <span class="st">"rome"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">omezarrzip</span>, exdir <span class="op">=</span> <span class="va">td</span><span class="op">)</span></span></span>
@@ -73,56 +74,27 @@ image or label pyramid.</p>
 <span class="r-in"><span><span class="fu">extract_levels</span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Multiscale OME-Zarr  (v) object.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scale: 1/2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;2 x 5 x 5&gt; DelayedArray object of type "integer":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;5 x 5&gt; DelayedMatrix object of type "integer":</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   11   16    9   11   11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    9    7   10    6   11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    2   11    8   11   10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   12    2    8   11   11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   11    6   18    4    7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   12    8   13    6    9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   13    8   17    6    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    9    6    8    5    8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   14   13    4   10    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    9   11    6   12    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    8    8    8    8    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    8    8    7    8    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    9    8    8    8    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    8    9    8    9    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    9    8    8    9    8</span>
 <span class="r-in"><span><span class="fu">extract_levels</span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;2 x 64 x 64&gt; DelayedArray object of type "integer":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]  [,2]  [,3]  [,4] ... [,61] [,62] [,63] [,64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     9     9    11    11   .    11    10    11    11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     7     8     9    11   .     8     9    10     9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]  [,2]  [,3]  [,4] ... [,61] [,62] [,63] [,64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     9    10     7     8   .     9     9    11    11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     8     8     8     9   .     9    12    10     9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]  [,2]  [,3]  [,4] ... [,61] [,62] [,63] [,64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    11    10    10    10   .    10    12    11     9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     9    12     9    11   .    10     8     9     9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ,,64</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]  [,2]  [,3]  [,4] ... [,61] [,62] [,63] [,64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     9     8     9     9   .    11     8     9    10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    10     7     9    10   .    12    13    10    11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;256 x 256&gt; ZarrMatrix object of type "integer":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          [,1]   [,2]   [,3]   [,4] ... [,253] [,254] [,255] [,256]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1,]      7      7      7      8   .     14     19     54     72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [2,]      8      8      8      8   .     15     18     42     62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [3,]      8      8      8      8   .     14     15     25     48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [4,]      7      8      8      8   .     15     15     17     21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [5,]      7      8      8      8   .     16     14     15     17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    ...      .      .      .      .   .      .      .      .      .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [252,]      7      7      7      7   .     13     13     14     15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [253,]      8      7      7      7   .     12     12     14     17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [254,]      8      7      7      7   .     13     13     15     27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [255,]      8      7      7      8   .     14     13     15     38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [256,]      8      7      7      8   .     12     13     15     32</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

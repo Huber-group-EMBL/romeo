@@ -23,7 +23,9 @@ output:
 
 `r BiocStyle::Biocpkg("rome")` is a minimal R package thats provides read, validate and write tools for multiscale images and labels (image labels, segmentation masks etc.) stored as OME-ZARR file formats.
 
-The package also provides helper and methods to manipulate the OME-ZARR images and labels (as `ome_zarr` objects) the same way one would manipulate traditional arrays in R. You can subset an `ome_zarr` object like data arrays (using the `[` operator) where the subsetting will be applied to all levels of the multiscale OME-Zarr object. 
+The package also provides helpers and methods to manipulate the OME-ZARR images and labels (as `ome_zarr` objects) the same way one would manipulate traditional arrays in R. You can subset an `ome_zarr` object like data arrays (using the `[` operator) where the subsetting will be applied to all levels of the multiscale OME-Zarr object. 
+
+`r BiocStyle::Biocpkg("rome")` uses `r BiocStyle::Biocpkg("Rarr")` package to manipulate images stored as Zarr datasets and OME-ZARR metadata while `r BiocStyle::Biocpkg("ZarrArray")` package is used to lazily read larger-than-memory images.
 
 ## What is OME-ZARR ?
 

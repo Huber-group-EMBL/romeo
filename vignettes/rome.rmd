@@ -17,34 +17,46 @@ output:
   BiocStyle::html_document
 ---
 
-```{css, echo=FALSE}
-.main-container {
-  max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-```
-
 # Introduction
-
-## OME-ZARR
 
 ## rome
 
-`r BiocStyle::Biocpkg("rome")` is a minimal R package to read and write multiscale OME-ZARR images.
+`r BiocStyle::Biocpkg("rome")` is a minimal R package thats provides read, validate and write tools for multiscale images and labels (image labels, segmentation masks etc.) stored as OME-ZARR file formats.
 
-It also provides helper and methods to manipulate the resulting `ome_zarr` objects the same way one would manipulate traditional arrays in R. For example, you can subset an `ome_zarr` object using the `[` operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.
+The package also provides helper and methods to manipulate the OME-ZARR images and labels (as `ome_zarr` objects) the same way one would manipulate traditional arrays in R. You can subset an `ome_zarr` object like data arrays (using the `[` operator) where the subsetting will be applied to all levels of the multiscale OME-Zarr object. 
 
+## What is OME-ZARR ?
+
+OME-ZARR is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images. It combines 
+
+* **(i)** **Zarr**, a chunked, compressed array storage format ([https://zarr.dev/](https://zarr.dev/)) designed for scalable access to multidimensional data and
+* **(ii)** **OME Next-Generation File Formats**, or **OME-NGFF** ([https://ngff.openmicroscopy.org/](https://ngff.openmicroscopy.org/)), that defines standardized structure and metadata conventions for multiscale labels, segmentations, and coordinate transformations of bioimaging data formats. 
+
+In essence, an OME-ZARR file is a collection of data arrays with XYZCT dimensions representing an image pyramid, combined with a metadata (lives in the attributes property of Zarr arrays) that describes the properties of these arrays, such as scales, annotations and their coordinate spaces (Figure 1).    
+
+Currently there exists multiple OME-ZARR formats each having their own OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions 2 or 3). Currently, `r BiocStyle::Biocpkg("rome")` provides utilities to manipulate OME-ZARR with 0.4 and 0.5 NGFF formats. The current released version of the OME-ZARR specification is 0.5. See [https://ngff.openmicroscopy.org/specifications](https://ngff.openmicroscopy.org/specifications) for more information.
+
+<table>
+    <tr>
+      <td>
+        <img src="../inst/figures/chunks.png" width="80%" height="80%">
+      </td>
+      <td>
+        <img src="../inst/figures/metadata.png" width="80%" height="80%">
+      </td>
+    </tr>
+</table>
+  
 # Installation
 
 You can install the development version of `r BiocStyle::Biocpkg("rome")` like so:
 
-``` r
+```{r install, eval=FALSE}
 # install.packages("pak")
 pak::pak("Huber-group-EMBL/rome")
 ```
 
-# Reading OME-ZARR data
+# Reading OME-ZARR files
 
 ## Images
 
@@ -84,7 +96,7 @@ plot(x, all = TRUE)
 For remote OME-ZARR files, you can use the `paws.storage::s3` client to read 
 the data directly from the S3 bucket without downloading it first:
 
-```{r read_remote, eval=FALSE}
+```{r read_remote}
 library(paws)
 s3_client <- paws.storage::s3(
   config = list(
@@ -97,10 +109,10 @@ x <- ome_read(
   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr",
   s3_client = s3_client,
 )
-plot(x, all = TRUE)
+plot(x[1:2,1:50,1:50])
 ```
 
-# Writing OME-ZARR data
+# Writing OME-ZARR files
 
 ## Images
 

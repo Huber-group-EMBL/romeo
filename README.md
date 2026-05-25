@@ -13,6 +13,14 @@ rome is a minimal R package to read and write multiscale
 [OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or OME-NGFF)
 images.
 
+OME-ZARR is a cloud-friendly data format for storing large bioimaging
+datasets, such as microscopy images, that combines **Zarr**, a chunked,
+compressed array storage format (<https://zarr.dev/>) designed for
+scalable access to multidimensional data with **OME-NGFF**
+(<https://ngff.openmicroscopy.org/>) metadata standards for describing
+multiscale images, segmentations, and coordinate transformations for
+bioimaging data formats.
+
 The package also provides helper and methods to manipulate the resulting
 `ome_zarr` objects the same way one would manipulate traditional arrays
 in R. For example, you can subset an `ome_zarr` object using the `[`

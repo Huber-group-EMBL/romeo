@@ -30,7 +30,8 @@ Suggests:
     knitr,
     utils,
     testthat,
-    withr
+    withr,
+    paws
 Remotes:
     Huber-group-EMBL/Rarr@b0c8174
 VignetteBuilder: 

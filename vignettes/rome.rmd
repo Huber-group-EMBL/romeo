@@ -52,7 +52,7 @@ Currently there exists multiple OME-ZARR formats each having their own OME-NGFF 
 You can install the development version of `r BiocStyle::Biocpkg("rome")` like so:
 
 ```{r install, eval=FALSE}
-# install.packages("pak")
+install.packages("pak")
 pak::pak("Huber-group-EMBL/rome")
 ```
 
@@ -109,7 +109,7 @@ x <- ome_read(
   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr",
   s3_client = s3_client,
 )
-plot(x[1:2,1:50,1:50])
+plot(x[1:2, 1:50, 1:50])
 ```
 
 # Writing OME-ZARR files

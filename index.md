@@ -1,14 +1,22 @@
 # rome
 
-rome is a minimal R package to read and write multiscale
-[OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or OME-NGFF)
-images.
+rome is a minimal R package to reading, writing and validating
+multiscale [OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or
+OME-NGFF) images.
 
-The package also provides helper and methods to manipulate the resulting
-`ome_zarr` objects the same way one would manipulate traditional arrays
-in R. For example, you can subset an `ome_zarr` object using the `[`
-operator, and the subsetting will be applied to all levels of the
-multiscale OME-Zarr object.
+OME-ZARR is a cloud-friendly data format for storing large bioimaging
+datasets, such as microscopy images, that combines **Zarr**, a chunked,
+compressed array storage format (<https://zarr.dev/>) designed for
+scalable access to multidimensional data, together with **OME-NGFF**
+(<https://ngff.openmicroscopy.org/>) metadata standards for describing
+multiscale images, segmentations, and coordinate transformations for
+bioimaging data formats.
+
+The package also provides helpers and methods to manipulate the
+resulting `ome_zarr` objects in the same way one would manipulate
+traditional arrays in R. For example, you can subset an `ome_zarr`
+object using the `[` operator, and the subsetting will be applied to all
+levels of the multiscale OME-Zarr object.
 
 ## Installation
 
@@ -22,9 +30,8 @@ pak::pak("Huber-group-EMBL/rome")
 
 ## Reading OME-ZARR images
 
-This is a basic example which shows you how to read a OME-ZARR image of
-version 0.4. By default, the read will be performed lazily using
-`ZarrArray`.
+This example shows how to read an OME-ZARR image of version 0.4. By
+default, data are read lazily using `ZarrArray`.
 
 ``` r
 
@@ -64,7 +71,7 @@ x <- ome_read(
 
 rome also provides utilities for writing OME-ZARR images for OME-NGFF
 versions 0.4 and 0.5. The package also supports writing pyramids using
-`scalfactors` argument.
+`scalefactors` argument.
 
 ``` r
 

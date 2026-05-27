@@ -93,7 +93,7 @@ NULL
     if (!all(names(label_metadata) %in% lm_names)) {
       stop(
         "Label metadata should only include: ",
-        paste(lm_names, collapse = ", ")
+        toString(lm_names)
       )
     }
 

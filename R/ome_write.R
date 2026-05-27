@@ -353,5 +353,5 @@ setMethod(
   if (length(chunk_dim) != length(dim)) {
     stop("chunk and array dimensions do not match!")
   }
-  mapply(function(x, y) min(x, y), dim, chunk_dim)
+  pmin(chunk_dim, dim)
 }

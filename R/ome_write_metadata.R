@@ -86,70 +86,71 @@ NULL
   # add image-label
   meta <- list(`image-label` = list(version = version))
 
-  # check label metadata if provided
-  if (!is.null(label_metadata)) {
-    # check names
-    lm_names <- c("properties", "colors", "source")
-    if (!all(names(label_metadata) %in% lm_names)) {
-      stop(
-        "Label metadata should only include: ",
-        toString(lm_names)
-      )
-    }
-
-    # check source
-    if ("source" %in% names(label_metadata)) {
-      if (
-        !is.null(label_metadata$source) &&
-          !"image" %in% names(label_metadata$source)
-      ) {
-        stop("'source' should include 'image' with a path")
-      }
-    } else {
-      label_metadata <- c(
-        label_metadata,
-        list(source = list(image = "../../"))
-      )
-    }
-
-    # check colors
-    if (!is.null(label_metadata$colors)) {
-      colors <- vapply(
-        label_metadata$colors,
-        function(lm) {
-          .check_label_value(lm)
-          if (!is.null(lm[["rgba"]])) {
-            if (!is.list(lm[["rgba"]]) || !is_rgba(lm[["rgba"]])) {
-              stop("rgba should be a list of four uint8 [0,255] entries")
-            }
-          }
-          lm[["label-value"]]
-        },
-        numeric(1)
-      )
-      if (anyDuplicated(colors)) {
-        stop("label values should be unique!")
-      }
-    }
-
-    # check properties
-    if (!is.null(label_metadata$properties)) {
-      props <- vapply(
-        label_metadata$properties,
-        function(lm) {
-          .check_label_value(lm)
-          lm[["label-value"]]
-        },
-        numeric(1)
-      )
-      if (anyDuplicated(props)) {
-        stop("label values should be unique!")
-      }
-    }
-
-    # append label metadata
-    meta[["image-label"]] <- c(meta[["image-label"]], label_metadata)
+  if (is.null(label_metadata)) {
+    return(meta)
   }
+
+  # check names
+  lm_names <- c("properties", "colors", "source")
+  if (!all(names(label_metadata) %in% lm_names)) {
+    stop(
+      "Label metadata should only include: ",
+      toString(lm_names)
+    )
+  }
+
+  # check source
+  if ("source" %in% names(label_metadata)) {
+    if (
+      !is.null(label_metadata$source) &&
+        !"image" %in% names(label_metadata$source)
+    ) {
+      stop("'source' should include 'image' with a path")
+    }
+  } else {
+    label_metadata <- c(
+      label_metadata,
+      list(source = list(image = "../../"))
+    )
+  }
+
+  # check colors
+  if (!is.null(label_metadata$colors)) {
+    colors <- vapply(
+      label_metadata$colors,
+      function(lm) {
+        .check_label_value(lm)
+        if (!is.null(lm[["rgba"]])) {
+          if (!is.list(lm[["rgba"]]) || !is_rgba(lm[["rgba"]])) {
+            stop("rgba should be a list of four uint8 [0,255] entries")
+          }
+        }
+        lm[["label-value"]]
+      },
+      numeric(1)
+    )
+    if (anyDuplicated(colors)) {
+      stop("label values should be unique!")
+    }
+  }
+
+  # check properties
+  if (!is.null(label_metadata$properties)) {
+    props <- vapply(
+      label_metadata$properties,
+      function(lm) {
+        .check_label_value(lm)
+        lm[["label-value"]]
+      },
+      numeric(1)
+    )
+    if (anyDuplicated(props)) {
+      stop("label values should be unique!")
+    }
+  }
+
+  # append label metadata
+  meta[["image-label"]] <- c(meta[["image-label"]], label_metadata)
 
   meta
 }

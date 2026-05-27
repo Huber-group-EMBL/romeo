@@ -21,7 +21,7 @@ test_that("check axes when not given", {
   expect_error(.get_valid_axes(im), regexp = "Can't be guessed beyond 2D")
   im <- array(dim = c(1, 1, 1, 2))
   expect_error(.get_valid_axes(im), regexp = "Can't be guessed beyond 2D")
-  im <- array(dim = c(10))
+  im <- array(dim = 10)
   expect_error(.get_valid_axes(im), regexp = "Can't be guessed beyond 2D")
 })
 

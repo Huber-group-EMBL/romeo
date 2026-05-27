@@ -261,7 +261,7 @@ setMethod(
   .write_label_group_metadata(path, name, version = version)
 
   # update path
-  file.path(path, file.path("labels", name))
+  file.path(path, "labels", name)
 }
 
 #' .create_mip

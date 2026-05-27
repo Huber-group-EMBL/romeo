@@ -23,7 +23,7 @@ img <- readImage(img_file)
 test_that("check version", {
   lapply(c("0.1", "0.2", "0.3"), \(.) {
     expect_error(
-      ome_img <- ome_write(
+      ome_write(
         img,
         path = tempfile(fileext = ".ome.zarr"),
         version = .,
@@ -65,15 +65,15 @@ test_that("writing from array works", {
 
   ar <- array(sample(1:10, size = 100, replace = TRUE), dim = c(2, 2, 5, 5))
   axes <- c("t", "c", "x", "y")
-  expect_no_error(
-    ome_img <- ome_write(
-      ar,
-      path = tempfile(fileext = ".ome.zarr"),
-      axes = axes,
-      scalefactors = 2,
-      storage_options = list(chunk_dim = c(1, 1, 2, 2))
-    )
-  )
+  ome_img <- ome_write(
+    ar,
+    path = tempfile(fileext = ".ome.zarr"),
+    axes = axes,
+    scalefactors = 2,
+    storage_options = list(chunk_dim = c(1, 1, 2, 2))
+  ) |>
+    expect_no_error()
+
   expect_equal(dim(ome_img[[1]]), dim(ar))
   expect_equal(type(ome_img[[1]]), type(ar))
 })
@@ -114,7 +114,7 @@ test_that("writing 0.4 and 0.5 works", {
 
     # TODO: for now, chunk_dim has to be specified:
     expect_error(
-      ome_img <- ome_write(
+      ome_write(
         img,
         path = tempfile(fileext = ".ome.zarr"),
         version = .

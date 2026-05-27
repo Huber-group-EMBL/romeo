@@ -98,17 +98,17 @@ NULL
     }
 
     # check source
-    if (!"source" %in% names(label_metadata)) {
-      label_metadata <- append(
-        label_metadata,
-        list(source = list(image = "../../"))
-      )
-    } else {
+    if ("source" %in% names(label_metadata)) {
       if (!is.null(lbl_meta <- label_metadata$source)) {
         if (!"image" %in% names(lbl_meta)) {
           stop("'source' should include 'image' with a path")
         }
       }
+    } else {
+      label_metadata <- append(
+        label_metadata,
+        list(source = list(image = "../../"))
+      )
     }
 
     # check colors
@@ -310,13 +310,12 @@ NULL
 }
 
 .check_label_value <- function(lmv) {
-  if (!is.null(lmv <- lmv$`label-value`)) {
-    lmv <- suppressWarnings(as.numeric(lmv))
-    if (!is_integer(lmv)) {
-      stop("label-value should be a non-zero integer")
-    }
-  } else {
+  if (is.null(lmv$`label-value`)) {
     stop("colors and properties in label metadata should include 'label-value'")
+  }
+  lmv <- suppressWarnings(as.numeric(lmv$`label-value`))
+  if (!is_integer(lmv)) {
+    stop("label-value should be a non-zero integer")
   }
 }
 

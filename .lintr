@@ -6,5 +6,10 @@ linters: linters_with_defaults(
     nzchar_linter(),
     is_numeric_linter(),
     fixed_regex_linter(),
+    unnecessary_concatenation_linter(),
+    if_not_else_linter(),
+    paste_linter(),
+    implicit_assignment_linter(),
+    coalesce_linter(),
     object_name_linter = object_name_linter(styles = c("snake_case", "symbols", "CamelCase", "SNAKE_CASE"))
   )

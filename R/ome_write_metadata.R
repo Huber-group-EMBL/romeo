@@ -43,7 +43,7 @@ NULL
 
   # image-label
   if (type == "label") {
-    meta <- append(
+    meta <- c(
       meta,
       .make_label_metadata(
         label_metadata = label_metadata,
@@ -106,7 +106,7 @@ NULL
         stop("'source' should include 'image' with a path")
       }
     } else {
-      label_metadata <- append(
+      label_metadata <- c(
         label_metadata,
         list(source = list(image = "../../"))
       )
@@ -148,7 +148,7 @@ NULL
     }
 
     # append label metadata
-    meta[["image-label"]] <- append(meta[["image-label"]], label_metadata)
+    meta[["image-label"]] <- c(meta[["image-label"]], label_metadata)
   }
 
   meta

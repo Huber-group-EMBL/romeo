@@ -69,7 +69,8 @@ By default, data are read lazily using `ZarrArray`.
 library(rome)
 library(utils)
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
-dir.create(td <- tempfile())
+td <- withr::local_tempfile(fileext = ".ome.zarr")
+dir.create(td)
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
 plot(x, 1)
@@ -87,7 +88,8 @@ Labels of image pyramids can also be read as images
 
 ```{r read_label}
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
-dir.create(td <- tempfile())
+td <- withr::local_tempfile(fileext = ".ome.zarr")
+dir.create(td)
 unzip(omezarrzip, exdir = td)
 x <- ome_read(file.path(td, "labels/blobs"))
 plot(x, all = TRUE)

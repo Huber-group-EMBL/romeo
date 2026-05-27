@@ -99,10 +99,11 @@ NULL
 
     # check source
     if ("source" %in% names(label_metadata)) {
-      if (!is.null(lbl_meta <- label_metadata$source)) {
-        if (!"image" %in% names(lbl_meta)) {
-          stop("'source' should include 'image' with a path")
-        }
+      if (
+        !is.null(label_metadata$source) &&
+          !"image" %in% names(label_metadata$source)
+      ) {
+        stop("'source' should include 'image' with a path")
       }
     } else {
       label_metadata <- append(
@@ -112,17 +113,15 @@ NULL
     }
 
     # check colors
-    if (!is.null(lbl_meta <- label_metadata$colors)) {
+    if (!is.null(label_metadata$colors)) {
       colors <- vapply(
-        lbl_meta,
+        label_metadata$colors,
         function(lm) {
           .check_label_value(lm)
-          if (!is.null(lmrgb <- lm[["rgba"]])) {
-            msg <- "rgba should be a list of four uint8 [0,255] entries"
-            if (!is.list(lmrgb)) {
-              stop(msg)
+          if (!is.null(lm[["rgba"]])) {
+            if (!is.list(lm[["rgba"]]) || !is_rgba(lm[["rgba"]])) {
+              stop("rgba should be a list of four uint8 [0,255] entries")
             }
-            if (!is_rgba(lmrgb)) stop(msg)
           }
           lm[["label-value"]]
         },
@@ -134,9 +133,9 @@ NULL
     }
 
     # check properties
-    if (!is.null(lbl_meta <- label_metadata$properties)) {
+    if (!is.null(label_metadata$properties)) {
       props <- vapply(
-        lbl_meta,
+        label_metadata$properties,
         function(lm) {
           .check_label_value(lm)
           lm[["label-value"]]

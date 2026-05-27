@@ -77,7 +77,7 @@ test_that("writing 0.4 and 0.5 labels works (with images)", {
     # check labels group metadata
     label_meta <- Rarr::read_zarr_attributes(file.path(td, "labels"))
     if (. == "0.5") {
-      expect_true(!is.null(label_meta <- label_meta$ome))
+      label_meta <- label_meta$ome
     }
     expect_contains(names(label_meta), "labels")
     expect_contains(label_meta[["labels"]][[1]], label_name)

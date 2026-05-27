@@ -12,7 +12,6 @@ test_that("check scalefactors", {
   expect_error(.check_scalefactors(c(2, 0.1, 2)))
   expect_error(.check_scalefactors(c(2, NA, 2)))
   expect_error(.check_scalefactors(c(2, -1, 2)))
-  expect_error(.check_scalefactors(c()))
   expect_error(.check_scalefactors(NULL))
 })
 
@@ -71,7 +70,7 @@ test_that("writing from array works", {
       ar,
       path = tempfile(fileext = ".ome.zarr"),
       axes = axes,
-      scalefactors = c(2),
+      scalefactors = 2,
       storage_options = list(chunk_dim = c(1, 1, 2, 2))
     )
   )

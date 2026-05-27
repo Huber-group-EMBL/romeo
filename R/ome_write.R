@@ -339,7 +339,7 @@ setMethod(
     }
     Rarr::write_zarr_array(
       x = image,
-      zarr_array_path = file.path(path, paste0(i - 1)),
+      zarr_array_path = file.path(path, i - 1),
       chunk_dim = .get_scale_chunk_dim(
         chunk_dim = storage_options$chunk_dim,
         dim = dim(image)

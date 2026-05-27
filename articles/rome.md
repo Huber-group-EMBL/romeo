@@ -75,7 +75,8 @@ version 0.4. By default, data are read lazily using `ZarrArray`.
 library(rome)
 library(utils)
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
-dir.create(td <- tempfile())
+td <- withr::local_tempfile(fileext = ".ome.zarr")
+dir.create(td)
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
 plot(x, 1)
@@ -97,7 +98,8 @@ Labels of image pyramids can also be read as images
 ``` r
 
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
-dir.create(td <- tempfile())
+td <- withr::local_tempfile(fileext = ".ome.zarr")
+dir.create(td)
 unzip(omezarrzip, exdir = td)
 x <- ome_read(file.path(td, "labels/blobs"))
 plot(x, all = TRUE)
@@ -268,7 +270,7 @@ ome_nuc_th <- ome_write(nuc_th,
                         label_name = "blobs")
 ```
 
-    ## An image pyramid was found at '/tmp/Rtmp3kd3z5/file22854ee32de1.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpmQ0WwH/file1c036713bf2d.ome.zarr', writing labels to 'labels/blobs'
 
 ``` r
 
@@ -284,7 +286,7 @@ plot(ome_nuc_th, 3)
 
 ### Session info
 
-    ## R Under development (unstable) (2026-05-23 r90071)
+    ## R Under development (unstable) (2026-05-25 r90076)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 
@@ -319,15 +321,15 @@ plot(ome_nuc_th, 3)
     ## [25] httr2_1.2.2           textshaping_1.0.5     jquerylib_0.1.4      
     ## [28] abind_1.4-8           cli_3.6.6             rlang_1.2.0          
     ## [31] crayon_1.5.3          XVector_0.53.0        R.methodsS3_1.8.2    
-    ## [34] ZarrArray_1.1.0       DelayedArray_0.39.2   cachem_1.1.0         
-    ## [37] yaml_2.3.12           S4Arrays_1.13.0       tools_4.7.0          
-    ## [40] locfit_1.5-9.12       BiocGenerics_0.59.3   curl_7.1.0           
-    ## [43] R6_2.6.1              png_0.1-9             matrixStats_1.5.0    
-    ## [46] stats4_4.7.0          lifecycle_1.0.5       V8_8.2.0             
-    ## [49] S4Vectors_0.51.2      fs_2.1.0              htmlwidgets_1.6.4    
-    ## [52] IRanges_2.47.1        ragg_1.5.2            desc_1.4.3           
-    ## [55] pkgdown_2.2.0         bslib_0.11.0          glue_1.8.1           
-    ## [58] Rcpp_1.1.1-1.1        systemfonts_1.3.2     xfun_0.57            
-    ## [61] MatrixGenerics_1.25.0 paws.storage_0.9.0    knitr_1.51           
-    ## [64] htmltools_0.5.9       rmarkdown_2.31        compiler_4.7.0       
-    ## [67] RCurl_1.98-1.18
+    ## [34] ZarrArray_1.1.0       withr_3.0.2           DelayedArray_0.39.2  
+    ## [37] cachem_1.1.0          yaml_2.3.12           S4Arrays_1.13.0      
+    ## [40] tools_4.7.0           locfit_1.5-9.12       BiocGenerics_0.59.3  
+    ## [43] curl_7.1.0            R6_2.6.1              png_0.1-9            
+    ## [46] matrixStats_1.5.0     stats4_4.7.0          lifecycle_1.0.5      
+    ## [49] V8_8.2.0              S4Vectors_0.51.2      fs_2.1.0             
+    ## [52] htmlwidgets_1.6.4     IRanges_2.47.1        ragg_1.5.2           
+    ## [55] desc_1.4.3            pkgdown_2.2.0         bslib_0.11.0         
+    ## [58] glue_1.8.1            Rcpp_1.1.1-1.1        systemfonts_1.3.2    
+    ## [61] xfun_0.57             MatrixGenerics_1.25.0 paws.storage_0.9.0   
+    ## [64] knitr_1.51            htmltools_0.5.9       rmarkdown_2.31       
+    ## [67] compiler_4.7.0        RCurl_1.98-1.18

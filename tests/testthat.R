@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(rome)
+library(romeo)
 
-test_check("rome")
+test_check("romeo")

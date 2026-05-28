@@ -28,7 +28,7 @@ conserving the same scaling factor across levels
 \examples{
 omezarrzip <- system.file("extdata",
                           "test_ngff_image_v04.ome.zarr.zip",
-                          package = "rome")
+                          package = "romeo")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)

@@ -12,7 +12,7 @@
 #' @examples
 #' omezarrzip <- system.file("extdata",
 #'                           "test_ngff_image_v04.ome.zarr.zip",
-#'                           package = "rome")
+#'                           package = "romeo")
 #' dir.create(td <- tempfile())
 #' unzip(omezarrzip, exdir = td)
 #' ome_validate(td)
@@ -38,7 +38,7 @@ ome_validate <- function(path, s3_client = NULL) {
     "schemas",
     ome_version,
     paste0(type, ".schema"),
-    package = "rome"
+    package = "romeo"
   )
   jsonvalidate::json_validate(
     jsonlite::toJSON(group_attributes, auto_unbox = TRUE),

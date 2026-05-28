@@ -1,4 +1,4 @@
-Package: rome
+Package: romeo
 Title: Minimal R 'OME-Zarr' Reader
 Version: 0.99.1
 Authors@R: c(
@@ -37,6 +37,6 @@ Remotes:
 VignetteBuilder: 
     knitr
 biocViews: DataImport
-URL: https://huber-group-embl.github.io/rome/, https://github.com/Huber-group-EMBL/rome
-BugReports: https://github.com/Huber-group-EMBL/rome/issues
+URL: https://huber-group-embl.github.io/romeo/, https://github.com/Huber-group-EMBL/romeo
+BugReports: https://github.com/Huber-group-EMBL/romeo/issues
 Config/roxygen2/version: 8.0.0

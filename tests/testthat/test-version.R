@@ -10,7 +10,7 @@ test_that("parse ome version", {
     omezarrzip <- system.file(
       "extdata",
       paste0("test_ngff_image_", version[i], ".ome.zarr.zip"),
-      package = "rome"
+      package = "romeo"
     )
     td <- withr::local_tempfile()
     unzip(omezarrzip, exdir = td)

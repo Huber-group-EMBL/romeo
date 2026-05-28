@@ -1,5 +1,5 @@
 ---
-title: "Introduction to `rome`"
+title: "Introduction to `romeo`"
 date: "`r BiocStyle::doc_date()`"
 author:
   - name: Hugo Gruson
@@ -8,9 +8,9 @@ author:
   - name: Artür Manukyan
     affiliation: MDC-BIMSB
     email: artur-man@hotmail.com
-package: "`r BiocStyle::pkg_ver('rome')`"
+package: "`r BiocStyle::pkg_ver('romeo')`"
 vignette: >
-  %\VignetteIndexEntry{Introduction to rome}
+  %\VignetteIndexEntry{Introduction to romeo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 output:
@@ -19,13 +19,13 @@ output:
 
 # Introduction
 
-## rome
+## romeo
 
-`r BiocStyle::Biocpkg("rome")` is a minimal R package that provides tools to read, validate, and write multiscale images and labels (image labels, segmentation masks, etc.) stored as OME-ZARR files.
+`r BiocStyle::Biocpkg("romeo")` is a minimal R package that provides tools to read, validate, and write multiscale images and labels (image labels, segmentation masks, etc.) stored as OME-ZARR files.
 
 The package also provides helpers and methods to manipulate the OME-ZARR images and labels (as `ome_zarr` objects) the same way one would manipulate traditional arrays in R. You can subset an `ome_zarr` object like data arrays (using the `[` operator) where subsetting is applied to all levels of the multiscale OME-Zarr object. 
 
-`r BiocStyle::Biocpkg("rome")` uses the `r BiocStyle::Biocpkg("Rarr")` package to manipulate images stored as Zarr datasets and OME-ZARR metadata while the `r BiocStyle::Biocpkg("ZarrArray")` package is used to lazily read larger-than-memory images.
+`r BiocStyle::Biocpkg("romeo")` uses the `r BiocStyle::Biocpkg("Rarr")` package to manipulate images stored as Zarr datasets and OME-ZARR metadata while the `r BiocStyle::Biocpkg("ZarrArray")` package is used to lazily read larger-than-memory images.
 
 ## What is OME-ZARR?
 
@@ -36,7 +36,7 @@ OME-ZARR is a cloud-friendly data format for storing large bioimaging datasets, 
 
 In essence, an OME-ZARR file is a collection of data arrays with XYZCT dimensions representing an image pyramid, combined with metadata (lives in the attributes property of Zarr arrays) that describes the properties of these arrays, such as scales, annotations and coordinate spaces (Figure 1).    
 
-Currently, there exists multiple OME-ZARR formats each having its own OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions 2 or 3). Currently, `r BiocStyle::Biocpkg("rome")` provides utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and 0.5.. The current released version of the OME-ZARR specification is 0.5. See [https://ngff.openmicroscopy.org/specifications](https://ngff.openmicroscopy.org/specifications) for more information.
+Currently, there exists multiple OME-ZARR formats each having its own OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions 2 or 3). Currently, `r BiocStyle::Biocpkg("romeo")` provides utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and 0.5.. The current released version of the OME-ZARR specification is 0.5. See [https://ngff.openmicroscopy.org/specifications](https://ngff.openmicroscopy.org/specifications) for more information.
 
 <table>
     <tr>
@@ -51,11 +51,11 @@ Currently, there exists multiple OME-ZARR formats each having its own OME-NGFF s
   
 # Installation
 
-You can install the development version of `r BiocStyle::Biocpkg("rome")` like so:
+You can install the development version of `r BiocStyle::Biocpkg("romeo")` like so:
 
 ```{r install, eval=FALSE}
 install.packages("pak")
-pak::pak("Huber-group-EMBL/rome")
+pak::pak("Huber-group-EMBL/romeo")
 ```
 
 # Reading OME-ZARR files
@@ -66,9 +66,9 @@ This is a basic example which shows you how to read an OME-ZARR image of version
 By default, data are read lazily using `ZarrArray`. 
 
 ```{r read}
-library(rome)
+library(romeo)
 library(utils)
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
+omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
@@ -87,7 +87,7 @@ x <- ome_read(td, lazy = FALSE)
 Labels of image pyramids can also be read as images
 
 ```{r read_label}
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
+omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
@@ -120,12 +120,12 @@ plot(x[1:2, 1:50, 1:50])
 
 ## Images
 
-`r BiocStyle::Biocpkg("rome")` also provides utilities for writing OME-ZARR 
+`r BiocStyle::Biocpkg("romeo")` also provides utilities for writing OME-ZARR 
 images compatible with OME-NGFF versions 0.4 and 0.5. 
 
 ```{r write}
 library(EBImage)
-img_file <- system.file("extdata", "example_RGB.png", package = "rome")
+img_file <- system.file("extdata", "example_RGB.png", package = "romeo")
 img <- readImage(img_file)
 
 # write image pyramid

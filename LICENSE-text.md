@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2026
-    COPYRIGHT HOLDER: rome authors
+    COPYRIGHT HOLDER: romeo authors

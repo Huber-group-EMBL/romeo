@@ -1,6 +1,6 @@
-# rome
+# romeo
 
-rome is a minimal R package to reading, writing and validating
+romeo is a minimal R package to reading, writing and validating
 multiscale [OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or
 OME-NGFF) images.
 
@@ -20,12 +20,12 @@ levels of the multiscale OME-Zarr object.
 
 ## Installation
 
-You can install the development version of rome like so:
+You can install the development version of romeo like so:
 
 ``` r
 
 # install.packages("pak")
-pak::pak("Huber-group-EMBL/rome")
+pak::pak("Huber-group-EMBL/romeo")
 ```
 
 ## Reading OME-ZARR images
@@ -35,9 +35,9 @@ default, data are read lazily using `ZarrArray`.
 
 ``` r
 
-library(rome)
+library(romeo)
 library(utils)
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "rome")
+omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
 dir.create(td <- tempfile())
 unzip(omezarrzip, exdir = td)
 x <- ome_read(td)
@@ -69,7 +69,7 @@ x <- ome_read(
 
 ## Writing OME-ZARR images
 
-rome also provides utilities for writing OME-ZARR images for OME-NGFF
+romeo also provides utilities for writing OME-ZARR images for OME-NGFF
 versions 0.4 and 0.5. The package also supports writing pyramids using
 `scalefactors` argument.
 
@@ -77,7 +77,7 @@ versions 0.4 and 0.5. The package also supports writing pyramids using
 
 # read image
 library(EBImage)
-img_file <- system.file("extdata", "example_RGB.png", package="rome")
+img_file <- system.file("extdata", "example_RGB.png", package="romeo")
 img <- readImage(img_file)
 
 # write image pyramid

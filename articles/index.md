@@ -3,4 +3,4 @@
 ### All vignettes
 
 - [Introduction to
-  \`rome\`](https://huber-group-embl.github.io/rome/articles/rome.md):
+  \`romeo\`](https://huber-group-embl.github.io/romeo/articles/romeo.md):

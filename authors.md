@@ -10,15 +10,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Huber-group-EMBL/rome/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Huber-group-EMBL/romeo/blob/main/DESCRIPTION)
 
-Gruson H, Manukyan A (2026). *rome: Minimal R 'OME-Zarr' Reader*. R
-package version 0.99.1, <https://huber-group-embl.github.io/rome/>.
+Gruson H, Manukyan A (2026). *romeo: Minimal R 'OME-Zarr' Reader*. R
+package version 0.99.1, <https://huber-group-embl.github.io/romeo/>.
 
     @Manual{,
-      title = {rome: Minimal R 'OME-Zarr' Reader},
+      title = {romeo: Minimal R 'OME-Zarr' Reader},
       author = {Hugo Gruson and Artür Manukyan},
       year = {2026},
       note = {R package version 0.99.1},
-      url = {https://huber-group-embl.github.io/rome/},
+      url = {https://huber-group-embl.github.io/romeo/},
     }

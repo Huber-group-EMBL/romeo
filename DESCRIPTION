@@ -32,8 +32,6 @@ Suggests:
     testthat,
     withr,
     paws
-Remotes:
-    Huber-group-EMBL/Rarr@b0c8174
 VignetteBuilder: 
     knitr
 biocViews: DataImport

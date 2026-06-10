@@ -49,9 +49,7 @@ utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and
 See <https://ngff.openmicroscopy.org/specifications> for more
 information.
 
-|                                 |                                   |
-|---------------------------------|-----------------------------------|
-| ![](../inst/figures/chunks.png) | ![](../inst/figures/metadata.png) |
+[TABLE]
 
 ## Installation
 
@@ -271,7 +269,7 @@ ome_nuc_th <- ome_write(nuc_th,
                         label_name = "blobs")
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpTVrupg/file1c09bc389ea.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/Rtmp9nlUTA/file33aa2b6bb899.ome.zarr', writing labels to 'labels/blobs'
 
 ``` r
 
@@ -287,7 +285,7 @@ plot(ome_nuc_th, 3)
 
 ### Session info
 
-    ## R Under development (unstable) (2026-05-27 r90083)
+    ## R Under development (unstable) (2026-06-08 r90120)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 
@@ -308,29 +306,29 @@ plot(ome_nuc_th, 3)
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] EBImage_4.55.0   paws_0.9.0       romeo_0.99.1     BiocStyle_2.41.0
+    ## [1] EBImage_4.55.0   paws_0.10.0      romeo_0.99.1     BiocStyle_2.41.0
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] rappdirs_0.3.4        sass_0.4.10           generics_0.1.4       
-    ##  [4] tiff_0.1-12           xml2_1.5.2            SparseArray_1.13.2   
-    ##  [7] bitops_1.0-9          jpeg_0.1-11           lattice_0.22-9       
-    ## [10] jsonvalidate_1.5.0    paws.common_0.8.9     digest_0.6.39        
-    ## [13] magrittr_2.0.5        evaluate_1.0.5        grid_4.7.0           
-    ## [16] bookdown_0.46         fftwtools_0.9-11      fastmap_1.2.0        
-    ## [19] Matrix_1.7-5          R.oo_1.27.1           jsonlite_2.0.0       
-    ## [22] R.utils_2.13.0        Rarr_2.1.8            BiocManager_1.30.27  
-    ## [25] httr2_1.2.2           textshaping_1.0.5     jquerylib_0.1.4      
-    ## [28] abind_1.4-8           cli_3.6.6             rlang_1.2.0          
-    ## [31] crayon_1.5.3          XVector_0.53.0        R.methodsS3_1.8.2    
-    ## [34] ZarrArray_1.1.0       withr_3.0.2           DelayedArray_0.39.2  
-    ## [37] cachem_1.1.0          yaml_2.3.12           S4Arrays_1.13.0      
-    ## [40] tools_4.7.0           locfit_1.5-9.12       BiocGenerics_0.59.3  
-    ## [43] curl_7.1.0            R6_2.6.1              png_0.1-9            
-    ## [46] matrixStats_1.5.0     stats4_4.7.0          lifecycle_1.0.5      
-    ## [49] V8_8.2.0              S4Vectors_0.51.2      fs_2.1.0             
-    ## [52] htmlwidgets_1.6.4     IRanges_2.47.1        ragg_1.5.2           
-    ## [55] desc_1.4.3            pkgdown_2.2.0         bslib_0.11.0         
-    ## [58] glue_1.8.1            Rcpp_1.1.1-1.1        systemfonts_1.3.2    
-    ## [61] xfun_0.57             MatrixGenerics_1.25.0 paws.storage_0.9.0   
-    ## [64] knitr_1.51            htmltools_0.5.9       rmarkdown_2.31       
-    ## [67] compiler_4.7.0        RCurl_1.98-1.18
+    ##  [1] xfun_0.58             bslib_0.11.0          httr2_1.2.2          
+    ##  [4] htmlwidgets_1.6.4     lattice_0.22-9        tools_4.7.0          
+    ##  [7] bitops_1.0-9          generics_0.1.4        stats4_4.7.0         
+    ## [10] curl_7.1.0            paws.common_0.8.9     R.oo_1.27.1          
+    ## [13] Matrix_1.7-5          desc_1.4.3            S4Vectors_0.50.1     
+    ## [16] lifecycle_1.0.5       compiler_4.7.0        textshaping_1.0.5    
+    ## [19] tiff_0.1-12           htmltools_0.5.9       sass_0.4.10          
+    ## [22] RCurl_1.98-1.19       yaml_2.3.12           pkgdown_2.2.0        
+    ## [25] crayon_1.5.3          jquerylib_0.1.4       R.utils_2.13.0       
+    ## [28] cachem_1.1.0          DelayedArray_0.38.2   jsonvalidate_1.5.0   
+    ## [31] abind_1.4-8           locfit_1.5-9.12       digest_0.6.39        
+    ## [34] paws.storage_0.10.0   bookdown_0.46         fastmap_1.2.0        
+    ## [37] grid_4.7.0            cli_3.6.6             SparseArray_1.13.2   
+    ## [40] Rarr_2.0.1            magrittr_2.0.5        S4Arrays_1.13.0      
+    ## [43] withr_3.0.2           rappdirs_0.3.4        rmarkdown_2.31       
+    ## [46] XVector_0.53.0        matrixStats_1.5.0     fftwtools_0.9-11     
+    ## [49] jpeg_0.1-11           otel_0.2.0            ragg_1.5.2           
+    ## [52] png_0.1-9             R.methodsS3_1.8.2     evaluate_1.0.5       
+    ## [55] knitr_1.51            IRanges_2.46.0        V8_8.2.0             
+    ## [58] rlang_1.2.0           Rcpp_1.1.1-1.1        glue_1.8.1           
+    ## [61] ZarrArray_1.1.0       BiocManager_1.30.27   xml2_1.5.2           
+    ## [64] BiocGenerics_0.58.1   jsonlite_2.0.0        R6_2.6.1             
+    ## [67] MatrixGenerics_1.25.0 systemfonts_1.3.2     fs_2.1.0

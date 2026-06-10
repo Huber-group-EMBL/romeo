@@ -38,23 +38,26 @@ In essence, an OME-ZARR file is a collection of data arrays with XYZCT dimension
 
 Currently, there exists multiple OME-ZARR formats each having its own OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions 2 or 3). Currently, `r BiocStyle::Biocpkg("romeo")` provides utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and 0.5.. The current released version of the OME-ZARR specification is 0.5. See [https://ngff.openmicroscopy.org/specifications](https://ngff.openmicroscopy.org/specifications) for more information.
 
-<table>
-<tr>
-<td>
+:::: {style="display: grid; grid-template-columns: 200px min-content 1fr; grid-column-gap: 10px;"}
+
+::: {}
+
 ```{r, echo = FALSE}
 system.file("figures", "chunks.svg", package = "romeo") |>
   knitr::include_graphics()
 ```
-</td>
-<td>
-```{r, out.width = "20%", result = "asis", echo = FALSE}
+:::
+
+::: {}
+
+```{r, echo = FALSE, comment = ""}
 system.file("figures", "metadata.json", package = "romeo") |>
   readLines() |>
   cat(sep = "\n")
 ```
-</td>
-</tr>
-</table>
+:::
+
+::::
   
 # Installation
 

@@ -41,7 +41,7 @@ Currently, there exists multiple OME-ZARR formats each having its own OME-NGFF s
 :::: {style="display: grid; grid-template-columns: 200px min-content 1fr; grid-column-gap: 10px;"}
 
 ::: {}
-![](../inst/figures/chunks.svg)
+![](chunks.svg)
 :::
 
 ::: {}

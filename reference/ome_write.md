@@ -1,23 +1,10 @@
-# ome_write
+# Write a multiscale OME-Zarr file
 
 Writes an ome image to the zarr path according to ome-zarr specification
 
 ## Usage
 
 ``` r
-ome_write(
-  image,
-  path = "/",
-  axes = NULL,
-  scalefactors = c(2, 2, 2, 2),
-  version = c("0.4", "0.5"),
-  storage_options = NULL,
-  type = c("image", "label"),
-  label_name = NULL,
-  label_metadata = NULL
-)
-
-# S4 method for class 'character'
 ome_write(
   image,
   path = "/",
@@ -131,5 +118,5 @@ ome_nuc_th <- ome_write(nuc_th,
                         storage_options = list(chunk_dim = c(64,64)),
                         label_name = "nuclei_segmentation",
                         type = "label")
-#> An image pyramid was found at '/tmp/RtmpeOsfJf/file1baf688a8c41.ome.zarr', writing labels to 'labels/nuclei_segmentation'
+#> An image pyramid was found at '/tmp/RtmpOYX0mw/file1bfe4c157832.ome.zarr', writing labels to 'labels/nuclei_segmentation'
 ```

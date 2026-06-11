@@ -7,7 +7,7 @@
 - [`ome_validate()`](https://huber-group-embl.github.io/romeo/reference/ome_validate.md)
   : Validate a multiscale OME-Zarr file
 - [`ome_write()`](https://huber-group-embl.github.io/romeo/reference/ome_write.md)
-  : ome_write
+  : Write a multiscale OME-Zarr file
 
 ## Manipulating `ome_zarr` objects
 

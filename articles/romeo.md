@@ -314,7 +314,7 @@ ome_nuc_th <- ome_write(nuc_th,
                         label_name = "blobs")
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpDzTV56/file1d0f52cea93b.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpBQGzT6/file1da915f3e7a.ome.zarr', writing labels to 'labels/blobs'
 
 ``` r
 

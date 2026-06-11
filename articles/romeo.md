@@ -49,7 +49,7 @@ utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and
 See <https://ngff.openmicroscopy.org/specifications> for more
 information.
 
-![](../../../_temp/Library/romeo/figures/chunks.svg)
+![](../inst/figures/chunks.svg)
 
     {
       "multiscales": [
@@ -314,7 +314,7 @@ ome_nuc_th <- ome_write(nuc_th,
                         label_name = "blobs")
 ```
 
-    ## An image pyramid was found at '/tmp/Rtmp2YPdTt/file1de0b63923.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpTZyFrQ/file1dcb38ed106c.ome.zarr', writing labels to 'labels/blobs'
 
 ``` r
 

@@ -1,5 +1,5 @@
 #' @name ome_write
-#' @title ome_write
+#' @title Write a multiscale OME-Zarr file
 #'
 #' @description
 #' Writes an ome image to the zarr path according to ome-zarr specification
@@ -63,41 +63,6 @@ setGeneric(
     label_metadata = NULL
   ) {
     standardGeneric("ome_write")
-  }
-)
-
-#' @rdname ome_write
-#' @importFrom EBImage readImage
-#' @export
-setMethod(
-  "ome_write",
-  "character",
-  function(
-    image,
-    path,
-    axes,
-    scalefactors,
-    version,
-    storage_options,
-    type,
-    label_name,
-    label_metadata
-  ) {
-    if (!file.exists(image)) {
-      stop("Image at path ", image, "does not exist!")
-    }
-    image <- EBImage::readImage(image)
-    .ome_write(
-      image,
-      path,
-      axes,
-      scalefactors,
-      version,
-      storage_options,
-      type,
-      label_name,
-      label_metadata
-    )
   }
 )
 

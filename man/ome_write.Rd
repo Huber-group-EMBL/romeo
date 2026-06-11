@@ -2,24 +2,11 @@
 % Please edit documentation in R/ome_write.R
 \name{ome_write}
 \alias{ome_write}
-\alias{ome_write,character-method}
 \alias{ome_write,array-method}
 \alias{ome_write,Image-method}
-\title{ome_write}
+\title{Write a multiscale OME-Zarr file}
 \usage{
 ome_write(
-  image,
-  path = "/",
-  axes = NULL,
-  scalefactors = c(2, 2, 2, 2),
-  version = c("0.4", "0.5"),
-  storage_options = NULL,
-  type = c("image", "label"),
-  label_name = NULL,
-  label_metadata = NULL
-)
-
-\S4method{ome_write}{character}(
   image,
   path = "/",
   axes = NULL,

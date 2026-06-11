@@ -1,10 +1,10 @@
 # romeo
 
 romeo is a minimal R package to reading, writing and validating
-multiscale [OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or
+multiscale [OME-Zarr](https://ngff.openmicroscopy.org/index.html) (or
 OME-NGFF) images.
 
-OME-ZARR is a cloud-friendly data format for storing large bioimaging
+OME-Zarr is a cloud-friendly data format for storing large bioimaging
 datasets, such as microscopy images, that combines **Zarr**, a chunked,
 compressed array storage format (<https://zarr.dev/>) designed for
 scalable access to multidimensional data, together with **OME-NGFF**
@@ -28,9 +28,9 @@ You can install the development version of romeo like so:
 pak::pak("Huber-group-EMBL/romeo")
 ```
 
-## Reading OME-ZARR images
+## Reading OME-Zarr images
 
-This example shows how to read an OME-ZARR image of version 0.4. By
+This example shows how to read an OME-Zarr image of version 0.4. By
 default, data are read lazily using `ZarrArray`.
 
 ``` r
@@ -46,7 +46,7 @@ plot(x, 1)
 
 ![](reference/figures/README-read-1.png)
 
-For remote OME-ZARR files, you can use the
+For remote OME-Zarr files, you can use the
 [`paws.storage::s3`](https://paws-r.r-universe.dev/paws.storage/reference/s3.html)
 client to read the data directly from the S3 bucket without downloading
 it first:
@@ -67,9 +67,9 @@ x <- ome_read(
 )
 ```
 
-## Writing OME-ZARR images
+## Writing OME-Zarr images
 
-romeo also provides utilities for writing OME-ZARR images for OME-NGFF
+romeo also provides utilities for writing OME-Zarr images for OME-NGFF
 versions 0.4 and 0.5. The package also supports writing pyramids using
 `scalefactors` argument.
 

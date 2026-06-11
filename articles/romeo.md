@@ -7,9 +7,9 @@
 *[romeo](https://bioconductor.org/packages/3.24/romeo)* is a minimal R
 package that provides tools to read, validate, and write multiscale
 images and labels (image labels, segmentation masks, etc.) stored as
-OME-ZARR files.
+OME-Zarr files.
 
-The package also provides helpers and methods to manipulate the OME-ZARR
+The package also provides helpers and methods to manipulate the OME-Zarr
 images and labels (as `ome_zarr` objects) the same way one would
 manipulate traditional arrays in R. You can subset an `ome_zarr` object
 like data arrays (using the `[` operator) where subsetting is applied to
@@ -17,13 +17,13 @@ all levels of the multiscale OME-Zarr object.
 
 *[romeo](https://bioconductor.org/packages/3.24/romeo)* uses the
 *[Rarr](https://bioconductor.org/packages/3.24/Rarr)* package to
-manipulate images stored as Zarr datasets and OME-ZARR metadata while
+manipulate images stored as Zarr datasets and OME-Zarr metadata while
 the *[ZarrArray](https://bioconductor.org/packages/3.24/ZarrArray)*
 package is used to lazily read larger-than-memory images.
 
-### What is OME-ZARR?
+### What is OME-Zarr?
 
-OME-ZARR is a cloud-friendly data format for storing large bioimaging
+OME-Zarr is a cloud-friendly data format for storing large bioimaging
 datasets, such as microscopy images. It combines:
 
 - **(i)** **Zarr**, a chunked, compressed array storage format
@@ -34,18 +34,18 @@ datasets, such as microscopy images. It combines:
   structures and metadata conventions for multiscale labels,
   segmentations, and coordinate transformations of bioimaging datasets.
 
-In essence, an OME-ZARR file is a collection of data arrays with XYZCT
+In essence, an OME-Zarr file is a collection of data arrays with XYZCT
 dimensions representing an image pyramid, combined with metadata (lives
 in the attributes property of Zarr arrays) that describes the properties
 of these arrays, such as scales, annotations and coordinate spaces
 (Figure 1).
 
-Currently, there exists multiple OME-ZARR formats each having its own
+Currently, there exists multiple OME-Zarr formats each having its own
 OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions
 2 or 3). Currently,
 *[romeo](https://bioconductor.org/packages/3.24/romeo)* provides
-utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and
-0.5.. The current released version of the OME-ZARR specification is 0.5.
+utilities for manipulating OME-Zarr datasets using NGFF versions 0.4 and
+0.5.. The current released version of the OME-Zarr specification is 0.5.
 See <https://ngff.openmicroscopy.org/specifications> for more
 information.
 
@@ -107,11 +107,11 @@ install.packages("pak")
 pak::pak("Huber-group-EMBL/romeo")
 ```
 
-## Reading OME-ZARR files
+## Reading OME-Zarr files
 
 ### Images
 
-This is a basic example which shows you how to read an OME-ZARR image of
+This is a basic example which shows you how to read an OME-Zarr image of
 version 0.4. By default, data are read lazily using `ZarrArray`.
 
 ``` r
@@ -153,7 +153,7 @@ plot(x, all = TRUE)
 
 ## Reading from S3 storage
 
-For remote OME-ZARR files, you can use the
+For remote OME-Zarr files, you can use the
 [`paws.storage::s3`](https://paws-r.r-universe.dev/paws.storage/reference/s3.html)
 client to read the data directly from the S3 bucket without downloading
 it first:
@@ -180,12 +180,12 @@ plot(x[1:2, 1:50, 1:50])
 
 ![](romeo_files/figure-html/read_remote-1.png)
 
-## Writing OME-ZARR files
+## Writing OME-Zarr files
 
 ### Images
 
 *[romeo](https://bioconductor.org/packages/3.24/romeo)* also provides
-utilities for writing OME-ZARR images compatible with OME-NGFF versions
+utilities for writing OME-Zarr images compatible with OME-NGFF versions
 0.4 and 0.5.
 
 ``` r
@@ -236,7 +236,7 @@ ome_img <- ome_write(img,
 
 ### Labels
 
-OME-ZARR label pyramids can be generated in the same way. We first
+OME-Zarr label pyramids can be generated in the same way. We first
 create our own label data using EBImage.
 
 ``` r
@@ -314,7 +314,7 @@ ome_nuc_th <- ome_write(nuc_th,
                         label_name = "blobs")
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpBQGzT6/file1da915f3e7a.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpBUAtN1/file1d303844ed05.ome.zarr', writing labels to 'labels/blobs'
 
 ``` r
 

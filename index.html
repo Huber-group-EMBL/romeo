@@ -51,8 +51,8 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>romeo is a minimal R package to reading, writing and validating multiscale <a href="https://ngff.openmicroscopy.org/index.html" class="external-link">OME-ZARR</a> (or OME-NGFF) images.</p>
-<p>OME-ZARR is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images, that combines <strong>Zarr</strong>, a chunked, compressed array storage format (<a href="https://zarr.dev/" class="external-link uri">https://zarr.dev/</a>) designed for scalable access to multidimensional data, together with <strong>OME-NGFF</strong> (<a href="https://ngff.openmicroscopy.org/" class="external-link uri">https://ngff.openmicroscopy.org/</a>) metadata standards for describing multiscale images, segmentations, and coordinate transformations for bioimaging data formats.</p>
+<p>romeo is a minimal R package to reading, writing and validating multiscale <a href="https://ngff.openmicroscopy.org/index.html" class="external-link">OME-Zarr</a> (or OME-NGFF) images.</p>
+<p>OME-Zarr is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images, that combines <strong>Zarr</strong>, a chunked, compressed array storage format (<a href="https://zarr.dev/" class="external-link uri">https://zarr.dev/</a>) designed for scalable access to multidimensional data, together with <strong>OME-NGFF</strong> (<a href="https://ngff.openmicroscopy.org/" class="external-link uri">https://ngff.openmicroscopy.org/</a>) metadata standards for describing multiscale images, segmentations, and coordinate transformations for bioimaging data formats.</p>
 <p>The package also provides helpers and methods to manipulate the resulting <code>ome_zarr</code> objects in the same way one would manipulate traditional arrays in R. For example, you can subset an <code>ome_zarr</code> object using the <code>[</code> operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -63,9 +63,9 @@
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"Huber-group-EMBL/romeo"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="reading-ome-zarr-images">Reading OME-ZARR images<a class="anchor" aria-label="anchor" href="#reading-ome-zarr-images"></a>
+<h2 id="reading-ome-zarr-images">Reading OME-Zarr images<a class="anchor" aria-label="anchor" href="#reading-ome-zarr-images"></a>
 </h2>
-<p>This example shows how to read an OME-ZARR image of version 0.4. By default, data are read lazily using <code>ZarrArray</code>.</p>
+<p>This example shows how to read an OME-Zarr image of version 0.4. By default, data are read lazily using <code>ZarrArray</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://huber-group-embl.github.io/romeo/">romeo</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">utils</span><span class="op">)</span></span>
@@ -75,7 +75,7 @@
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-read-1.png" style="width:100.0%"></p>
-<p>For remote OME-ZARR files, you can use the <code><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">paws.storage::s3</a></code> client to read the data directly from the S3 bucket without downloading it first:</p>
+<p>For remote OME-Zarr files, you can use the <code><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">paws.storage::s3</a></code> client to read the data directly from the S3 bucket without downloading it first:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paws-r/paws" class="external-link">paws</a></span><span class="op">)</span></span>
 <span><span class="va">s3_client</span> <span class="op">&lt;-</span> <span class="fu">paws.storage</span><span class="fu">::</span><span class="fu"><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">s3</a></span><span class="op">(</span></span>
@@ -91,9 +91,9 @@
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="writing-ome-zarr-images">Writing OME-ZARR images<a class="anchor" aria-label="anchor" href="#writing-ome-zarr-images"></a>
+<h2 id="writing-ome-zarr-images">Writing OME-Zarr images<a class="anchor" aria-label="anchor" href="#writing-ome-zarr-images"></a>
 </h2>
-<p>romeo also provides utilities for writing OME-ZARR images for OME-NGFF versions 0.4 and 0.5. The package also supports writing pyramids using <code>scalefactors</code> argument.</p>
+<p>romeo also provides utilities for writing OME-Zarr images for OME-NGFF versions 0.4 and 0.5. The package also supports writing pyramids using <code>scalefactors</code> argument.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># read image</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aoles/EBImage" class="external-link">EBImage</a></span><span class="op">)</span></span>

@@ -25,7 +25,7 @@ create_zarr_group <- function(store, name, version = 2L) {
       function(x) paste(split_name[seq_len(x)], collapse = "/"),
       FUN.VALUE = character(1)
     )
-    split_name <- rev(utils::tail(split_name, 2))
+    split_name <- rev(split_name)[1:2]
     if (!dir.exists(file.path(store, split_name[2]))) {
       create_zarr_group(store = store, name = split_name[2], version = version)
     }

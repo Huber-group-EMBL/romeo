@@ -41,11 +41,7 @@ Currently, there exists multiple OME-ZARR formats each having its own OME-NGFF s
 :::: {style="display: grid; grid-template-columns: 200px min-content 1fr; grid-column-gap: 10px;"}
 
 ::: {}
-
-```{r, echo = FALSE}
-system.file("figures", "chunks.svg", package = "romeo") |>
-  knitr::include_graphics()
-```
+![](../inst/figures/chunks.svg)
 :::
 
 ::: {}

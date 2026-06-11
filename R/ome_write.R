@@ -67,41 +67,6 @@ setGeneric(
 )
 
 #' @rdname ome_write
-#' @importFrom EBImage readImage
-#' @export
-setMethod(
-  "ome_write",
-  "character",
-  function(
-    image,
-    path,
-    axes,
-    scalefactors,
-    version,
-    storage_options,
-    type,
-    label_name,
-    label_metadata
-  ) {
-    if (!file.exists(image)) {
-      stop("Image at path ", image, "does not exist!")
-    }
-    image <- EBImage::readImage(image)
-    .ome_write(
-      image,
-      path,
-      axes,
-      scalefactors,
-      version,
-      storage_options,
-      type,
-      label_name,
-      label_metadata
-    )
-  }
-)
-
-#' @rdname ome_write
 #' @importFrom EBImage Image
 #' @export
 setMethod(

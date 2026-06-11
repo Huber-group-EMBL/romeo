@@ -6,7 +6,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/Huber-group-EMBL/romeo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Huber-group-EMBL/romeo/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/Huber-group-EMBL/romeo/actions/workflows/r-universe.yaml/badge.svg)](https://github.com/Huber-group-EMBL/romeo/actions/workflows/r-universe.yaml)
 <!-- badges: end -->
 
 romeo is a minimal R package to reading, writing and validating

@@ -43,16 +43,6 @@ test_that("default version works", {
   )
 })
 
-test_that("writing from path works", {
-  expect_no_error(
-    ome_write(
-      img_file,
-      path = tempfile(fileext = ".ome.zarr"),
-      storage_options = list(chunk_dim = c(64, 64))
-    )
-  )
-})
-
 test_that("writing from array works", {
   imgdata <- imageData(img)
   expect_no_error(

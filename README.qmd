@@ -22,9 +22,9 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/Huber-group-EMBL/romeo/actions/workflows/r-universe.yaml/badge.svg)](https://github.com/Huber-group-EMBL/romeo/actions/workflows/r-universe.yaml)
 <!-- badges: end -->
 
-romeo is a minimal R package to reading, writing and validating multiscale [OME-ZARR](https://ngff.openmicroscopy.org/index.html) (or OME-NGFF) images. 
+romeo is a minimal R package to reading, writing and validating multiscale [OME-Zarr](https://ngff.openmicroscopy.org/index.html) (or OME-NGFF) images. 
 
-OME-ZARR is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images, that combines **Zarr**, a chunked, compressed array storage format ([https://zarr.dev/](https://zarr.dev/)) designed for scalable access to multidimensional data, together with **OME-NGFF** ([https://ngff.openmicroscopy.org/](https://ngff.openmicroscopy.org/)) metadata standards for describing multiscale images, segmentations, and coordinate transformations for bioimaging data formats.
+OME-Zarr is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images, that combines **Zarr**, a chunked, compressed array storage format ([https://zarr.dev/](https://zarr.dev/)) designed for scalable access to multidimensional data, together with **OME-NGFF** ([https://ngff.openmicroscopy.org/](https://ngff.openmicroscopy.org/)) metadata standards for describing multiscale images, segmentations, and coordinate transformations for bioimaging data formats.
 
 The package also provides helpers and methods to manipulate the resulting `ome_zarr` objects in the same way one would manipulate traditional arrays in R. For example, you can subset an `ome_zarr` object using the `[` operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.
 
@@ -37,9 +37,9 @@ You can install the development version of romeo like so:
 pak::pak("Huber-group-EMBL/romeo")
 ```
 
-## Reading OME-ZARR images
+## Reading OME-Zarr images
 
-This example shows how to read an OME-ZARR image of version 0.4. 
+This example shows how to read an OME-Zarr image of version 0.4. 
 By default, data are read lazily using `ZarrArray`. 
 
 ```{r read}
@@ -53,7 +53,7 @@ x <- ome_read(td)
 plot(x, 1)
 ```
 
-For remote OME-ZARR files, you can use the `paws.storage::s3` client to read the data directly from the S3 bucket without downloading it first:
+For remote OME-Zarr files, you can use the `paws.storage::s3` client to read the data directly from the S3 bucket without downloading it first:
 
 ```{r read_remote, eval=FALSE}
 #| label: read_remote
@@ -72,9 +72,9 @@ x <- ome_read(
 )
 ```
 
-## Writing OME-ZARR images
+## Writing OME-Zarr images
 
-romeo also provides utilities for writing OME-ZARR images for OME-NGFF versions 
+romeo also provides utilities for writing OME-Zarr images for OME-NGFF versions 
 0.4 and 0.5. The package also supports writing pyramids using `scalefactors`
 argument.
 

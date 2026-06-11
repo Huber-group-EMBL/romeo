@@ -4,7 +4,7 @@
 \alias{ome_write}
 \alias{ome_write,array-method}
 \alias{ome_write,Image-method}
-\title{ome_write}
+\title{Write a multiscale OME-Zarr file}
 \usage{
 ome_write(
   image,

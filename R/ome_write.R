@@ -1,5 +1,5 @@
 #' @name ome_write
-#' @title ome_write
+#' @title Write a multiscale OME-Zarr file
 #'
 #' @description
 #' Writes an ome image to the zarr path according to ome-zarr specification

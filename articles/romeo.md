@@ -49,7 +49,52 @@ utilities for manipulating OME-ZARR datasets using NGFF versions 0.4 and
 See <https://ngff.openmicroscopy.org/specifications> for more
 information.
 
-[TABLE]
+![](../../../_temp/Library/romeo/figures/chunks.svg)
+
+    {
+      "multiscales": [
+        {
+          "version": "0.4",
+          "name": "example",
+          "axes": [
+            {"name": "t", "type": "time", "unit": "millisecond"},
+            {"name": "c", "type": "channel"},
+            {"name": "z", "type": "space", "unit": "micrometer"},
+            {"name": "y", "type": "space", "unit": "micrometer"},
+            {"name": "x", "type": "space", "unit": "micrometer"}
+          ],
+          "datasets": [
+            {
+              "path": "0",
+              "coordinateTransformations": [{
+                // the voxel size for the first scale level (0.5 micrometer)
+                "type": "scale",
+                "scale": [1.0, 1.0, 0.5, 0.5, 0.5]
+              }]
+            },
+            {
+              "path": "1",
+              "coordinateTransformations": [{
+                // the voxel size for the second scale level (downscaled by a factor of 2 on x, y and z dimensions)
+                "type": "scale",
+                "scale": [1.0, 1.0, 1.0, 1.0, 1.0]
+              }]
+            },
+            {
+              "path": "2",
+              "coordinateTransformations": [{
+                // the voxel size for the third scale level (downscaled by a factor of 4 on x, y and z dimensions)
+                "type": "scale",
+                "scale": [1.0, 1.0, 2.0, 2.0, 2.0]
+              }]
+            }
+          ],
+          "coordinateTransformations": [{
+            // the time unit (0.1 milliseconds), which is the same for each scale
+            "type": "scale",
+            "scale": [0.1, 1.0, 1.0, 1.0, 1.0]
+          }],
+          ...
 
 ## Installation
 
@@ -269,7 +314,7 @@ ome_nuc_th <- ome_write(nuc_th,
                         label_name = "blobs")
 ```
 
-    ## An image pyramid was found at '/tmp/Rtmp9nlUTA/file33aa2b6bb899.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/Rtmp2YPdTt/file1de0b63923.ome.zarr', writing labels to 'labels/blobs'
 
 ``` r
 
@@ -285,7 +330,7 @@ plot(ome_nuc_th, 3)
 
 ### Session info
 
-    ## R Under development (unstable) (2026-06-08 r90120)
+    ## R Under development (unstable) (2026-06-09 r90126)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 

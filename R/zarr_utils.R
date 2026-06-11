@@ -27,7 +27,7 @@ create_zarr_group <- function(store, name, version = 2L) {
     )
     split_name <- rev(utils::tail(split_name, 2))
     if (!dir.exists(file.path(store, split_name[2]))) {
-      create_zarr_group(store = store, name = split_name[2])
+      create_zarr_group(store = store, name = split_name[2], version = version)
     }
   }
   dir.create(file.path(store, split_name[1]), showWarnings = FALSE)
@@ -45,7 +45,7 @@ create_zarr_group <- function(store, name, version = 2L) {
         file = file.path(store, split_name[1], "zarr.json")
       )
     },
-    cli::cli_abort("Only zarr v2 is supported. Use version = 'v2'")
+    cli::cli_abort("Only zarr v2 and v3 are supported. Use version = 2L or 3L")
   )
 }
 
@@ -85,7 +85,7 @@ create_zarr <- function(store, version = "v2") {
 #' is_zarr_empty(store)
 is_zarr_empty <- function(store) {
   files <- list.files(store, recursive = FALSE, full.names = FALSE)
-  all(files %in% c(".zarray", ".zattrs", ".zgroup"))
+  all(files %in% c(".zarray", ".zattrs", ".zgroup", "zarr.json"))
 }
 
 #' zarr_exists

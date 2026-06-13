@@ -120,8 +120,6 @@ For remote OME-Zarr files, you can use the `paws.storage::s3` client to read
 the data directly from the S3 bucket without downloading it first:
 
 ```{r read_remote}
-if (!requireNamespace("paws"))
-  install.packages("paws")
 library(paws)
 
 s3_client <- paws.storage::s3(
@@ -156,8 +154,6 @@ Here, `ome_write` function accepts objects of `Image` class (from
 `r BiocStyle::Biocpkg("EBImage")`) package as input. 
 
 ```{r ebimage}
-if (!requireNamespace("EBImage"))
-  BiocManager::install("EBImage")
 library(EBImage)
 
 img_file <- system.file("extdata", "example_RGB.png", package = "romeo")

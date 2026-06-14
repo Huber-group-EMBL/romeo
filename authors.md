@@ -7,6 +7,15 @@
 
 - **Artür Manukyan**. Author. [](https://orcid.org/0000-0002-0441-9517)
 
+- **Helmholtz Association**. Funder.
+  [![ROR](https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg)](https://ror.org/0281dp749)  
+  Funded by the Helmholtz ScienceServe Initative to improve
+  interoperability of bioimaging, single-cell and spatial omics data,
+  https://www.helmholtz.de
+
+- **German Network for Bioinformatics Infrastructure - de.NBI**. Funder.
+  [![ROR](https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg)](https://ror.org/01vmpm840)
+
 ## Citation
 
 Source:

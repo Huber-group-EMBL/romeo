@@ -51,13 +51,16 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>romeo is a minimal R package to reading, writing and validating multiscale <a href="https://ngff.openmicroscopy.org/index.html" class="external-link">OME-Zarr</a> (or OME-NGFF) images.</p>
-<p>OME-Zarr is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images, that combines <strong>Zarr</strong>, a chunked, compressed array storage format (<a href="https://zarr.dev/" class="external-link uri">https://zarr.dev/</a>) designed for scalable access to multidimensional data, together with <strong>OME-NGFF</strong> (<a href="https://ngff.openmicroscopy.org/" class="external-link uri">https://ngff.openmicroscopy.org/</a>) metadata standards for describing multiscale images, segmentations, and coordinate transformations for bioimaging data formats.</p>
-<p>The package also provides helpers and methods to manipulate the resulting <code>ome_zarr</code> objects in the same way one would manipulate traditional arrays in R. For example, you can subset an <code>ome_zarr</code> object using the <code>[</code> operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.</p>
+<p><strong>romeo</strong> is a minimal R package to reading, writing and validating multiscale <a href="https://ngff.openmicroscopy.org/index.html" class="external-link">OME-Zarr</a> images. <strong>romeo</strong> also provides helpers and methods to manipulate OME-Zarr images (realized as <code>ome_zarr</code> objects) in the same way one would manipulate traditional arrays in R. For example, you can subset an <code>ome_zarr</code> object using the <code>[</code> operator, and the subsetting will be applied to all levels of the multiscale OME-Zarr object.</p>
+<div class="section level2">
+<h2 id="ome-zarr">OME-Zarr<a class="anchor" aria-label="anchor" href="#ome-zarr"></a>
+</h2>
+<p>OME-Zarr is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images, that combines <strong>Zarr</strong>, a chunked, compressed array storage format (<a href="https://zarr.dev/" class="external-link uri">https://zarr.dev/</a>) designed for scalable access to multidimensional data, together with <strong>OME-NGFF</strong> (<a href="https://ngff.openmicroscopy.org/" class="external-link uri">https://ngff.openmicroscopy.org/</a>) metadata standards for describing multiscale images, labels, and coordinate transformations for bioimaging data formats.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of romeo like so:</p>
+<p>You can install the development version of <strong>romeo</strong> like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"Huber-group-EMBL/romeo"</span><span class="op">)</span></span></code></pre></div>
@@ -72,6 +75,7 @@
 <span><span class="va">omezarrzip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"test_ngff_image_v04.ome.zarr.zip"</span>, package <span class="op">=</span> <span class="st">"romeo"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">omezarrzip</span>, exdir <span class="op">=</span> <span class="va">td</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-read-1.png" style="width:100.0%"></p>
@@ -93,14 +97,13 @@
 <div class="section level2">
 <h2 id="writing-ome-zarr-images">Writing OME-Zarr images<a class="anchor" aria-label="anchor" href="#writing-ome-zarr-images"></a>
 </h2>
-<p>romeo also provides utilities for writing OME-Zarr images for OME-NGFF versions 0.4 and 0.5. The package also supports writing pyramids using <code>scalefactors</code> argument.</p>
+<p><strong>romeo</strong> is also capable of writing OME-Zarr images with respect to multiple OME-NGFF specifications (Versions 0.4 and 0.5). See <a href="https://ngff.openmicroscopy.org/specifications/" class="external-link">NGFF Specifications</a> for more information.</p>
+<p>We use <code>ome_write</code> to write image (or label) pyramids with custom scaling. Here, <code>scalefactors</code> argument specifies the relative scale factor of each space layer (x, y and z dimensions) to the previous layer, e.g. <code>scalefactors = c(2,2,3)</code> generates four layers with scales 1, 2, 4, and 12.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># read image</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aoles/EBImage" class="external-link">EBImage</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aoles/EBImage" class="external-link">EBImage</a></span><span class="op">)</span></span>
 <span><span class="va">img_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_RGB.png"</span>, package<span class="op">=</span><span class="st">"romeo"</span><span class="op">)</span></span>
 <span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/io.html" class="external-link">readImage</a></span><span class="op">(</span><span class="va">img_file</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># write image pyramid</span></span>
 <span><span class="va">ome_img</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">img</span>,</span>
 <span>                     path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span>

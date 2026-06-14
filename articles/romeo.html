@@ -79,19 +79,19 @@ Manukyan</h4>
 </h3>
 <p><em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em> is a
 minimal R package that provides tools to read, validate, and write
-multiscale images and labels (image labels, segmentation masks, etc.)
-stored as OME-Zarr files.</p>
-<p>The package also provides helpers and methods to manipulate the
-OME-Zarr images and labels (as <code>ome_zarr</code> objects) the same
-way one would manipulate traditional arrays in R. You can subset an
-<code>ome_zarr</code> object like data arrays (using the <code>[</code>
-operator) where subsetting is applied to all levels of the multiscale
-OME-Zarr object.</p>
-<p><em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em> uses
-the <em><a href="https://bioconductor.org/packages/3.24/Rarr" class="external-link">Rarr</a></em> package
+multiscale images and labels (regions, segmentation masks, etc.) stored
+as <strong>OME-Zarr</strong> files.</p>
+<p>The package uses the <em><a href="https://bioconductor.org/packages/3.24/Rarr" class="external-link">Rarr</a></em> package
 to manipulate images stored as Zarr datasets and OME-Zarr metadata while
 the <em><a href="https://bioconductor.org/packages/3.24/ZarrArray" class="external-link">ZarrArray</a></em>
 package is used to lazily read larger-than-memory images.</p>
+<p><em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em>
+realizes these Zarr-backed images (or labels) as objects of an
+<code>ome_zarr</code> class where a number of methods are available to
+manipulate these images as traditional arrays. These are, for example,
+subsetting or slicing the images using the <code>[</code> operator which
+is applied to all levels of the multiscale OME-Zarr object (i.e. image
+pyramids).</p>
 </div>
 <div class="section level3">
 <h3 id="what-is-ome-zarr">What is OME-Zarr?<a class="anchor" aria-label="anchor" href="#what-is-ome-zarr"></a>
@@ -111,15 +111,16 @@ multiscale labels, segmentations, and coordinate transformations of
 bioimaging datasets.</li>
 </ul>
 <p>In essence, an OME-Zarr file is a collection of data arrays with
-XYZCT dimensions representing an image pyramid, combined with metadata
-(lives in the attributes property of Zarr arrays) that describes the
-properties of these arrays, such as scales, annotations and coordinate
-spaces (Figure 1).</p>
-<p>Currently, there exists multiple OME-Zarr formats each having its own
-OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions
-2 or 3). Currently, <em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em>
+XYZCT dimensions (X, Y, and Z for space, C for channels and T for time)
+representing an image pyramid, combined with metadata (which lives in
+the attributes property of Zarr arrays) that describes the properties of
+these arrays, such as scales, annotations and coordinate spaces (Figure
+1).</p>
+<p>There exists multiple OME-Zarr formats each having its own <a href="https://ngff.openmicroscopy.org/specifications/index.html#" class="external-link">OME-NGFF
+specifications</a> (Versions 0.3, 0.4, 0.5 etc.) and <a href="https://zarr-specs.readthedocs.io/en/latest/specs.html" class="external-link">Zarr
+formats</a> (Versions 2 or 3). Currently, <em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em>
 provides utilities for manipulating OME-Zarr datasets using NGFF
-versions 0.4 and 0.5.. The current released version of the OME-Zarr
+versions 0.4 and 0.5. The current released version of the OME-Zarr
 specification is 0.5. See <a href="https://ngff.openmicroscopy.org/specifications" class="external-link">https://ngff.openmicroscopy.org/specifications</a>
 for more information.</p>
 <div style="display: grid; grid-template-columns: 200px min-content 1fr; grid-column-gap: 10px;">
@@ -190,9 +191,12 @@ so:</p>
 <div class="section level3">
 <h3 id="images">Images<a class="anchor" aria-label="anchor" href="#images"></a>
 </h3>
-<p>This is a basic example which shows you how to read an OME-Zarr image
-of version 0.4. By default, data are read lazily using
-<code>ZarrArray</code>.</p>
+<p>This is a basic example which shows you how to read an OME-Zarr
+image. By default, data are read lazily using <code>ZarrArray</code>.
+Here, <code>ome_read</code> function first validates if the attributes
+of the OME-Zarr image comply with the OME-NGFF specifications (of
+Version 0.4 in this example), and if valid, move to reading as a
+multi-scale <code>ome_zarr</code> object.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://huber-group-embl.github.io/romeo/">romeo</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">utils</span><span class="op">)</span></span>
@@ -200,23 +204,56 @@ of version 0.4. By default, data are read lazily using
 <span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">omezarrzip</span>, exdir <span class="op">=</span> <span class="va">td</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="romeo_files/figure-html/read-1.png" class="r-plt" alt="" width="700"></p>
-<p>Alternatively, the data can be read into memory:</p>
+<p>We can extract each layer of the image pyramid using <code>[[</code>
+method. Each layer of the image pyramid is a <code>ZarrArray</code>
+object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span>, lazy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "ZarrMatrix"        "ZarrArray"         "DelayedMatrix"    </span></span>
+<span><span class="co">## [4] "DelayedArray"      "DelayedUnaryIsoOp" "DelayedUnaryOp"   </span></span>
+<span><span class="co">## [7] "DelayedOp"         "Array"             "RectangularData"</span></span></code></pre>
+<p>Alternatively, the data can be read into memory as below using the
+<code>lazy</code> argument:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="va">td</span>, lazy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "matrix"                              "array"                              </span></span>
+<span><span class="co">## [3] "structure"                           "matrix_OR_array_OR_table_OR_numeric"</span></span>
+<span><span class="co">## [5] "vector"                              "vector_OR_factor"                   </span></span>
+<span><span class="co">## [7] "vector_OR_Vector"</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="labels">Labels<a class="anchor" aria-label="anchor" href="#labels"></a>
 </h3>
-<p>Labels of image pyramids can also be read as images</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>Labels of an image (or image pyramid) are pixel-level annotations
+that are used to annotate regions within the image (pathology
+annotations, segmentation masks etc.) where each pixel stores an integer
+value corresponding of each label.</p>
+<p>Labels of OME-Zarr images are often found nested within the zarr
+group of the image, at the same level of the Zarr hierarchy as the
+resolution levels for the original image. Each label has its own group
+under the <code>labels</code> group.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">omezarrzip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"test_ngff_image_v04.ome.zarr.zip"</span>, package <span class="op">=</span> <span class="st">"romeo"</span><span class="op">)</span></span>
 <span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">omezarrzip</span>, exdir <span class="op">=</span> <span class="va">td</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">td</span>, <span class="st">"labels/blobs"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">td</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "labels" "s0"     "s1"     "s2"     "s3"     "s4"</span></span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">td</span>, <span class="st">"labels"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "blobs"</span></span></code></pre>
+<p>Once located the path of the label pyramid within the OME-Zarr file,
+we can use <em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em> again
+to read these labels as <code>ome_zarr</code> objects.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_read.html">ome_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">td</span>, <span class="st">"labels/blobs"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="romeo_files/figure-html/read_label-1.png" class="r-plt" alt="" width="700"></p>
 </div>
@@ -227,8 +264,9 @@ of version 0.4. By default, data are read lazily using
 <p>For remote OME-Zarr files, you can use the
 <code><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">paws.storage::s3</a></code> client to read the data directly from the
 S3 bucket without downloading it first:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paws-r/paws" class="external-link">paws</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">s3_client</span> <span class="op">&lt;-</span> <span class="fu">paws.storage</span><span class="fu">::</span><span class="fu"><a href="https://paws-r.r-universe.dev/paws.storage/reference/s3.html" class="external-link">s3</a></span><span class="op">(</span></span>
 <span>  config <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    credentials <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>anonymous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -239,11 +277,18 @@ S3 bucket without downloading it first:</p>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_read.html">ome_read</a></span><span class="op">(</span></span>
 <span>  <span class="st">"https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"</span>,</span>
 <span>  s3_client <span class="op">=</span> <span class="va">s3_client</span>,</span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Slicing (or subsetting) of images are performed using the
+<code>[</code> operator where indices correspond to each available XYZCT
+dimensions.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"dim_names"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "c" "y" "x"</span></span></code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Only the first frame of the image stack is displayed.</span></span>
 <span><span class="co">## To display all frames use 'all = TRUE'.</span></span></code></pre>
-<p><img src="romeo_files/figure-html/read_remote-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="romeo_files/figure-html/read_remote_slice-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="writing-ome-zarr-files">Writing OME-Zarr files<a class="anchor" aria-label="anchor" href="#writing-ome-zarr-files"></a>
@@ -251,22 +296,46 @@ S3 bucket without downloading it first:</p>
 <div class="section level3">
 <h3 id="images-1">Images<a class="anchor" aria-label="anchor" href="#images-1"></a>
 </h3>
-<p><em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em> also
-provides utilities for writing OME-Zarr images compatible with OME-NGFF
-versions 0.4 and 0.5.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em>
+provides extensive utilities for writing OME-Zarr images compatible with
+multiple <a href="https://ngff.openmicroscopy.org/specifications/index.html#" class="external-link">OME-NGFF
+specifications</a>.</p>
+<p>Here, <code>ome_write</code> function accepts objects of
+<code>Image</code> class (from <em><a href="https://bioconductor.org/packages/3.24/EBImage" class="external-link">EBImage</a></em>
+package) as input.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aoles/EBImage" class="external-link">EBImage</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Attaching package: 'EBImage'</span></span></code></pre>
 <pre><code><span><span class="co">## The following object is masked from 'package:paws':</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##     translate</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">img_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_RGB.png"</span>, package <span class="op">=</span> <span class="st">"romeo"</span><span class="op">)</span></span>
 <span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/io.html" class="external-link">readImage</a></span><span class="op">(</span><span class="va">img_file</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># write image pyramid</span></span>
-<span><span class="va">ome_img</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">img</span>,</span>
+<span><span class="va">img</span></span></code></pre></div>
+<pre><code><span><span class="co">## Image </span></span>
+<span><span class="co">##   colorMode    : Color </span></span>
+<span><span class="co">##   storage.mode : double </span></span>
+<span><span class="co">##   dim          : 480 320 3 </span></span>
+<span><span class="co">##   frames.total : 3 </span></span>
+<span><span class="co">##   frames.render: 1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## imageData(object)[1:5,1:6,1]</span></span>
+<span><span class="co">##           [,1]      [,2]      [,3]      [,4]      [,5]      [,6]</span></span>
+<span><span class="co">## [1,] 0.4196078 0.4196078 0.4235294 0.4235294 0.4235294 0.4235294</span></span>
+<span><span class="co">## [2,] 0.4196078 0.4196078 0.4235294 0.4235294 0.4235294 0.4235294</span></span>
+<span><span class="co">## [3,] 0.4196078 0.4196078 0.4235294 0.4235294 0.4235294 0.4235294</span></span>
+<span><span class="co">## [4,] 0.4196078 0.4196078 0.4235294 0.4235294 0.4235294 0.4235294</span></span>
+<span><span class="co">## [5,] 0.4235294 0.4235294 0.4274510 0.4274510 0.4274510 0.4274510</span></span></code></pre>
+<p>Currently, <em><a href="https://bioconductor.org/packages/3.24/romeo" class="external-link">romeo</a></em>
+supports the two most recent OME-NGFF specs, Versions 0.4 and 0.5,
+corresponding to Zarr formats v2 and v3, respectively. When writing the
+pyramid, we define the version, e.g. <a href="https://ngff.openmicroscopy.org/specifications/0.4/index.html" class="external-link">0.4</a>,
+and also the image axes, e.g. <code>c("x", "y", "c")</code>, whose order
+and length should match the <code>Image</code> object.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ome_img</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">img</span>,</span>
 <span>                     path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                     axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"c"</span><span class="op">)</span>,</span>
 <span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
@@ -278,8 +347,9 @@ versions 0.4 and 0.5.</p>
 <p>Users can also define their own scaling factors to write image
 pyramids. For a <code>scalefactors</code> vector with length three, the
 resulting pyramid will contain four scales. Each scale factor in the
-vector defines the scale factor relative to the previous scale.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+vector defines the scale factor of the layer relative to the previous
+layer.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ome_img</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">img</span>,</span>
 <span>                     path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                     axes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"c"</span><span class="op">)</span>,</span>
@@ -291,19 +361,34 @@ vector defines the scale factor relative to the previous scale.</p>
 <h3 id="labels-1">Labels<a class="anchor" aria-label="anchor" href="#labels-1"></a>
 </h3>
 <p>OME-Zarr label pyramids can be generated in the same way. We first
-create our own label data using EBImage.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aoles/EBImage" class="external-link">EBImage</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># read the first frame of image</span></span>
+create our own label data using <em><a href="https://bioconductor.org/packages/3.24/EBImage" class="external-link">EBImage</a></em>.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># read the first frame of the Image object</span></span>
 <span><span class="va">nuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/io.html" class="external-link">readImage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"images"</span>, <span class="st">"nuclei.tif"</span>, package <span class="op">=</span> <span class="st">"EBImage"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">nuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/Image.html" class="external-link">getFrames</a></span><span class="op">(</span><span class="va">nuc</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># threshold using otsu's method</span></span>
-<span><span class="va">nuc_th</span> <span class="op">&lt;-</span> <span class="va">nuc</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/otsu.html" class="external-link">otsu</a></span><span class="op">(</span><span class="va">nuc</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">nuc_th</span> <span class="op">&lt;-</span> <span class="va">nuc</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/EBImage/man/otsu.html" class="external-link">otsu</a></span><span class="op">(</span><span class="va">nuc</span><span class="op">)</span></span>
+<span><span class="va">nuc_th</span></span></code></pre></div>
+<pre><code><span><span class="co">## Image </span></span>
+<span><span class="co">##   colorMode    : Grayscale </span></span>
+<span><span class="co">##   storage.mode : logical </span></span>
+<span><span class="co">##   dim          : 510 510 </span></span>
+<span><span class="co">##   frames.total : 1 </span></span>
+<span><span class="co">##   frames.render: 1 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## imageData(object)[1:5,1:6]</span></span>
+<span><span class="co">##       [,1]  [,2]  [,3]  [,4]  [,5]  [,6]</span></span>
+<span><span class="co">## [1,] FALSE FALSE FALSE FALSE FALSE FALSE</span></span>
+<span><span class="co">## [2,] FALSE FALSE FALSE FALSE FALSE FALSE</span></span>
+<span><span class="co">## [3,] FALSE FALSE FALSE FALSE FALSE FALSE</span></span>
+<span><span class="co">## [4,] FALSE FALSE FALSE FALSE FALSE FALSE</span></span>
+<span><span class="co">## [5,] FALSE FALSE FALSE FALSE FALSE FALSE</span></span></code></pre>
 <p>We can now write the label pyramid. The arguments are similar to
-those used for writing images</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+those used for writing image pyramids, but when
+<code>type = "label"</code> is specified, <a href="https://ngff.openmicroscopy.org/specifications/0.4/index.html#labels-metadata" class="external-link">OME-NGFF
+label specifications</a> is used to write the Zarr attributes.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
 <span>                        path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
@@ -312,11 +397,38 @@ those used for writing images</p>
 <span>                        type <span class="op">=</span> <span class="st">"label"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc_th</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="romeo_files/figure-html/write_label-1.png" class="r-plt" alt="" width="700"></p>
-<p>Additional metadata information about labels can be provided using
-the <code>label_metadata</code> argument.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># write label, version 0.4</span></span>
+<p>If the path already includes an image pyramid, then we should define
+a name (e.g. <code>blobs</code>) for the label pyramid associated with
+the image.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ome_nuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc</span>,</span>
+<span>                     path <span class="op">=</span> <span class="va">td</span>,</span>
+<span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
+<span>                     storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">64</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
+<span>                        path <span class="op">=</span> <span class="va">td</span>,</span>
+<span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
+<span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>                        storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">64</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                        type <span class="op">=</span> <span class="st">"label"</span>,</span>
+<span>                        label_name <span class="op">=</span> <span class="st">"blobs"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## An image pyramid was found at '/tmp/RtmpDs6wlM/file1bf068d8b34b.ome.zarr', writing labels to 'labels/blobs'</span></span></code></pre>
+<p>We can now visualize both the image and its corresponding labels side
+by side.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc_th</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="romeo_files/figure-html/write_image_label_plot-1.png" class="r-plt" alt="" width="700"></p>
+<p>Additional metadata information about labels can also be provided
+using the <code>label_metadata</code> argument, e.g. colors, properties
+etc. See <a href="https://ngff.openmicroscopy.org/specifications/0.4/index.html#image-label-metadata" class="external-link">OME-NGFF
+image-label specifications</a> for more information.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
 <span>                        path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span>,</span>
 <span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
 <span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
@@ -333,32 +445,6 @@ the <code>label_metadata</code> argument.</p>
 <span>                            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>`label-value` <span class="op">=</span> <span class="fl">2</span>, class <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span></span>
 <span>                          <span class="op">)</span></span>
 <span>                        <span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>If the path already includes an image pyramid, then we should define
-a name (e.g. <code>blobs</code>) for the label pyramid associated with
-the image.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".ome.zarr"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># write image pyramid</span></span>
-<span><span class="va">ome_nuc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc</span>,</span>
-<span>                     path <span class="op">=</span> <span class="va">td</span>,</span>
-<span>                     version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
-<span>                     storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">64</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ome_nuc_th</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ome_write.html">ome_write</a></span><span class="op">(</span><span class="va">nuc_th</span>,</span>
-<span>                        path <span class="op">=</span> <span class="va">td</span>,</span>
-<span>                        version <span class="op">=</span> <span class="st">"0.4"</span>,</span>
-<span>                        scalefactors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>                        storage_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>chunk_dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">64</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                        type <span class="op">=</span> <span class="st">"label"</span>,</span>
-<span>                        label_name <span class="op">=</span> <span class="st">"blobs"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## An image pyramid was found at '/tmp/Rtmp92F1hm/file1ccd21c06e68.ome.zarr', writing labels to 'labels/blobs'</span></span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ome_nuc_th</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="romeo_files/figure-html/write_image_label-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 </div>
 <div class="section level2">

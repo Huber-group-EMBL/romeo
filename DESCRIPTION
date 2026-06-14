@@ -12,7 +12,10 @@ Authors@R: c(
         comment=c(ORCID="0000-0002-0441-9517")),
     person("Helmholtz Association", 
         role = "fnd", 
-        comment = c("Funded by the Helmholtz ScienceServe Initative to improve interoperability of bioimaging, single-cell and spatial omics data, https://www.helmholtz.de", ROR = "0281dp749"))
+        comment = c("Funded by the Helmholtz ScienceServe Initative to improve interoperability of bioimaging, single-cell and spatial omics data, https://www.helmholtz.de", ROR = "0281dp749")),
+    person("German Network for Bioinformatics Infrastructure - de.NBI", 
+           role = "fnd",
+           comment = c(ROR = "01vmpm840"))
   )
 Description: A minimal R package to reading, writing and validating multiscale OME-Zarr images.
 License: MIT + file LICENSE

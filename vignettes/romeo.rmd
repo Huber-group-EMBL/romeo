@@ -21,11 +21,11 @@ output:
 
 ## romeo
 
-`r BiocStyle::Biocpkg("romeo")` is a minimal R package that provides tools to read, validate, and write multiscale images and labels (image labels, segmentation masks, etc.) stored as OME-Zarr files.
+`r BiocStyle::Biocpkg("romeo")` is a minimal R package that provides tools to read, validate, and write multiscale images and labels (regions, segmentation masks, etc.) stored as **OME-Zarr** files.
 
-The package also provides helpers and methods to manipulate the OME-Zarr images and labels (as `ome_zarr` objects) the same way one would manipulate traditional arrays in R. You can subset an `ome_zarr` object like data arrays (using the `[` operator) where subsetting is applied to all levels of the multiscale OME-Zarr object. 
+The package uses the `r BiocStyle::Biocpkg("Rarr")` package to manipulate images stored as Zarr datasets and OME-Zarr metadata while the `r BiocStyle::Biocpkg("ZarrArray")` package is used to lazily read larger-than-memory images. 
 
-`r BiocStyle::Biocpkg("romeo")` uses the `r BiocStyle::Biocpkg("Rarr")` package to manipulate images stored as Zarr datasets and OME-Zarr metadata while the `r BiocStyle::Biocpkg("ZarrArray")` package is used to lazily read larger-than-memory images.
+`r BiocStyle::Biocpkg("romeo")` realizes these Zarr-backed images (or labels) as objects of an `ome_zarr` class where a number of methods are available to manipulate these images as traditional arrays. These are, for example, subsetting or slicing the images using the `[` operator which is applied to all levels of the multiscale OME-Zarr object (i.e. image pyramids).
 
 ## What is OME-Zarr?
 
@@ -34,9 +34,9 @@ OME-Zarr is a cloud-friendly data format for storing large bioimaging datasets, 
 * **(i)** **Zarr**, a chunked, compressed array storage format ([https://zarr.dev/](https://zarr.dev/)) designed for scalable access to multidimensional data and
 * **(ii)** **OME Next-Generation File Formats**, or **OME-NGFF** ([https://ngff.openmicroscopy.org/](https://ngff.openmicroscopy.org/)), that defines standardized structures and metadata conventions for multiscale labels, segmentations, and coordinate transformations of bioimaging datasets. 
 
-In essence, an OME-Zarr file is a collection of data arrays with XYZCT dimensions representing an image pyramid, combined with metadata (lives in the attributes property of Zarr arrays) that describes the properties of these arrays, such as scales, annotations and coordinate spaces (Figure 1).    
+In essence, an OME-Zarr file is a collection of data arrays with XYZCT dimensions (X, Y, and Z for space, C for channels and T for time) representing an image pyramid, combined with metadata (which lives in the attributes property of Zarr arrays) that describes the properties of these arrays, such as scales, annotations and coordinate spaces (Figure 1).    
 
-Currently, there exists multiple OME-Zarr formats each having its own OME-NGFF specifications (0.3, 0.4, 0.5 etc.) and Zarr formats (versions 2 or 3). Currently, `r BiocStyle::Biocpkg("romeo")` provides utilities for manipulating OME-Zarr datasets using NGFF versions 0.4 and 0.5.. The current released version of the OME-Zarr specification is 0.5. See [https://ngff.openmicroscopy.org/specifications](https://ngff.openmicroscopy.org/specifications) for more information.
+There exists multiple OME-Zarr formats each having its own [OME-NGFF specifications](https://ngff.openmicroscopy.org/specifications/index.html#) (Versions 0.3, 0.4, 0.5 etc.) and [Zarr formats](https://zarr-specs.readthedocs.io/en/latest/specs.html) (Versions 2 or 3). Currently, `r BiocStyle::Biocpkg("romeo")` provides utilities for manipulating OME-Zarr datasets using NGFF versions 0.4 and 0.5. The current released version of the OME-Zarr specification is 0.5. See [https://ngff.openmicroscopy.org/specifications](https://ngff.openmicroscopy.org/specifications) for more information.
 
 :::: {style="display: grid; grid-template-columns: 200px min-content 1fr; grid-column-gap: 10px;"}
 
@@ -68,8 +68,10 @@ pak::pak("Huber-group-EMBL/romeo")
 
 ## Images
 
-This is a basic example which shows you how to read an OME-Zarr image of version 0.4. 
-By default, data are read lazily using `ZarrArray`. 
+This is a basic example which shows you how to read an OME-Zarr image. 
+By default, data are read lazily using `ZarrArray`. Here, `ome_read` function first validates
+if the attributes of the OME-Zarr image comply with the OME-NGFF specifications 
+(of Version 0.4 in this example), and if valid, move to reading as a multi-scale `ome_zarr` object. 
 
 ```{r read}
 library(romeo)
@@ -78,25 +80,54 @@ omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
+
 x <- ome_read(td)
 plot(x, 1)
 ```
 
-Alternatively, the data can be read into memory:
+We can extract each layer of the image pyramid using `[[` method. 
+Each layer of the image pyramid is a `ZarrArray` object.
+
+```{r read_layer}
+y <- x[[1]]
+is(y)
+```
+
+Alternatively, the data can be read into memory as below using the `lazy` 
+argument:
 
 ```{r read_lazy}
 x <- ome_read(td, lazy = FALSE)
+y <- x[[1]]
+is(y)
 ```
 
 ## Labels
 
-Labels of image pyramids can also be read as images
+Labels of an image (or image pyramid) are pixel-level annotations that
+are used to annotate regions within the image (pathology annotations, segmentation 
+masks etc.) where each pixel stores an integer value corresponding of each 
+label.
 
-```{r read_label}
+Labels of OME-Zarr images are often found nested 
+within the zarr group of the image, at the same level of the Zarr hierarchy 
+as the resolution levels for the original image. Each label has its own group
+under the `labels` group. 
+
+```{r read_label_files}
 omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
+list.files(td)
+list.files(file.path(td, "labels"))
+```
+
+Once located the path of the label pyramid within the OME-Zarr file, we can 
+use `r BiocStyle::Biocpkg("romeo")` again to read these labels as `ome_zarr` 
+objects. 
+
+```{r read_label}
 x <- ome_read(file.path(td, "labels/blobs"))
 plot(x, all = TRUE)
 ```
@@ -108,6 +139,7 @@ the data directly from the S3 bucket without downloading it first:
 
 ```{r read_remote}
 library(paws)
+
 s3_client <- paws.storage::s3(
   config = list(
     credentials = list(anonymous = TRUE),
@@ -119,6 +151,13 @@ x <- ome_read(
   "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr",
   s3_client = s3_client,
 )
+```
+
+Slicing (or subsetting) of images are performed using the `[` operator where
+indices correspond to each available XYZCT dimensions.
+
+```{r read_remote_slice}
+attr(x, "dim_names")
 plot(x[1:2, 1:50, 1:50])
 ```
 
@@ -126,15 +165,27 @@ plot(x[1:2, 1:50, 1:50])
 
 ## Images
 
-`r BiocStyle::Biocpkg("romeo")` also provides utilities for writing OME-Zarr 
-images compatible with OME-NGFF versions 0.4 and 0.5. 
+`r BiocStyle::Biocpkg("romeo")` provides extensive utilities for writing 
+OME-Zarr images compatible with multiple [OME-NGFF specifications](https://ngff.openmicroscopy.org/specifications/index.html#).
 
-```{r write}
+Here, `ome_write` function accepts objects of `Image` class (from 
+`r BiocStyle::Biocpkg("EBImage")` package) as input. 
+
+```{r ebimage}
 library(EBImage)
+
 img_file <- system.file("extdata", "example_RGB.png", package = "romeo")
 img <- readImage(img_file)
+img
+```
 
-# write image pyramid
+Currently, `r BiocStyle::Biocpkg("romeo")` supports the two most recent 
+OME-NGFF specs, Versions 0.4 and 0.5, corresponding to Zarr formats v2 and v3, 
+respectively. When writing the pyramid, we define the version, e.g. [0.4](https://ngff.openmicroscopy.org/specifications/0.4/index.html), and 
+also the image axes, e.g. `c("x", "y", "c")`, whose order and length 
+should match the `Image` object.
+
+```{r write}
 ome_img <- ome_write(img,
                      path = tempfile(fileext = ".ome.zarr"),
                      axes = c("x", "y", "c"),
@@ -146,7 +197,7 @@ plot(ome_img, 1)
 Users can also define their own scaling factors to write image pyramids.
 For a `scalefactors` vector with length three, the resulting pyramid will 
 contain four scales. Each scale factor in the vector defines the scale 
-factor relative to the previous scale.
+factor of the layer relative to the previous layer.
 
 ```{r write2}
 ome_img <- ome_write(img,
@@ -160,21 +211,21 @@ ome_img <- ome_write(img,
 ## Labels
 
 OME-Zarr label pyramids can be generated in the same way. We first create
-our own label data using EBImage. 
+our own label data using `r BiocStyle::Biocpkg("EBImage")`.  
 
 ```{r image-label}
-library(EBImage)
-
-# read the first frame of image
+# read the first frame of the Image object
 nuc <- readImage(system.file("images", "nuclei.tif", package = "EBImage"))
 nuc <- getFrames(nuc)[[1]]
 
 # threshold using otsu's method
 nuc_th <- nuc > otsu(nuc)
+nuc_th
 ```
 
 We can now write the label pyramid. The arguments are similar to those used 
-for writing images
+for writing image pyramids, but when `type = "label"` is specified, [OME-NGFF label 
+specifications](https://ngff.openmicroscopy.org/specifications/0.4/index.html#labels-metadata) is used to write the Zarr attributes. 
 
 ```{r write_label}
 ome_nuc_th <- ome_write(nuc_th,
@@ -186,11 +237,38 @@ ome_nuc_th <- ome_write(nuc_th,
 plot(ome_nuc_th, 3)
 ```
 
-Additional metadata information about labels can be provided using the 
-`label_metadata` argument. 
+If the path already includes an image pyramid, then we should define a name 
+(e.g. `blobs`) for the label pyramid associated with the image.
+
+```{r write_image_label}
+td <- tempfile(fileext = ".ome.zarr")
+
+ome_nuc <- ome_write(nuc,
+                     path = td,
+                     version = "0.4",
+                     storage_options = list(chunk_dim = c(64, 64)))
+
+ome_nuc_th <- ome_write(nuc_th,
+                        path = td,
+                        version = "0.4",
+                        scalefactors = c(2, 2, 3),
+                        storage_options = list(chunk_dim = c(64, 64)),
+                        type = "label",
+                        label_name = "blobs")
+```
+
+We can now visualize both the image and its corresponding labels side by side.
+
+```{r write_image_label_plot}
+layout(matrix(1:2, nrow = 1))
+plot(ome_nuc, 3)
+plot(ome_nuc_th, 3)
+```
+
+Additional metadata information about labels can also be provided using the 
+`label_metadata` argument, e.g. colors, properties etc. See [OME-NGFF image-label specifications](https://ngff.openmicroscopy.org/specifications/0.4/index.html#image-label-metadata) for more information. 
 
 ```{r write_label_meta}
-# write label, version 0.4
 ome_nuc_th <- ome_write(nuc_th,
                         path = tempfile(fileext = ".ome.zarr"),
                         version = "0.4",
@@ -208,32 +286,6 @@ ome_nuc_th <- ome_write(nuc_th,
                             list(`label-value` = 2, class = "B")
                           )
                         ))
-```
-
-If the path already includes an image pyramid, then we should define a name 
-(e.g. `blobs`) for the label pyramid associated with the image.
-
-```{r write_image_label}
-td <- tempfile(fileext = ".ome.zarr")
-
-# write image pyramid
-ome_nuc <- ome_write(nuc,
-                     path = td,
-                     version = "0.4",
-                     storage_options = list(chunk_dim = c(64, 64)))
-
-ome_nuc_th <- ome_write(nuc_th,
-                        path = td,
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label",
-                        label_name = "blobs")
-
-# plot
-layout(matrix(1:2, nrow = 1))
-plot(ome_nuc, 3)
-plot(ome_nuc_th, 3)
 ```
 
 # Appendix

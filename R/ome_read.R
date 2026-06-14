@@ -48,7 +48,7 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
   x <- lapply(scales$datasets, function(scale) {
     img <- .read_zarr(
       file.path(path, scale$path),
-      lazy = TRUE,
+      lazy = lazy,
       s3_client = s3_client
     )
     img

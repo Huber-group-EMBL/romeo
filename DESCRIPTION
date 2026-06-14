@@ -2,45 +2,41 @@ Package: romeo
 Title: Minimal R 'OME-Zarr' Reader
 Version: 0.99.1
 Authors@R: c(
-    person("Hugo", "Gruson",
-        role=c("aut", "cre"),
-        email="hugo.gruson@embl.de",
-        comment=c(ORCID="0000-0002-4094-1476")),
-    person("Artür", "Manukyan",
-        role=c("aut"),
-        email="artur-man@hotmail.com",
-        comment=c(ORCID="0000-0002-0441-9517")),
-    person("Helmholtz Association", 
-        role = "fnd", 
-        comment = c("Funded by the Helmholtz ScienceServe Initative to improve interoperability of bioimaging, single-cell and spatial omics data, https://www.helmholtz.de", ROR = "0281dp749")),
-    person("German Network for Bioinformatics Infrastructure - de.NBI", 
-           role = "fnd",
+    person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-4094-1476")),
+    person("Artür", "Manukyan", , "artur-man@hotmail.com", role = "aut",
+           comment = c(ORCID = "0000-0002-0441-9517")),
+    person("Helmholtz Association", role = "fnd",
+           comment = c("Funded by the Helmholtz ScienceServe Initative to improve interoperability of bioimaging, single-cell and spatial omics data, https://www.helmholtz.de", ROR = "0281dp749")),
+    person("German Network for Bioinformatics Infrastructure - de.NBI", role = "fnd",
            comment = c(ROR = "01vmpm840"))
   )
-Description: A minimal R package to reading, writing and validating multiscale OME-Zarr images.
+Description: A minimal R package to reading, writing and validating
+    multiscale OME-Zarr images.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+URL: https://huber-group-embl.github.io/romeo/,
+    https://github.com/Huber-group-EMBL/romeo
+BugReports: https://github.com/Huber-group-EMBL/romeo/issues
 Depends: 
     R (>= 4.6)
 Imports:
-    methods,
     cli,
     EBImage,
     jsonlite,
     jsonvalidate,
+    methods,
     Rarr,
     ZarrArray
 Suggests:
     BiocStyle,
     knitr,
-    utils,
+    paws,
     testthat,
-    withr,
-    paws
+    utils,
+    withr
 VignetteBuilder: 
     knitr
 biocViews: DataImport
-URL: https://huber-group-embl.github.io/romeo/, https://github.com/Huber-group-EMBL/romeo
-BugReports: https://github.com/Huber-group-EMBL/romeo/issues
 Config/roxygen2/version: 8.0.0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)

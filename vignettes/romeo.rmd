@@ -136,24 +136,18 @@ plot(x, all = TRUE)
 
 # Reading from S3 storage
 
-For remote OME-Zarr files, you can use the `paws.storage::s3` client to read 
+For remote OME-Zarr files, you can an S3 URL to `ome_read()` to read 
 the data directly from the S3 bucket without downloading it first:
 
 ```{r read_remote}
-library(paws)
-
-s3_client <- paws.storage::s3(
-  config = list(
-    credentials = list(anonymous = TRUE),
-    region = "auto",
-    endpoint = "https://uk1s3.embassy.ebi.ac.uk"
-  )
-)
 x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr",
-  s3_client = s3_client,
+  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
 )
 ```
+
+For more advanced cases where authentication is required to access the data,
+you must manually create an `s3_client` object using the `r BiocStyle::CRANpkg("paws")` package and pass 
+it to `ome_read()`.
 
 Slicing (or subsetting) of images are performed using the `[` operator where
 indices correspond to each available XYZCT dimensions.

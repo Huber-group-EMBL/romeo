@@ -30,7 +30,6 @@ Imports:
 Suggests:
     BiocStyle,
     knitr,
-    paws,
     testthat,
     utils,
     withr

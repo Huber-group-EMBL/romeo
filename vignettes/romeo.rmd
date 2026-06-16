@@ -69,9 +69,9 @@ pak::pak("Huber-group-EMBL/romeo")
 ## Images
 
 This is a basic example which shows you how to read an OME-Zarr image. 
-By default, data are read lazily using `ZarrArray`. Here, `ome_read` function first validates
-if the attributes of the OME-Zarr image comply with the OME-NGFF specifications 
-(of Version 0.4 in this example), and if valid, move to reading as a multi-scale `ome_zarr` object. 
+By default, data are read lazily using `ZarrArray`. Here, the `ome_read()` function first validates
+that the attributes of the OME-Zarr image comply with the relevant OME-NGFF specifications 
+(version 0.4 in this example). If valid, it proceeds to read the data as a multi-scale `ome_zarr` object. 
 
 ```{r read}
 library(romeo)

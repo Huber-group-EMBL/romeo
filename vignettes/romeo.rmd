@@ -44,7 +44,7 @@ There exists multiple OME-Zarr formats each having its own [OME-NGFF specificati
 ![](chunks.svg)
 :::
 
-::: {}
+::: {style="font-size: 0.75em; color: #555; overflow-x: scroll; max-width: 70%;"}
 
 ```{r, echo = FALSE, comment = ""}
 system.file("figures", "metadata.json", package = "romeo") |>

@@ -31,8 +31,8 @@ The package uses the `r BiocStyle::Biocpkg("Rarr")` package to manipulate images
 
 OME-Zarr is a cloud-friendly data format for storing large bioimaging datasets, such as microscopy images. It combines: 
 
-* **(i)** **Zarr**, a chunked, compressed array storage format ([https://zarr.dev/](https://zarr.dev/)) designed for scalable access to multidimensional data and
-* **(ii)** **OME Next-Generation File Formats**, or **OME-NGFF** ([https://ngff.openmicroscopy.org/](https://ngff.openmicroscopy.org/)), that defines standardized structures and metadata conventions for multiscale labels, segmentations, and coordinate transformations of bioimaging datasets. 
+* **(i)** **Zarr**, a chunked, compressed array storage format (<https://zarr.dev/>) designed for scalable access to multidimensional data and
+* **(ii)** **OME Next-Generation File Formats**, or **OME-NGFF** (<https://ngff.openmicroscopy.org/>), that defines standardized structures and metadata conventions for multiscale labels, segmentations, and coordinate transformations of bioimaging datasets. 
 
 In essence, an OME-Zarr file is a collection of data arrays with XYZCT dimensions (X, Y, and Z for space, C for channels and T for time) representing an image pyramid, combined with metadata (which lives in the attributes property of Zarr arrays) that describes the properties of these arrays, such as scales, annotations and coordinate spaces (Figure 1).    
 

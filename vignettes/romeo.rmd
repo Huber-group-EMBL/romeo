@@ -76,7 +76,11 @@ that the attributes of the OME-Zarr image comply with the relevant OME-NGFF spec
 ```{r read}
 library(romeo)
 library(utils)
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
+omezarrzip <- system.file(
+  "extdata",
+  "test_ngff_image_v04.ome.zarr.zip",
+  package = "romeo"
+)
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
@@ -117,7 +121,11 @@ as the resolution levels for the original image. Each label has its own group
 under the `labels` group. 
 
 ```{r read_label_files}
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
+omezarrzip <- system.file(
+  "extdata",
+  "test_ngff_image_v04.ome.zarr.zip",
+  package = "romeo"
+)
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
@@ -182,11 +190,13 @@ also the image axes, e.g. `c("x", "y", "c")`, whose order and length
 should match the `Image` object.
 
 ```{r write}
-ome_img <- ome_write(img,
-                     path = tempfile(fileext = ".ome.zarr"),
-                     axes = c("x", "y", "c"),
-                     version = "0.4",
-                     storage_options = list(chunk_dim = c(64, 64, 1)))
+ome_img <- ome_write(
+  img,
+  path = tempfile(fileext = ".ome.zarr"),
+  axes = c("x", "y", "c"),
+  version = "0.4",
+  storage_options = list(chunk_dim = c(64, 64, 1))
+)
 plot(ome_img, 1)
 ```
 
@@ -196,12 +206,14 @@ contain four scales. Each scale factor in the vector defines the scale
 factor of the layer relative to the previous layer.
 
 ```{r write2}
-ome_img <- ome_write(img,
-                     path = tempfile(fileext = ".ome.zarr"),
-                     axes = c("x", "y", "c"),
-                     version = "0.5",
-                     scalefactors = c(2, 2, 3),
-                     storage_options = list(chunk_dim = c(64, 64, 1)))
+ome_img <- ome_write(
+  img,
+  path = tempfile(fileext = ".ome.zarr"),
+  axes = c("x", "y", "c"),
+  version = "0.5",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64, 1))
+)
 ```
 
 ## Labels
@@ -224,12 +236,14 @@ for writing image pyramids, but when `type = "label"` is specified, [OME-NGFF la
 specifications](https://ngff.openmicroscopy.org/specifications/0.4/index.html#labels-metadata) is used to write the Zarr attributes. 
 
 ```{r write_label}
-ome_nuc_th <- ome_write(nuc_th,
-                        path = tempfile(fileext = ".ome.zarr"),
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label")
+ome_nuc_th <- ome_write(
+  nuc_th,
+  path = tempfile(fileext = ".ome.zarr"),
+  version = "0.4",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64)),
+  type = "label"
+)
 plot(ome_nuc_th, 3)
 ```
 
@@ -239,18 +253,22 @@ If the path already includes an image pyramid, then we should define a name
 ```{r write_image_label}
 td <- tempfile(fileext = ".ome.zarr")
 
-ome_nuc <- ome_write(nuc,
-                     path = td,
-                     version = "0.4",
-                     storage_options = list(chunk_dim = c(64, 64)))
+ome_nuc <- ome_write(
+  nuc,
+  path = td,
+  version = "0.4",
+  storage_options = list(chunk_dim = c(64, 64))
+)
 
-ome_nuc_th <- ome_write(nuc_th,
-                        path = td,
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label",
-                        label_name = "blobs")
+ome_nuc_th <- ome_write(
+  nuc_th,
+  path = td,
+  version = "0.4",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64)),
+  type = "label",
+  label_name = "blobs"
+)
 ```
 
 We can now visualize both the image and its corresponding labels side by side.
@@ -265,23 +283,25 @@ Additional metadata information about labels can also be provided using the
 `label_metadata` argument, e.g. colors, properties etc. See [OME-NGFF image-label specifications](https://ngff.openmicroscopy.org/specifications/0.4/index.html#image-label-metadata) for more information. 
 
 ```{r write_label_meta}
-ome_nuc_th <- ome_write(nuc_th,
-                        path = tempfile(fileext = ".ome.zarr"),
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label",
-                        label_name = "blobs",
-                        label_metadata = list(
-                          colors = list(
-                            list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
-                            list(`label-value` = 2, rgba = list(0, 255, 255, 128))
-                          ),
-                          properties = list(
-                            list(`label-value` = 1, class = "A"),
-                            list(`label-value` = 2, class = "B")
-                          )
-                        ))
+ome_nuc_th <- ome_write(
+  nuc_th,
+  path = tempfile(fileext = ".ome.zarr"),
+  version = "0.4",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64)),
+  type = "label",
+  label_name = "blobs",
+  label_metadata = list(
+    colors = list(
+      list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
+      list(`label-value` = 2, rgba = list(0, 255, 255, 128))
+    ),
+    properties = list(
+      list(`label-value` = 1, class = "A"),
+      list(`label-value` = 2, class = "B")
+    )
+  )
+)
 ```
 
 # Appendix

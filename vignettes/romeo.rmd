@@ -164,7 +164,7 @@ plot(x[1:2, 1:50, 1:50])
 `r BiocStyle::Biocpkg("romeo")` provides extensive utilities for writing 
 OME-Zarr images compatible with multiple [OME-NGFF specifications](https://ngff.openmicroscopy.org/specifications/index.html#).
 
-Here, `ome_write` function accepts objects of `Image` class (from 
+Here, `ome_write()` function accepts objects of `Image` class (from 
 `r BiocStyle::Biocpkg("EBImage")` package) as input. 
 
 ```{r ebimage}

@@ -102,6 +102,8 @@ y <- x[[1]]
 is(y)
 ```
 
+In this case, each layer of the image pyramid is a traditional array stored in memory.
+
 ## Labels
 
 Labels of an image (or image pyramid) are pixel-level annotations that

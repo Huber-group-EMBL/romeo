@@ -30,3 +30,37 @@ test_that("parse ome version", {
     expect_equal(attr(x, "type"), "label")
   }
 })
+
+test_that("read spatialdata elements", {
+  skip_if_not_installed("spatialdataR")
+
+  blobs_image <- system.file(
+    "extdata",
+    "blobs_v3.zarr",
+    "images",
+    "blobs_multiscale_image",
+    package = "spatialdataR"
+  )
+
+  x <- ome_read(blobs_image) |>
+    expect_no_condition()
+
+  expect_s3_class(x, "ome_zarr")
+  expect_identical(attr(x, "type"), "image")
+
+  blobs_label <- system.file(
+    "extdata",
+    "blobs_v3.zarr",
+    "labels",
+    "blobs_multiscale_labels",
+    package = "spatialdataR"
+  )
+
+  x <- ome_read(blobs_label) |>
+    expect_no_condition()
+
+  expect_s3_class(x, "ome_zarr")
+  # This is a bit counterintuitive but spatialdata labels elements are encoded
+  # as multiscale image from an OME point of view.
+  expect_identical(attr(x, "type"), "image")
+})

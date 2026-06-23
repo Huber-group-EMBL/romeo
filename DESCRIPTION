@@ -30,6 +30,7 @@ Imports:
 Suggests:
     BiocStyle,
     knitr,
+    spatialdataR,
     testthat,
     utils,
     withr

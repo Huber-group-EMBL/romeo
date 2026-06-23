@@ -10,5 +10,6 @@ jobs:
     name: R-universe testing
     uses: r-universe-org/workflows/.github/workflows/build.yml@v3
     with:
-      universe: bioc
+      # FIXME: revert to 'bioc' after spatialdataR has been accepted to BioC
+      universe: biocstaging
       organization: bioconductor

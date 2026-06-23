@@ -14,5 +14,5 @@
 
 #' @export
 dimnames.ome_zarr <- function(x) {
-  attr(x, "dim_names")
+  x@metadata$dim_names
 }

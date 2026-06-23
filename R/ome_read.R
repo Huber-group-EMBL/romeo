@@ -29,7 +29,7 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
   type <- if (validate) {
     ome_validate(path, s3_client = s3_client)
   } else {
-    "Unknown"
+    "unknown"
   }
 
   group_attributes <- Rarr::read_zarr_attributes(path, s3_client = s3_client)

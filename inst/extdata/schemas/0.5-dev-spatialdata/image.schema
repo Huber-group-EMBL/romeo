@@ -104,7 +104,7 @@
                 ]
               },
               "label": {
-                "type": "string"
+                "type": ["integer", "string"]
               },
               "family": {
                 "type": "string"

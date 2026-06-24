@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @import methods
 ## usethis namespace: end
 
 ## mockable bindings: start

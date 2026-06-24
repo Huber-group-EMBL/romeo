@@ -1,7 +1,10 @@
 # only xyc and xy are accepted for when axes=NULL
 test_that("check axes when given", {
-  expect_equal(.get_valid_axes(array(dim = c(1, 2, 5))), c("x", "y", "c"))
-  expect_equal(.get_valid_axes(array(dim = c(1, 2))), c("x", "y"))
+  expect_equal(
+    .get_valid_axes(array(dim = c(1, 2, 5)), c("x", "c", "y")),
+    c("x", "c", "y")
+  )
+  expect_equal(.get_valid_axes(array(dim = c(1, 2)), c("y", "x")), c("y", "x"))
 
   dim_img <- c("x", "y", "z", "c", "t")
   im <- array(dim = c(1, 1, 1, 2, 5))
@@ -12,17 +15,17 @@ test_that("check axes when given", {
 # beyond 2D and 3D, axes should be provided
 test_that("check axes when not given", {
   im <- array(dim = c(1, 2, 5))
-  expect_equal(.get_valid_axes(im), c("x", "y", "c"))
+  expect_equal(.get_valid_axes(im, NULL), c("x", "y", "c"))
   im <- array(dim = c(2, 5))
-  expect_equal(.get_valid_axes(im), c("x", "y"))
+  expect_equal(.get_valid_axes(im, NULL), c("x", "y"))
 
   # check fails when cant be guessed
   im <- array(dim = c(1, 1, 1, 2, 5))
-  expect_error(.get_valid_axes(im), regexp = "Can't be guessed beyond 2D")
+  expect_error(.get_valid_axes(im, NULL), regexp = "Can't be guessed beyond 2D")
   im <- array(dim = c(1, 1, 1, 2))
-  expect_error(.get_valid_axes(im), regexp = "Can't be guessed beyond 2D")
+  expect_error(.get_valid_axes(im, NULL), regexp = "Can't be guessed beyond 2D")
   im <- array(dim = 10)
-  expect_error(.get_valid_axes(im), regexp = "Can't be guessed beyond 2D")
+  expect_error(.get_valid_axes(im, NULL), regexp = "Can't be guessed beyond 2D")
 })
 
 # beyond 2D and 3D, axes should be provided

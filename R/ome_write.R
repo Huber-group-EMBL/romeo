@@ -203,7 +203,7 @@ setMethod(
   ome_read(path = path)
 }
 
-.write_label_group <- function(path, name = NULL, version) {
+.write_label_group <- function(path, name, version) {
   # check name
   if (!is_label_name(name)) {
     stop("label_name has to be a string!")
@@ -244,7 +244,7 @@ setMethod(
   version,
   scalefactors,
   axes = NULL,
-  type = "image"
+  type
 ) {
   # get x y dimensions for EBImage
   dim_image <- dim(image)

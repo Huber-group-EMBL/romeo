@@ -8,10 +8,10 @@ NULL
   path,
   image,
   scalefactors,
-  version = c("0.5", "0.4"),
-  axes = NULL,
-  type = c("image", "label"),
-  label_metadata = NULL
+  version,
+  axes,
+  type,
+  label_metadata
 ) {
   meta <- list()
   ax <- "axes"
@@ -163,8 +163,8 @@ NULL
 #' @noRd
 .get_valid_axes <- function(
   image,
-  axes = NULL,
-  version = "0.4"
+  axes,
+  version
 ) {
   # We can guess axes for images, labels if 2D (with/without channels)
   ndim <- length(dim(image))

@@ -19,11 +19,6 @@ NULL
   ds <- "datasets"
   v <- "version"
 
-  # check version
-  if (!version %in% c("0.4", "0.5")) {
-    stop("Writing support is only available for OME versions 0.4 and 0.5!")
-  }
-
   # version
   if (version == "0.4") {
     meta[[v]] <- version

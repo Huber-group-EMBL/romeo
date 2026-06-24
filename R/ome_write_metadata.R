@@ -23,6 +23,7 @@ NULL
   if (version == "0.4") {
     meta[[v]] <- version
   }
+  zarr_version <- if (version == "0.4") 2L else 3L
 
   # axis
   meta[[ax]] <- .make_axes_meta(axes)
@@ -58,6 +59,7 @@ NULL
   Rarr::write_zarr_attributes(
     zarr_path = path,
     new.zattrs = meta,
+    zarr_version = zarr_version,
     overwrite = TRUE
   )
 }

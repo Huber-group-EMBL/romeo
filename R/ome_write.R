@@ -219,8 +219,9 @@ setMethod(
   )
 
   # create zarr group of labels/<name>
-  create_zarr(path, version = if (version == "0.4") 2L else 3L)
-  create_zarr_group(path, file.path("labels", name))
+  zarr_version <- if (version == "0.4") 2L else 3L
+  create_zarr(path, version = zarr_version)
+  create_zarr_group(path, file.path("labels", name), version = zarr_version)
 
   # add labels group metadata
   .write_label_group_metadata(path, name, version = version)

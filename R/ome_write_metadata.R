@@ -163,8 +163,7 @@ NULL
 #' @noRd
 .get_valid_axes <- function(
   image,
-  axes,
-  version
+  axes
 ) {
   # We can guess axes for images, labels if 2D (with/without channels)
   ndim <- length(dim(image))

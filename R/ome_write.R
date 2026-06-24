@@ -145,13 +145,13 @@ setMethod(
   type <- match.arg(type)
 
   # validate axes
-  axes <- .get_valid_axes(image = image, axes = axes, version = version)
+  axes <- .get_valid_axes(image = image, axes = axes)
 
   # scale factors
   .check_scalefactors(scalefactors)
 
   # Generate a downsampled pyramid of images.
-  pyramid <- .create_mip(image, version, scalefactors, axes, type)
+  pyramid <- .create_mip(image, scalefactors, type)
 
   # update path if writing labels
   path <- switch(
@@ -184,8 +184,7 @@ setMethod(
     path = path,
     axes = axes,
     version = version,
-    storage_options = storage_options,
-    type = type
+    storage_options = storage_options
   )
 
   # write ome metadata
@@ -241,9 +240,7 @@ setMethod(
 #' @noRd
 .create_mip <- function(
   image,
-  version,
   scalefactors,
-  axes = NULL,
   type
 ) {
   # get x y dimensions for EBImage
@@ -277,8 +274,7 @@ setMethod(
   path,
   axes,
   version,
-  storage_options,
-  type
+  storage_options
 ) {
   # zarr version
   zarr_version <- if (version == "0.4") 2L else 3L

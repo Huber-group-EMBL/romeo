@@ -11,5 +11,8 @@ linters: linters_with_defaults(
     paste_linter(),
     implicit_assignment_linter(),
     coalesce_linter(),
+    missing_argument_linter(),
+    coalesce_linter(),
+    if_not_else_linter(),
     object_name_linter = object_name_linter(styles = c("snake_case", "symbols", "CamelCase", "SNAKE_CASE"))
   )

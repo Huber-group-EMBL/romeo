@@ -8,7 +8,7 @@ NULL
   path,
   image,
   scalefactors,
-  version = c("0.4", "0.5"),
+  version = c("0.5", "0.4"),
   axes = NULL,
   type = c("image", "label"),
   label_metadata = NULL

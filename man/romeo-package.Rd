@@ -6,7 +6,7 @@
 \alias{romeo-package}
 \title{romeo: Minimal R 'OME-Zarr' Reader}
 \description{
-What the package does (one paragraph).
+A minimal R package to reading, writing and validating multiscale OME-Zarr images.
 }
 \seealso{
 Useful links:
@@ -24,6 +24,12 @@ Authors:
 \itemize{
   \item Hugo Gruson \email{hugo.gruson@embl.de} (\href{https://orcid.org/0000-0002-4094-1476}{ORCID})
   \item Artür Manukyan \email{artur-man@hotmail.com} (\href{https://orcid.org/0000-0002-0441-9517}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Helmholtz Association (\href{https://ror.org/0281dp749}{ROR}) (Funded by the Helmholtz ScienceServe Initative to improve interoperability of bioimaging, single-cell and spatial omics data, https://www.helmholtz.de) [funder]
+  \item German Network for Bioinformatics Infrastructure - de.NBI (\href{https://ror.org/01vmpm840}{ROR}) [funder]
 }
 
 }

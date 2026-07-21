@@ -26,7 +26,7 @@ test_that("writing 0.4 and 0.5 labels works", {
     )
 
     # check type
-    expect_equal(attr(ome_label, "type"), "label")
+    expect_identical(ome_label@metadata$type, "label")
 
     # type is logical in this example
     expect_equal(type(ome_label[[1]]), "logical")

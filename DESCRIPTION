@@ -25,7 +25,7 @@ Imports:
     jsonlite,
     jsonvalidate,
     methods,
-    Rarr,
+    Rarr (>= 2.1.27),
     ZarrArray
 Suggests:
     BiocStyle,

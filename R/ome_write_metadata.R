@@ -13,24 +13,20 @@ NULL
   label_metadata
 ) {
   meta <- list()
-  ax <- "axes"
-  ct <- "coordinateTransformations"
-  ds <- "datasets"
-  v <- "version"
 
   # version
   if (version == "0.4") {
-    meta[[v]] <- version
+    meta[["version"]] <- version
   }
 
   # axis
-  meta[[ax]] <- .make_axes_meta(axes)
+  meta[["axes"]] <- .make_axes_meta(axes)
 
   # coordinate transformations
-  meta[[ct]] <- .make_empty_ct(axes)
+  meta[["coordinateTransformations"]] <- .make_empty_ct(axes)
 
   # datasets
-  meta[[ds]] <- .make_datasets(scalefactors, axes)
+  meta[["datasets"]] <- .make_datasets(scalefactors, axes)
 
   # multiscales
   meta <- list(multiscales = list(meta))

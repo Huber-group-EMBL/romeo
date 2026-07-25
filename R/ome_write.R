@@ -218,11 +218,10 @@ setMethod(
   )
 
   # create zarr group of labels/<name>
-  zarr_version <- if (version == "0.4") 2L else 3L
   Rarr::write_zarr_group(
     path,
     file.path("labels", name),
-    zarr_version
+    zarr_version = .set_zarr_format(version)
   )
 
   # add labels group metadata
@@ -280,7 +279,7 @@ setMethod(
   storage_options
 ) {
   # zarr version
-  zarr_version <- if (version == "0.4") 2L else 3L
+  zarr_version <- .set_zarr_format(version)
 
   # create zarr
   Rarr::write_zarr_group(path, "", zarr_version)

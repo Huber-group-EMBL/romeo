@@ -11,3 +11,4 @@
 ^\.vscode$
 ^\.positai$
 ^\.claude$
+^codecov\.yml$

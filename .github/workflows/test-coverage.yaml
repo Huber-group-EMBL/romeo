@@ -29,6 +29,7 @@ jobs:
         with:
           extra-packages: any::covr, any::xml2, spatialdataR=?ignore
           needs: coverage
+          upgrade: 'TRUE'
 
       - name: Test coverage
         run: |

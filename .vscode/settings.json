@@ -2,5 +2,9 @@
     "[r]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "Posit.air-vscode"
+    },
+    "[rmd]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "Posit.air-vscode"
     }
 }

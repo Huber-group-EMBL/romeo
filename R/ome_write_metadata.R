@@ -310,7 +310,7 @@ NULL
     stop("colors and properties in label metadata should include 'label-value'")
   }
   lmv <- suppressWarnings(as.numeric(lmv$`label-value`))
-  if (!is_integer(lmv)) {
+  if (!is_whole_number(lmv)) {
     stop("label-value should be a non-zero integer")
   }
 }
@@ -325,7 +325,7 @@ is_rgba <- function(x) {
     length(x) == 4
 }
 
-is_integer <- function(x) {
+is_whole_number <- function(x) {
   !is.na(x) &&
     is.numeric(x) &&
     is.finite(x) &&

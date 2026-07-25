@@ -44,14 +44,15 @@ these arrays, such as scales, annotations and coordinate spaces (Figure
 
 There exists multiple OME-Zarr formats each having its own [OME-NGFF
 specifications](https://ngff.openmicroscopy.org/specifications/index.html#)
-(Versions 0.3, 0.4, 0.5 etc.) and [Zarr
+(Versions 0.4, 0.5, 0.6, etc.) and [Zarr
 formats](https://zarr-specs.readthedocs.io/en/latest/specs.html)
 (Versions 2 or 3). Currently,
 *[romeo](https://bioconductor.org/packages/3.24/romeo)* provides
 utilities for manipulating OME-Zarr datasets using NGFF versions 0.4 and
-0.5. The current released version of the OME-Zarr specification is 0.5.
-See <https://ngff.openmicroscopy.org/specifications> for more
-information.
+0.5, as well as limited support for the transitional version
+0.5-dev-spatialdata. The current released version of the OME-Zarr
+specification is 0.5. See
+<https://ngff.openmicroscopy.org/specifications> for more information.
 
 ![](chunks.svg)
 
@@ -116,16 +117,22 @@ pak::pak("Huber-group-EMBL/romeo")
 ### Images
 
 This is a basic example which shows you how to read an OME-Zarr image.
-By default, data are read lazily using `ZarrArray`. Here, `ome_read`
-function first validates if the attributes of the OME-Zarr image comply
-with the OME-NGFF specifications (of Version 0.4 in this example), and
-if valid, move to reading as a multi-scale `ome_zarr` object.
+By default, data are read lazily using `ZarrArray`. Here, the
+[`ome_read()`](https://huber-group-embl.github.io/romeo/reference/ome_read.md)
+function first validates that the attributes of the OME-Zarr image
+comply with the relevant OME-NGFF specifications (version 0.4 in this
+example). If valid, it proceeds to read the data as a multi-scale
+`ome_zarr` object.
 
 ``` r
 
 library(romeo)
 library(utils)
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
+omezarrzip <- system.file(
+  "extdata",
+  "test_ngff_image_v04.ome.zarr.zip",
+  package = "romeo"
+)
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
@@ -164,6 +171,9 @@ is(y)
     ## [5] "vector"                              "vector_OR_factor"                   
     ## [7] "vector_OR_Vector"
 
+In this case, each layer of the image pyramid is a traditional array
+stored in memory.
+
 ### Labels
 
 Labels of an image (or image pyramid) are pixel-level annotations that
@@ -178,7 +188,11 @@ levels for the original image. Each label has its own group under the
 
 ``` r
 
-omezarrzip <- system.file("extdata", "test_ngff_image_v04.ome.zarr.zip", package = "romeo")
+omezarrzip <- system.file(
+  "extdata",
+  "test_ngff_image_v04.ome.zarr.zip",
+  package = "romeo"
+)
 td <- withr::local_tempfile(fileext = ".ome.zarr")
 dir.create(td)
 unzip(omezarrzip, exdir = td)
@@ -208,27 +222,22 @@ plot(x, all = TRUE)
 
 ## Reading from S3 storage
 
-For remote OME-Zarr files, you can use the
-[`paws.storage::s3`](https://paws-r.r-universe.dev/paws.storage/reference/s3.html)
-client to read the data directly from the S3 bucket without downloading
-it first:
+For remote OME-Zarr files, you can an S3 URL to
+[`ome_read()`](https://huber-group-embl.github.io/romeo/reference/ome_read.md)
+to read the data directly from the S3 bucket without downloading it
+first:
 
 ``` r
 
-library(paws)
-
-s3_client <- paws.storage::s3(
-  config = list(
-    credentials = list(anonymous = TRUE),
-    region = "auto",
-    endpoint = "https://uk1s3.embassy.ebi.ac.uk"
-  )
-)
 x <- ome_read(
-  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr",
-  s3_client = s3_client,
+  "https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.4/idr0076A/10501752.zarr"
 )
 ```
+
+For more advanced cases where authentication is required to access the
+data, you must manually create an `s3_client` object using the
+*[paws](https://CRAN.R-project.org/package=paws)* package and pass it to
+[`ome_read()`](https://huber-group-embl.github.io/romeo/reference/ome_read.md).
 
 Slicing (or subsetting) of images are performed using the `[` operator
 where indices correspond to each available XYZCT dimensions.
@@ -259,23 +268,15 @@ extensive utilities for writing OME-Zarr images compatible with multiple
 [OME-NGFF
 specifications](https://ngff.openmicroscopy.org/specifications/index.html#).
 
-Here, `ome_write` function accepts objects of `Image` class (from
+Here,
+[`ome_write()`](https://huber-group-embl.github.io/romeo/reference/ome_write.md)
+function accepts objects of `Image` class (from
 *[EBImage](https://bioconductor.org/packages/3.24/EBImage)* package) as
 input.
 
 ``` r
 
 library(EBImage)
-```
-
-    ## 
-    ## Attaching package: 'EBImage'
-
-    ## The following object is masked from 'package:paws':
-    ## 
-    ##     translate
-
-``` r
 
 img_file <- system.file("extdata", "example_RGB.png", package = "romeo")
 img <- readImage(img_file)
@@ -307,11 +308,13 @@ should match the `Image` object.
 
 ``` r
 
-ome_img <- ome_write(img,
-                     path = tempfile(fileext = ".ome.zarr"),
-                     axes = c("x", "y", "c"),
-                     version = "0.4",
-                     storage_options = list(chunk_dim = c(64, 64, 1)))
+ome_img <- ome_write(
+  img,
+  path = tempfile(fileext = ".ome.zarr"),
+  axes = c("x", "y", "c"),
+  version = "0.4",
+  storage_options = list(chunk_dim = c(64, 64, 1))
+)
 plot(ome_img, 1)
 ```
 
@@ -327,12 +330,14 @@ scale factor of the layer relative to the previous layer.
 
 ``` r
 
-ome_img <- ome_write(img,
-                     path = tempfile(fileext = ".ome.zarr"),
-                     axes = c("x", "y", "c"),
-                     version = "0.5",
-                     scalefactors = c(2, 2, 3),
-                     storage_options = list(chunk_dim = c(64, 64, 1)))
+ome_img <- ome_write(
+  img,
+  path = tempfile(fileext = ".ome.zarr"),
+  axes = c("x", "y", "c"),
+  version = "0.5",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64, 1))
+)
 ```
 
 ### Labels
@@ -375,12 +380,14 @@ is used to write the Zarr attributes.
 
 ``` r
 
-ome_nuc_th <- ome_write(nuc_th,
-                        path = tempfile(fileext = ".ome.zarr"),
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label")
+ome_nuc_th <- ome_write(
+  nuc_th,
+  path = tempfile(fileext = ".ome.zarr"),
+  version = "0.4",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64)),
+  type = "label"
+)
 plot(ome_nuc_th, 3)
 ```
 
@@ -393,21 +400,25 @@ name (e.g. `blobs`) for the label pyramid associated with the image.
 
 td <- tempfile(fileext = ".ome.zarr")
 
-ome_nuc <- ome_write(nuc,
-                     path = td,
-                     version = "0.4",
-                     storage_options = list(chunk_dim = c(64, 64)))
+ome_nuc <- ome_write(
+  nuc,
+  path = td,
+  version = "0.4",
+  storage_options = list(chunk_dim = c(64, 64))
+)
 
-ome_nuc_th <- ome_write(nuc_th,
-                        path = td,
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label",
-                        label_name = "blobs")
+ome_nuc_th <- ome_write(
+  nuc_th,
+  path = td,
+  version = "0.4",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64)),
+  type = "label",
+  label_name = "blobs"
+)
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpDs6wlM/file1bf068d8b34b.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/Rtmpt1UV9L/file618b34b0245f.ome.zarr', writing labels to 'labels/blobs'
 
 We can now visualize both the image and its corresponding labels side by
 side.
@@ -429,30 +440,32 @@ for more information.
 
 ``` r
 
-ome_nuc_th <- ome_write(nuc_th,
-                        path = tempfile(fileext = ".ome.zarr"),
-                        version = "0.4",
-                        scalefactors = c(2, 2, 3),
-                        storage_options = list(chunk_dim = c(64, 64)),
-                        type = "label",
-                        label_name = "blobs",
-                        label_metadata = list(
-                          colors = list(
-                            list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
-                            list(`label-value` = 2, rgba = list(0, 255, 255, 128))
-                          ),
-                          properties = list(
-                            list(`label-value` = 1, class = "A"),
-                            list(`label-value` = 2, class = "B")
-                          )
-                        ))
+ome_nuc_th <- ome_write(
+  nuc_th,
+  path = tempfile(fileext = ".ome.zarr"),
+  version = "0.4",
+  scalefactors = c(2, 2, 3),
+  storage_options = list(chunk_dim = c(64, 64)),
+  type = "label",
+  label_name = "blobs",
+  label_metadata = list(
+    colors = list(
+      list(`label-value` = 1, rgba = list(255, 255, 255, 255)),
+      list(`label-value` = 2, rgba = list(0, 255, 255, 128))
+    ),
+    properties = list(
+      list(`label-value` = 1, class = "A"),
+      list(`label-value` = 2, class = "B")
+    )
+  )
+)
 ```
 
 ## Appendix
 
 ### Session info
 
-    ## R Under development (unstable) (2026-06-12 r90141)
+    ## R Under development (unstable) (2026-06-21 r90185)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.4 LTS
     ## 
@@ -473,29 +486,29 @@ ome_nuc_th <- ome_write(nuc_th,
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] EBImage_4.55.0   paws_0.10.0      romeo_0.99.1     BiocStyle_2.41.0
+    ## [1] EBImage_4.55.1   romeo_0.99.1     BiocStyle_2.41.0
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] xfun_0.58             bslib_0.11.0          httr2_1.2.2          
+    ##  [1] xfun_0.60             bslib_0.11.0          httr2_1.3.0          
     ##  [4] htmlwidgets_1.6.4     lattice_0.22-9        tools_4.7.0          
     ##  [7] bitops_1.0-9          generics_0.1.4        stats4_4.7.0         
-    ## [10] curl_7.1.0            paws.common_0.8.9     R.oo_1.27.1          
-    ## [13] Matrix_1.7-5          desc_1.4.3            S4Vectors_0.50.1     
+    ## [10] curl_7.1.0            paws.common_0.8.10    R.oo_1.27.1          
+    ## [13] Matrix_1.7-6          desc_1.4.3            S4Vectors_0.51.5     
     ## [16] lifecycle_1.0.5       compiler_4.7.0        textshaping_1.0.5    
     ## [19] tiff_0.1-12           htmltools_0.5.9       sass_0.4.10          
-    ## [22] RCurl_1.98-1.19       yaml_2.3.12           pkgdown_2.2.0        
+    ## [22] RCurl_1.98-1.19       yaml_2.3.12           pkgdown_2.2.1        
     ## [25] crayon_1.5.3          jquerylib_0.1.4       R.utils_2.13.0       
-    ## [28] cachem_1.1.0          DelayedArray_0.38.2   jsonvalidate_1.5.0   
-    ## [31] abind_1.4-8           locfit_1.5-9.12       digest_0.6.39        
-    ## [34] paws.storage_0.10.0   bookdown_0.46         fastmap_1.2.0        
-    ## [37] grid_4.7.0            cli_3.6.6             SparseArray_1.13.2   
-    ## [40] Rarr_2.0.1            magrittr_2.0.5        S4Arrays_1.13.0      
-    ## [43] withr_3.0.2           rappdirs_0.3.4        rmarkdown_2.31       
+    ## [28] grumpy_0.1.1          cachem_1.1.0          DelayedArray_0.39.3  
+    ## [31] jsonvalidate_1.5.0    abind_1.4-8           locfit_1.5-9.12      
+    ## [34] digest_0.6.39         paws.storage_0.10.0   bookdown_0.47        
+    ## [37] fastmap_1.2.0         grid_4.7.0            cli_3.6.6            
+    ## [40] SparseArray_1.13.2    Rarr_2.1.27           magrittr_2.0.5       
+    ## [43] S4Arrays_1.13.0       withr_3.0.3           rmarkdown_2.31       
     ## [46] XVector_0.53.0        matrixStats_1.5.0     fftwtools_0.9-11     
     ## [49] jpeg_0.1-11           otel_0.2.0            ragg_1.5.2           
     ## [52] png_0.1-9             R.methodsS3_1.8.2     evaluate_1.0.5       
-    ## [55] knitr_1.51            IRanges_2.46.0        V8_8.2.0             
-    ## [58] rlang_1.2.0           Rcpp_1.1.1-1.1        glue_1.8.1           
-    ## [61] ZarrArray_1.1.0       BiocManager_1.30.27   xml2_1.5.2           
-    ## [64] BiocGenerics_0.58.1   jsonlite_2.0.0        R6_2.6.1             
+    ## [55] knitr_1.51            IRanges_2.47.2        V8_8.2.0             
+    ## [58] rlang_1.3.0           Rcpp_1.1.2            glue_1.8.1           
+    ## [61] ZarrArray_1.1.3       BiocManager_1.30.27   xml2_1.6.0           
+    ## [64] BiocGenerics_0.59.10  jsonlite_2.0.0        R6_2.6.1             
     ## [67] MatrixGenerics_1.25.0 systemfonts_1.3.2     fs_2.1.0

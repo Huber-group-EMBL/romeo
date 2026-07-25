@@ -10,7 +10,7 @@ ome_write(
   path = "/",
   axes = NULL,
   scalefactors = c(2, 2, 2, 2),
-  version = c("0.4", "0.5"),
+  version = c("0.5", "0.4"),
   storage_options = NULL,
   type = c("image", "label"),
   label_name = NULL,
@@ -23,7 +23,7 @@ ome_write(
   path = "/",
   axes = NULL,
   scalefactors = c(2, 2, 2, 2),
-  version = c("0.4", "0.5"),
+  version = c("0.5", "0.4"),
   storage_options = NULL,
   type = c("image", "label"),
   label_name = NULL,
@@ -36,7 +36,7 @@ ome_write(
   path = "/",
   axes = NULL,
   scalefactors = c(2, 2, 2, 2),
-  version = c("0.4", "0.5"),
+  version = c("0.5", "0.4"),
   storage_options = NULL,
   type = c("image", "label"),
   label_name = NULL,
@@ -118,5 +118,5 @@ ome_nuc_th <- ome_write(nuc_th,
                         storage_options = list(chunk_dim = c(64,64)),
                         label_name = "nuclei_segmentation",
                         type = "label")
-#> An image pyramid was found at '/tmp/Rtmp3XllUS/file1adc7c90b232.ome.zarr', writing labels to 'labels/nuclei_segmentation'
+#> An image pyramid was found at '/tmp/RtmpnxgiNE/file60616fffb0de.ome.zarr', writing labels to 'labels/nuclei_segmentation'
 ```

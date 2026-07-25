@@ -3,7 +3,6 @@ NULL
 
 # write ####
 
-#' @noRd
 .write_ome_metadata <- function(
   path,
   image,
@@ -64,7 +63,6 @@ NULL
   )
 }
 
-#' @noRd
 .write_label_group_metadata <- function(path, name, version) {
   meta <- list(labels = list(name))
   if (version == "0.5") {
@@ -78,7 +76,6 @@ NULL
   )
 }
 
-#' @noRd
 .make_label_metadata <- function(label_metadata, version) {
   # add image-label
   meta <- list(`image-label` = list(version = version))
@@ -118,7 +115,7 @@ NULL
       function(lm) {
         .check_label_value(lm)
         if (!is.null(lm[["rgba"]])) {
-          if (!is.list(lm[["rgba"]]) || !is_rgba(lm[["rgba"]])) {
+          if (!is.list(lm[["rgba"]]) || !.is_rgba(lm[["rgba"]])) {
             stop("rgba should be a list of four uint8 [0,255] entries")
           }
         }
@@ -223,7 +220,6 @@ NULL
   axes
 }
 
-#' @noRd
 .make_axes_meta <- function(axes) {
   lapply(axes, \(.) {
     if (. == "t") {
@@ -236,7 +232,6 @@ NULL
   })
 }
 
-#' @noRd
 .make_datasets <- function(scalefactors, axes) {
   paths <- as.character(seq(0, length(scalefactors)))
   scalefactors <- c(1, cumprod(scalefactors))
@@ -265,7 +260,6 @@ NULL
   )
 }
 
-#' @noRd
 .make_empty_ct <- function(axes) {
   list(
     list(
@@ -310,13 +304,12 @@ NULL
     stop("colors and properties in label metadata should include 'label-value'")
   }
   lmv <- suppressWarnings(as.numeric(lmv$`label-value`))
-  if (!is_whole_number(lmv)) {
+  if (!.is_whole_number(lmv)) {
     stop("label-value should be a non-zero integer")
   }
 }
 
-#' @noRd
-is_rgba <- function(x) {
+.is_rgba <- function(x) {
   x <- unlist(x, use.names = FALSE)
   is.numeric(x) &&
     all(is.finite(x)) &&
@@ -325,13 +318,13 @@ is_rgba <- function(x) {
     length(x) == 4
 }
 
-is_whole_number <- function(x) {
+.is_whole_number <- function(x) {
   !is.na(x) &&
     is.numeric(x) &&
     is.finite(x) &&
     (x %% 1 == 0)
 }
 
-is_label_name <- function(x) {
+.is_label_name <- function(x) {
   is.character(x) && length(x) == 1L && !is.na(x) && nzchar(x)
 }

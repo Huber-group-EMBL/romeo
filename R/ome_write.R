@@ -150,9 +150,6 @@ setMethod(
   # scale factors
   .check_scalefactors(scalefactors)
 
-  # Generate a downsampled pyramid of images.
-  pyramid <- .create_mip(image, scalefactors, type)
-
   # update path if writing labels
   path <- switch(
     type,
@@ -177,6 +174,14 @@ setMethod(
     "image" = path,
     stop("Type should be either 'image' or 'label'")
   )
+
+  # check storage options
+  if (!"chunk_dim" %in% names(storage_options)) {
+    stop("'chunk_dim' must be provided in storage_options")
+  }
+
+  # Generate a downsampled pyramid of images.
+  pyramid <- .create_mip(image, scalefactors, type)
 
   # write image
   .write_multiscale(
@@ -283,11 +288,6 @@ setMethod(
 
   # create zarr
   Rarr::write_zarr_group(path, "", zarr_version)
-
-  # check storage options
-  if (!"chunk_dim" %in% names(storage_options)) {
-    stop("'chunk_dim' must be provided in storage_options")
-  }
 
   # write multiscale image
   # TODO: how can we do this optimal for each scale/layer

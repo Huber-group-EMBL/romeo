@@ -418,7 +418,7 @@ ome_nuc_th <- ome_write(
 )
 ```
 
-    ## An image pyramid was found at '/tmp/Rtmpt1UV9L/file618b34b0245f.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpNnVPWz/file1bf06a0a034d.ome.zarr', writing labels to 'labels/blobs'
 
 We can now visualize both the image and its corresponding labels side by
 side.

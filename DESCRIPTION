@@ -20,7 +20,6 @@ BugReports: https://github.com/Huber-group-EMBL/romeo/issues
 Depends: 
     R (>= 4.6)
 Imports:
-    cli,
     EBImage,
     jsonlite,
     jsonvalidate,

@@ -8,7 +8,7 @@
 
 [![R-CMD-check](https://github.com/Huber-group-EMBL/romeo/actions/workflows/r-universe.yaml/badge.svg)](https://github.com/Huber-group-EMBL/romeo/actions/workflows/r-universe.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/Huber-group-EMBL/rome/graph/badge.svg)](https://app.codecov.io/gh/Huber-group-EMBL/rome)
+coverage](https://codecov.io/gh/Huber-group-EMBL/romeo/graph/badge.svg)](https://app.codecov.io/gh/Huber-group-EMBL/romeo)
 <!-- badges: end -->
 
 **romeo** is a minimal R package to reading, writing and validating

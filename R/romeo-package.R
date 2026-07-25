@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom methods setGeneric setMethod
 ## usethis namespace: end
 
 ## mockable bindings: start

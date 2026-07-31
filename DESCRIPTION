@@ -18,7 +18,7 @@ URL: https://huber-group-embl.github.io/romeo/,
     https://github.com/Huber-group-EMBL/romeo
 BugReports: https://github.com/Huber-group-EMBL/romeo/issues
 Depends: 
-    R (>= 4.6)
+    R (>= 4.1)
 Imports:
     EBImage,
     jsonlite,

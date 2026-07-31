@@ -418,7 +418,7 @@ ome_nuc_th <- ome_write(
 )
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpNnVPWz/file1bf06a0a034d.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpLkwrpo/file216464f5ed1c.ome.zarr', writing labels to 'labels/blobs'
 
 We can now visualize both the image and its corresponding labels side by
 side.
@@ -491,9 +491,9 @@ ome_nuc_th <- ome_write(
     ## loaded via a namespace (and not attached):
     ##  [1] xfun_0.60             bslib_0.11.0          httr2_1.3.0          
     ##  [4] htmlwidgets_1.6.4     lattice_0.22-9        tools_4.7.0          
-    ##  [7] bitops_1.0-9          generics_0.1.4        stats4_4.7.0         
+    ##  [7] bitops_1.1-0          generics_0.1.4        stats4_4.7.0         
     ## [10] curl_7.1.0            paws.common_0.8.10    R.oo_1.27.1          
-    ## [13] Matrix_1.7-6          desc_1.4.3            S4Vectors_0.51.5     
+    ## [13] Matrix_1.7-6          desc_1.4.3            S4Vectors_0.51.6     
     ## [16] lifecycle_1.0.5       compiler_4.7.0        textshaping_1.0.5    
     ## [19] tiff_0.1-12           htmltools_0.5.9       sass_0.4.10          
     ## [22] RCurl_1.98-1.19       yaml_2.3.12           pkgdown_2.2.1        
@@ -502,7 +502,7 @@ ome_nuc_th <- ome_write(
     ## [31] jsonvalidate_1.5.0    abind_1.4-8           locfit_1.5-9.12      
     ## [34] digest_0.6.39         paws.storage_0.10.0   bookdown_0.47        
     ## [37] fastmap_1.2.0         grid_4.7.0            cli_3.6.6            
-    ## [40] SparseArray_1.13.2    Rarr_2.1.27           magrittr_2.0.5       
+    ## [40] SparseArray_1.13.2    Rarr_2.1.32           magrittr_2.0.5       
     ## [43] S4Arrays_1.13.0       withr_3.0.3           rmarkdown_2.31       
     ## [46] XVector_0.53.0        matrixStats_1.5.0     fftwtools_0.9-11     
     ## [49] jpeg_0.1-11           otel_0.2.0            ragg_1.5.2           

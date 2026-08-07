@@ -25,7 +25,8 @@ Imports:
     jsonvalidate,
     methods,
     Rarr (>= 2.1.27),
-    ZarrArray
+    ZarrArray,
+    ImageArray (>= 1.1.7)
 Suggests:
     BiocStyle,
     knitr,
@@ -33,9 +34,11 @@ Suggests:
     testthat,
     utils,
     withr
+Remotes:
+    BIMSBbioinfo/ImageArray@romeo_class
 VignetteBuilder: 
     knitr
 biocViews: DataImport
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

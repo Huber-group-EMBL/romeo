@@ -54,7 +54,7 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
     img
   })
 
-  x <- mapply(
+  mapply(
     function(img, scale) {
       attr(img, "scale") <- scale
       img
@@ -64,13 +64,9 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
       unlist(x$coordinateTransformations[[1]]$scale)
     }),
     SIMPLIFY = FALSE
-  )
-  class(x) <- "ome_zarr"
-  attr(x, "type") <- type
-  attr(x, "version") <- ome_version
-  if (!is.null(dim_names)) {
-    attr(x, "dim_names") <- dim_names
-  }
-
-  x
+  ) |>
+    new(
+      "ome_zarr",
+      metadata = list(version = ome_version, type = type, dim_names = dim_names)
+    )
 }

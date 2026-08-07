@@ -1,8 +1,11 @@
 #' @importFrom S4Vectors SimpleList
+#' @importClassesFrom ImageArray ImageArray
 setClass(
   Class = "ome_zarr",
-  contains = "SimpleList",
-  prototype = prototype(elementType = "array")
+  contains = "ImageArray", 
+  slots = c(
+    metadata = "list"
+  ) 
 )
 
 #' @importFrom utils head

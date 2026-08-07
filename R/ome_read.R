@@ -34,6 +34,8 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
 
   group_attributes <- Rarr::read_zarr_attributes(path, s3_client = s3_client)
   ome_version <- .get_version(group_attributes)
+  multiscales <- .get_multiscales(group_attributes, ome_version)
+  datasets <- multiscales$datasets
   scales <- .get_scales(group_attributes, ome_version)
   dim_names <- .get_dim_names(group_attributes, ome_version)
 
@@ -45,7 +47,7 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
     }
   }
 
-  x <- lapply(scales$datasets, function(scale) {
+  x <- lapply(datasets, function(scale) {
     img <- .read_zarr(
       file.path(path, scale$path),
       lazy = lazy,
@@ -54,19 +56,26 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
     img
   })
 
-  mapply(
+  levels <- mapply(
     function(img, scale) {
       attr(img, "scale") <- scale
       img
     },
     x,
-    lapply(scales$datasets, function(x) {
+    lapply(datasets, function(x) {
       unlist(x$coordinateTransformations[[1]]$scale)
     }),
     SIMPLIFY = FALSE
-  ) |>
-    new(
-      "ome_zarr",
-      metadata = list(version = ome_version, type = type, dim_names = dim_names)
-    )
+  )
+  
+  levels <- S4Vectors:::new_SimpleList_from_list("ImageList", levels)
+  S4Vectors::new2(
+    "ome_zarr",
+    levels = levels,
+    axes = names(scales[[1]]),
+    scales = scales,
+    metadata = list(version = ome_version, 
+                    type = type, 
+                    dim_names = dim_names)
+  )
 }

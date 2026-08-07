@@ -43,7 +43,7 @@ test_that("read spatialdata elements", {
   x <- ome_read(blobs_image) |>
     expect_no_condition()
 
-  expect_s3_class(x, "ome_zarr")
+  expect_s4_class(x, "ome_zarr")
   expect_identical(attr(x, "type"), "image")
 
   blobs_label <- system.file(
@@ -57,7 +57,7 @@ test_that("read spatialdata elements", {
   x <- ome_read(blobs_label) |>
     expect_no_condition()
 
-  expect_s3_class(x, "ome_zarr")
+  expect_s4_class(x, "ome_zarr")
   # This is a bit counterintuitive but spatialdata labels elements are encoded
   # as multiscale image from an OME point of view.
   expect_identical(attr(x, "type"), "image")

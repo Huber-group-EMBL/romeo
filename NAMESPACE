@@ -5,10 +5,9 @@ S3method(plot,ome_zarr)
 export(ome_read)
 export(ome_validate)
 export(ome_write)
-export(print.ome_zarr)
 exportMethods(ome_write)
 exportMethods(print)
-exportMethods(show)
+importClassesFrom(ImageArray,ImageArray)
 importFrom(EBImage,
   Image,
   imageData,
@@ -22,8 +21,7 @@ importFrom(S4Vectors,SimpleList)
 importFrom(ZarrArray,ZarrArray)
 importFrom(methods,
   setGeneric,
-  setMethod,
-  show
+  setMethod
 )
 importFrom(stats,setNames)
 importFrom(utils,head)

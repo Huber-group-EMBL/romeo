@@ -25,7 +25,8 @@ Imports:
     jsonvalidate,
     methods,
     Rarr (>= 2.1.27),
-    ZarrArray
+    ZarrArray,
+    ImageArray (>= 1.1.7)
 Suggests:
     BiocStyle,
     knitr,
@@ -33,6 +34,8 @@ Suggests:
     testthat,
     utils,
     withr
+Remotes:
+    BIMSBbioinfo/ImageArray@romeo_class
 VignetteBuilder: 
     knitr
 biocViews: DataImport

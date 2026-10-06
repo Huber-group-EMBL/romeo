@@ -4,7 +4,9 @@ library(withr)
 # formats
 format <- c(
   "0.4" = "v04",
-  "0.5" = "v05"
+  "0.5" = "v05",
+  # FIXME: add "0.6" = "v06" when we can actually read it
+  NULL
 )
 
 test_that("parse ome version", {

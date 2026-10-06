@@ -40,7 +40,9 @@ config <- list(
   c(version = "0.4", type = "image"),
   c(version = "0.4", type = "label"),
   c(version = "0.5", type = "image"),
-  c(version = "0.5", type = "label")
+  c(version = "0.5", type = "label"),
+  c(version = "0.6", type = "image"),
+  c(version = "0.6", type = "label")
 )
 
 invisible(

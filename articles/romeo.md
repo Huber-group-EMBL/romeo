@@ -418,7 +418,7 @@ ome_nuc_th <- ome_write(
 )
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpzavHs8/file58b53025447e.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpF5ueNz/file1c4012d23ec7.ome.zarr', writing labels to 'labels/blobs'
 
 We can now visualize both the image and its corresponding labels side by
 side.
@@ -465,7 +465,7 @@ ome_nuc_th <- ome_write(
 
 ### Session info
 
-    ## R Under development (unstable) (2026-10-03 r90638)
+    ## R Under development (unstable) (2026-10-05 r90641)
     ## Platform: x86_64-pc-linux-gnu
     ## Running under: Ubuntu 24.04.5 LTS
     ## 
@@ -486,7 +486,7 @@ ome_nuc_th <- ome_write(
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] EBImage_4.55.2   romeo_0.99.1     BiocStyle_2.41.0
+    ## [1] EBImage_4.55.2   romeo_0.99.2     BiocStyle_2.41.0
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] xfun_0.61             bslib_0.12.0          httr2_1.3.0          

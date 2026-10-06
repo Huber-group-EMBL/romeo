@@ -22,12 +22,12 @@ Source:
 [`DESCRIPTION`](https://github.com/Huber-group-EMBL/romeo/blob/main/DESCRIPTION)
 
 Gruson H, Manukyan A (2026). *romeo: Minimal R 'OME-Zarr' Reader*. R
-package version 0.99.1, <https://huber-group-embl.github.io/romeo/>.
+package version 0.99.2, <https://huber-group-embl.github.io/romeo/>.
 
     @Manual{,
       title = {romeo: Minimal R 'OME-Zarr' Reader},
       author = {Hugo Gruson and Artür Manukyan},
       year = {2026},
-      note = {R package version 0.99.1},
+      note = {R package version 0.99.2},
       url = {https://huber-group-embl.github.io/romeo/},
     }

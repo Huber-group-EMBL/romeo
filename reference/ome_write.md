@@ -118,5 +118,5 @@ ome_nuc_th <- ome_write(nuc_th,
                         storage_options = list(chunk_dim = c(64,64)),
                         label_name = "nuclei_segmentation",
                         type = "label")
-#> An image pyramid was found at '/tmp/Rtmp9qGja1/file579018e4564.ome.zarr', writing labels to 'labels/nuclei_segmentation'
+#> An image pyramid was found at '/tmp/RtmpgkJdbQ/file1b1a194c4a89.ome.zarr', writing labels to 'labels/nuclei_segmentation'
 ```

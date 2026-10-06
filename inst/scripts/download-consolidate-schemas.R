@@ -1,6 +1,10 @@
 download_consolidate_schemas <- function(ome_version, type, path) {
   # Download root schema
-  schema_file <- paste0(type, ".schema")
+  if (endsWith(type, ".schema")) {
+    schema_file <- type
+  } else {
+    schema_file <- paste0(type, ".schema")
+  }
   url <- sprintf(
     paste0(
       "https://ngff.openmicroscopy.org/%s/schemas/",
@@ -23,16 +27,24 @@ download_consolidate_schemas <- function(ome_version, type, path) {
     leaf = function(x) {
       if (
         is.character(x) &&
-          grepl("^https://ngff.openmicroscopy.org/.+/schemas/.+\\.schema$", x)
+          grepl("^https://ngff.openmicroscopy.org/.+/schemas/.+\\.schema", x) &&
+          x != url
       ) {
-        download.file(x, file.path(path, ome_version, basename(x)))
-        basename(x)
+        name <- gsub(".+/schemas/(.+\\.schema)", "\\1", x)
+        download_consolidate_schemas(
+          ome_version = ome_version,
+          type = gsub("^(.*\\.schema).*", "\\1", name),
+          path = path
+        )
+        name
       } else {
         x
       }
     }
   ) |>
     jsonlite::write_json(dest, auto_unbox = TRUE, pretty = TRUE)
+
+  invisible(schema_file)
 }
 
 # schema configs

@@ -1,6 +1,6 @@
 Package: romeo
 Title: Minimal R 'OME-Zarr' Reader
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: c(
     person("Hugo", "Gruson", , "hugo.gruson@embl.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-4094-1476")),

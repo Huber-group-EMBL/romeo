@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "label.schema",
+  "$id": "https://ngff.openmicroscopy.org/0.4/schemas/label.schema",
   "title": "OME-NGFF labelled image schema",
   "description": "JSON from OME-NGFF .zattrs",
   "type": "object",

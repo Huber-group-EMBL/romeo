@@ -418,7 +418,7 @@ ome_nuc_th <- ome_write(
 )
 ```
 
-    ## An image pyramid was found at '/tmp/RtmpLkwrpo/file216464f5ed1c.ome.zarr', writing labels to 'labels/blobs'
+    ## An image pyramid was found at '/tmp/RtmpzavHs8/file58b53025447e.ome.zarr', writing labels to 'labels/blobs'
 
 We can now visualize both the image and its corresponding labels side by
 side.
@@ -465,9 +465,9 @@ ome_nuc_th <- ome_write(
 
 ### Session info
 
-    ## R Under development (unstable) (2026-06-21 r90185)
+    ## R Under development (unstable) (2026-10-03 r90638)
     ## Platform: x86_64-pc-linux-gnu
-    ## Running under: Ubuntu 24.04.4 LTS
+    ## Running under: Ubuntu 24.04.5 LTS
     ## 
     ## Matrix products: default
     ## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -486,29 +486,29 @@ ome_nuc_th <- ome_write(
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## other attached packages:
-    ## [1] EBImage_4.55.1   romeo_0.99.1     BiocStyle_2.41.0
+    ## [1] EBImage_4.55.2   romeo_0.99.1     BiocStyle_2.41.0
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] xfun_0.60             bslib_0.11.0          httr2_1.3.0          
-    ##  [4] htmlwidgets_1.6.4     lattice_0.22-9        tools_4.7.0          
+    ##  [1] xfun_0.61             bslib_0.12.0          httr2_1.3.0          
+    ##  [4] htmlwidgets_1.6.4     lattice_0.23-1        tools_4.7.0          
     ##  [7] bitops_1.1-0          generics_0.1.4        stats4_4.7.0         
-    ## [10] curl_7.1.0            paws.common_0.8.10    R.oo_1.27.1          
-    ## [13] Matrix_1.7-6          desc_1.4.3            S4Vectors_0.51.6     
+    ## [10] curl_8.0.0            paws.common_0.9.0     R.oo_1.27.1          
+    ## [13] Matrix_1.7-6          desc_1.4.3            S4Vectors_0.51.10    
     ## [16] lifecycle_1.0.5       compiler_4.7.0        textshaping_1.0.5    
     ## [19] tiff_0.1-12           htmltools_0.5.9       sass_0.4.10          
-    ## [22] RCurl_1.98-1.19       yaml_2.3.12           pkgdown_2.2.1        
+    ## [22] RCurl_1.98-1.20       yaml_2.3.12           pkgdown_2.2.1        
     ## [25] crayon_1.5.3          jquerylib_0.1.4       R.utils_2.13.0       
-    ## [28] grumpy_0.1.1          cachem_1.1.0          DelayedArray_0.39.3  
+    ## [28] grumpy_0.1.1          cachem_1.1.0          DelayedArray_0.39.8  
     ## [31] jsonvalidate_1.5.0    abind_1.4-8           locfit_1.5-9.12      
-    ## [34] digest_0.6.39         paws.storage_0.10.0   bookdown_0.47        
+    ## [34] digest_0.6.39         paws.storage_0.10.0   bookdown_0.48        
     ## [37] fastmap_1.2.0         grid_4.7.0            cli_3.6.6            
-    ## [40] SparseArray_1.13.2    Rarr_2.1.32           magrittr_2.0.5       
-    ## [43] S4Arrays_1.13.0       withr_3.0.3           rmarkdown_2.31       
+    ## [40] SparseArray_1.13.4    Rarr_2.1.43           magrittr_2.0.5       
+    ## [43] S4Arrays_1.13.2       withr_3.0.3           rmarkdown_2.32       
     ## [46] XVector_0.53.0        matrixStats_1.5.0     fftwtools_0.9-11     
     ## [49] jpeg_0.1-11           otel_0.2.0            ragg_1.5.2           
     ## [52] png_0.1-9             R.methodsS3_1.8.2     evaluate_1.0.5       
-    ## [55] knitr_1.51            IRanges_2.47.2        V8_8.2.0             
+    ## [55] knitr_1.52            IRanges_2.47.5        V8_8.2.0             
     ## [58] rlang_1.3.0           Rcpp_1.1.2            glue_1.8.1           
-    ## [61] ZarrArray_1.1.3       BiocManager_1.30.27   xml2_1.6.0           
-    ## [64] BiocGenerics_0.59.10  jsonlite_2.0.0        R6_2.6.1             
+    ## [61] ZarrArray_1.1.7       BiocManager_1.30.27   xml2_1.6.0           
+    ## [64] BiocGenerics_0.59.12  jsonlite_2.0.0        R6_2.6.1             
     ## [67] MatrixGenerics_1.25.0 systemfonts_1.3.2     fs_2.1.0

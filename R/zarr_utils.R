@@ -2,7 +2,7 @@
 #'
 #' Check if the path is a Zarr store, group or array.
 #'
-#' @return Whether the `target_path` exists in `store`
+#' @returns Whether the `target_path` exists in `store`
 #' @noRd
 #'
 #' @param store Path to a Zarr store

@@ -6,7 +6,3 @@ reference:
   - title: "Validate, read & write OME-Zarr data in R"
     contents:
       - starts_with("ome_")
-  - title: "Manipulating `ome_zarr` objects"
-    contents:
-      - ends_with(".ome_zarr")
-      - extract_levels

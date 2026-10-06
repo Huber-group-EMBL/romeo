@@ -161,7 +161,7 @@ Slicing (or subsetting) of images are performed using the `[` operator where
 indices correspond to each available XYZCT dimensions.
 
 ```{r read_remote_slice}
-attr(x, "dim_names")
+dimnames(x)
 plot(x[1:2, 1:50, 1:50])
 ```
 

@@ -85,7 +85,7 @@ test_that("writing 0.4 and 0.5 works", {
     )
 
     # check type
-    expect_equal(attr(ome_img, "type"), "image")
+    expect_identical(metadata(ome_img)$type, "image")
 
     # zarr exists
     expect_true(zarr_exists(td))

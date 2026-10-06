@@ -9,6 +9,7 @@
 #' @param validate Logical.If `TRUE` (the default), validate the OME-Zarr file.
 #'
 #' @importFrom stats setNames
+#' @importFrom methods new
 #' @importFrom Rarr read_zarr_array read_zarr_attributes
 #' @importFrom ZarrArray ZarrArray
 #'
@@ -34,18 +35,12 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
 
   group_attributes <- Rarr::read_zarr_attributes(path, s3_client = s3_client)
   ome_version <- .get_version(group_attributes)
-  scales <- .get_scales(group_attributes, ome_version)
+  multiscales <- .get_multiscales(group_attributes, ome_version)
+  datasets <- multiscales$datasets
+  scales <- .get_datasets_scales(group_attributes, ome_version)
   dim_names <- .get_dim_names(group_attributes, ome_version)
 
-  .read_zarr <- function(path, s3_client = NULL, lazy = TRUE) {
-    if (lazy) {
-      ZarrArray::ZarrArray(path, s3_client = s3_client)
-    } else {
-      Rarr::read_zarr_array(path, s3_client = s3_client)
-    }
-  }
-
-  x <- lapply(scales$datasets, function(scale) {
+  x <- lapply(datasets, function(scale) {
     img <- .read_zarr(
       file.path(path, scale$path),
       lazy = lazy,
@@ -54,23 +49,20 @@ ome_read <- function(path, s3_client = NULL, lazy = TRUE, validate = TRUE) {
     img
   })
 
-  x <- mapply(
-    function(img, scale) {
-      attr(img, "scale") <- scale
-      img
-    },
-    x,
-    lapply(scales$datasets, function(x) {
-      unlist(x$coordinateTransformations[[1]]$scale)
-    }),
-    SIMPLIFY = FALSE
+  new(
+    "ome_zarr",
+    levels = S4Vectors:::new_SimpleList_from_list("ImageList", x),
+    scales = scales,
+    metadata = list(version = ome_version, type = type, dim_names = dim_names)
   )
-  class(x) <- "ome_zarr"
-  attr(x, "type") <- type
-  attr(x, "version") <- ome_version
-  if (!is.null(dim_names)) {
-    attr(x, "dim_names") <- dim_names
-  }
+}
 
-  x
+#' @keywords internal
+#' @noRd
+.read_zarr <- function(path, s3_client = NULL, lazy = TRUE) {
+  if (lazy) {
+    ZarrArray::ZarrArray(path, s3_client = s3_client)
+  } else {
+    Rarr::read_zarr_array(path, s3_client = s3_client)
+  }
 }

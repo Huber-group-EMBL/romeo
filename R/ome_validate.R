@@ -24,7 +24,8 @@ ome_validate <- function(path, s3_client = NULL) {
   # local references as jsonvalidate doesn't support remote references
   # (https://github.com/ropensci/jsonvalidate/issues/70)
 
-  fields <- names(group_attributes$ome %||% group_attributes)
+  # No $ subset here because we want to make sure we don't partial match to "omero"
+  fields <- names(group_attributes[["ome"]] %||% group_attributes)
   type <-
     if ("image-label" %in% fields) {
       "label"
